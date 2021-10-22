@@ -127,3 +127,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# MAC DSFILE
+.DS_Store
+
+# LATEX BUILD OUTPUT
+*.aux
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
