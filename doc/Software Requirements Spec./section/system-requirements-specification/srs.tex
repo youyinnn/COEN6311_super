@@ -1,0 +1,168 @@
+\section{System Requirements Specification}
+\noindent
+
+\subsection*{Top SRS}
+To fulfill the software descriptions, the system shall have the following SRS:
+
+\begin{description}
+    \item [SRS 1.] The system shall have the general user information management module design for the academic researchers;
+    \item [SRS 2.] The system shall have the paper searching and management module and store a massive volume of paper files;
+    \item [SRS 3.] The system shall have a user-paper interacting module for users to upload, download, rate, comment and collect certain paper;
+    \item [SRS 4.] The system shall capture all user paper paper-relevant operations and store those records solid and provide statistical data to users themselves;
+    \item [SRS 5.] The system shall provide the API portal to the 3rd-party developer for accessing records described in specification 5;
+    \item [SRS 6.] The system shall allow users to create, join, leave a research team and provide a role system for team management;
+    \item [SRS 7.] The system shall use the ICDE API to implement features for sharing paper-relevant operations within the same team;
+\end{description}
+
+
+\subsection*{Sub SRS}
+\noindent
+\textbf{Regarding SRS 1, the system should have the following modules and features for user information management:}
+
+\begin{description}
+    \item[SRS 1.1] User Infomation Module
+        \begin{itemize}
+            \item [1]
+                register: ;
+            \item [2]
+                update information;
+        \end{itemize} 
+    \item[SRS 1.2] Login Module
+        \begin{itemize}
+            \item [1]
+                login;
+            \item [2]
+                logout;
+        \end{itemize} 
+\end{description}
+
+\noindent
+\textbf{Regarding SRS 2, the system should have the following modules and features for paper search service:}
+
+\begin{description}
+    \item[SRS 2.1] Paper Download Module
+        \begin{itemize}
+            \item [1]
+                download paper;
+            \item [2]
+                get download records;
+        \end{itemize} 
+    \item[SRS 2.2] Paper Operation Module
+        \begin{itemize}
+            \item [1]
+                comment paper;
+            \item [2]
+                like \& dislike paper;
+            \item [3]
+                share paper;
+            \item [4]
+                get paper operation history;
+        \end{itemize}
+\end{description}
+
+\noindent
+\textbf{Regarding SRS 3, the system should have the following module and features for paper operation service:}
+
+\begin{description}
+    \item[SRS 3.1] Paper Search Module 
+        \begin{itemize}
+            \item [1]
+                search paper;
+            \item [2]
+                view paper detail page;
+        \end{itemize}
+\end{description}
+
+\noindent
+\textbf{Regarding SRS 4, the system should have the following modules and features for user's activity capture service:}
+
+\begin{description}
+    \item[SRS 4.1] ICDE Record Capture Module
+    \begin{itemize}
+        \item [1]
+              capture user's searching keywords;
+        \item [2]
+              capture user's clicking on certain paper's detail page;
+        \item [3]
+              capture user's like \& dislike operations;
+        \item [4]
+              capture user's commenting operations;
+        \item [5]
+              capture user's sharing operations;
+    \end{itemize}
+    
+    \item[SRS 4.2]ICDE Record Access Module
+    \begin{itemize}
+        \item [1]
+              get user's searching keywords;
+        \item [2]
+              get user's clicking on certain paper's detail page;
+        \item [3]
+              get user's like \& dislike operations;
+        \item [4]
+              get user's commenting operations;
+        \item [5]
+              get user's sharing operations;
+    \end{itemize}
+\end{description}
+
+\noindent
+\textbf{Regarding SRS 5, the system should expose API portal includes following features:}
+
+\begin{description}
+    \item[SRS 5.1] Non-user-authorized API:
+    \begin{itemize}
+        \item [1]
+              get search trending;
+        \item [2]
+              get click-rate trending;
+    \end{itemize}
+    
+    \item[SRS 5.2] User-authorized API:
+    \begin{itemize}
+        \item [1]
+              get paper search records;
+        \item [2]
+              get paper rate records;
+        \item [3]
+              get paper download records;
+    \end{itemize}
+\end{description}
+
+\noindent
+\textbf{Regarding SRS 6, the system should have the following module and features for team management service:}
+
+\begin{description}
+    \item[SRS 6.1] Team Management Module:
+    \begin{itemize}
+        \item [1]
+              create team;
+        \item [2]
+              join team;
+        \item [3]
+              view joined team list;
+        \item [4]
+              leave team;
+        \item [5]
+              transfer leadership;
+        \item [6]
+              invite new member;
+        \item [7]
+              get team list;
+    \end{itemize}
+\end{description}
+
+\noindent
+\textbf{Regarding SRS 7, the system should have the following module and features for team member activitiy sharing service:}
+
+\begin{description}
+    \item[SRS 7.1] Team Share Module:
+    \begin{itemize}
+        \item [1]
+              get other member's like \& dislike activities;
+        \item [2]
+              get other member's click into paper's detail page activities;
+        \item [3]
+              get shared paper from other members;
+    \end{itemize}
+\end{description}
