@@ -48,6 +48,9 @@
 \usepackage{indentfirst}
 \usepackage{import}
 
+% nice quotation
+\usepackage{csquotes}
+
 \usepackage{array}
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
@@ -127,7 +130,9 @@ The aim of using ICDE-ScholarHub on the paper search system is to help the resea
 
 \chapter{Functional Requirements Specification}
 
-\import{./section/functional-requirements-specification/frs1}{frs1.tex}
+\import{./section/functional-requirements-specification}{frs0.tex}
+
+\import{./section/functional-requirements-specification}{frs1.tex}
 
 \def\apda{Appendix A: Glossary}
 \chapter*{\apda}
@@ -143,16 +148,16 @@ The aim of using ICDE-ScholarHub on the paper search system is to help the resea
 
 \textbf{SRS:} stands for system requirements specification.
 
+\textbf{FRS:} stands for functional requirements specification.
 
 \def\apdb{Appendix B: Editing Records}
 \chapter*{\apdb}
 \addcontentsline{toc}{chapter}{\apdb}
 
 \begin{itemize}
-	\item \textbf{v1.0} Jun Huang - 02/11/2021
+	\item \textbf{v1.0} Jun Huang - 03/11/2021
 \end{itemize}
 
 % \section{Security Requirements}
-
 
 \end{document}
