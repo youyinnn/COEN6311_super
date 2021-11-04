@@ -39,7 +39,7 @@
     linkcolor=[rgb]{0,0.5,0.5},
     linktoc=page            % only page is linked
 }%
-\def\myversion{1.0 }
+\def\myversion{1.1 }
 %\title{%
 
 %}
@@ -50,6 +50,13 @@
 
 % nice quotation
 \usepackage{csquotes}
+
+% color support
+\usepackage[dvipsnames]{xcolor}
+% \ast symbol
+\usepackage{latexsym}
+
+\usepackage{multirow}
 
 \usepackage{array}
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
@@ -91,6 +98,7 @@
 
 \section{Purpose}
 
+\noindent
 We define a system named \textbf{ICDE-ScholarHub} which is a web-based Paper Search Engine with ICDE concepts implemented.
 
 The system will practice the idea of ICDE to help the researchers work more efficiently regarding user operation history, teamwork, and paper trending.
@@ -100,6 +108,7 @@ Furthermore, the system exposes the API of ICDE for the development of 3rd-party
 
 \section{Sytem Problem Statement}
 
+\noindent
 During the daily research work, it always happens that researchers forget some critical paper they have read on the web-based paper search system a long-time ago. It takes time to find the critical one from the huge amount of paper list from a different academic area.
 
 More sadly, people may miss the latest paper which is important to their research. Researchers have supervisors, colleagues, and teammates. They like to share the latest paper in the same area with the team. But they do not want to disturb others by sending papers through email too often and it is not well organized.
@@ -138,25 +147,88 @@ The aim of using ICDE-ScholarHub on the paper search system is to help the resea
 \chapter*{\apda}
 \addcontentsline{toc}{chapter}{\apda}
 
-\textbf{ICDE:} stands for Information Capture and Dissemination Environment.
+{\parindent0pt
 
-\textbf{Researcher:} academic researcher with needs a paper search engine to help their research work.
+	\textbf{ICDE:} stands for Information Capture and Dissemination Environment.
 
-\textbf{Researche Team:} a team of researcher.
+	\textbf{Researcher:} academic researcher with needs a paper search engine to help their research work.
 
-\textbf{Paper:} academic papers which stored in the system.
+	\textbf{Researche Team:} a team of researcher.
 
-\textbf{SRS:} stands for system requirements specification.
+	\textbf{Paper:} academic papers which stored in the system.
 
-\textbf{FRS:} stands for functional requirements specification.
+	\textbf{SRS:} stands for system requirements specification.
+
+	\textbf{FRS:} stands for functional requirements specification.
+
+	\textbf{MVC:} stands for Model-View-Controller design pattern.
+
+	\textbf{BO:} stands for business object for class diagram design.
+
+}
 
 \def\apdb{Appendix B: Editing Records}
 \chapter*{\apdb}
 \addcontentsline{toc}{chapter}{\apdb}
 
 \begin{itemize}
-	\item \textbf{v1.0} Jun Huang - 03/11/2021
+	\item \textbf{v1.0} Jun Huang - 02/11/2021
+	\item \textbf{v1.5} Jun Huang - 03/11/2021
 \end{itemize}
+
+\def\apdc{Appendix C: Prototype of WebUI}
+\chapter*{\apdc}
+\addcontentsline{toc}{chapter}{\apdc}
+
+\begin{figure}[htbp]
+	\centering
+	\begin{minipage}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[width=6cm]{./section/appendix/img/UI Home page.jpg}
+		\caption{Home Page UI}
+	\end{minipage}
+	\begin{minipage}[t]{0.48\textwidth}
+		\centering
+		\includegraphics[width=6cm]{./section/appendix/img/UI sign in.jpg}
+		\caption{Sign in UI}
+	\end{minipage}
+\end{figure}
+
+\begin{figure*}[htp]
+	\centering
+	\includegraphics[width=\textwidth]{./section/appendix/img/UI MainPage.jpg}
+	\caption{Menu Page UI}
+	\label{fig:Memu Page}
+\end{figure*}
+
+\begin{figure*}[htp]
+	\centering
+	\includegraphics[width=\textwidth]{./section/appendix/img/UI My Library.jpg}
+	\caption{My Library UI}
+	\label{My Library UI}
+\end{figure*}
+
+
+\begin{figure*}[htp]
+	\centering
+	\includegraphics[width=\textwidth]{./section/appendix/img/UI my profile.jpg}
+	\caption{My Profile UI}
+	\label{my profile UI}
+\end{figure*}
+
+\begin{figure*}[htp]
+	\centering
+	\includegraphics[width=\textwidth]{./section/appendix/img/UI teamlist.jpg}
+	\caption{Team List UI}
+	\label{teamlist UI}
+\end{figure*}
+
+\begin{figure*}[htp]
+	\centering
+	\includegraphics[width=\textwidth]{./section/appendix/img/UITeamactivity.jpg}
+	\caption{Team Activity UI}
+	\label{Teamactivity UI}
+\end{figure*}
 
 % \section{Security Requirements}
 
