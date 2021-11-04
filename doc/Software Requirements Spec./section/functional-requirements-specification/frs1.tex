@@ -1,0 +1,36 @@
+\newpage
+
+\section{FRS 1}
+
+\subsection{FRS 1.1 - Login Module}
+
+\subsubsection*{FRS 1.1.1 - Login}
+
+\begin{table}[!ht]
+	\renewcommand{\arraystretch}{1.3}
+	\label{tb:frs111}
+	\centering
+	\begin{tabular}{ r | L{12cm}}
+		\hline
+		\multicolumn{2}{l}{\textbf{FRS 1.1.1-Login}}              \\
+		\hline
+		\textbf{Method}                       & POST              \\
+		\hline
+		\textbf{URL}                          & /user/login       \\
+		\hline
+		\textbf{needToken}                    & no                \\
+		\hline
+		\multirow[t]{2}{*}{\textbf{Params}}   & username : string \\
+		                                      & password : string \\
+		\hline
+		\multirow[t]{1}{*}{\textbf{response}} & code : integer    \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\textbf{Code:}
+\begin{itemize}
+	\item 0 : login successed
+	\item 1 : user not exist
+	\item 2 : password not match
+\end{itemize}

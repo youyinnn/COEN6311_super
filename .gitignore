@@ -137,3 +137,6 @@ dmypy.json
 *.fls
 *.out
 *.synctex.gz
+
+dist
+node_modules
