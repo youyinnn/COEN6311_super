@@ -28,6 +28,13 @@
     <v-main>
       <router-view></router-view>
     </v-main>
+
+    <v-footer padless height="30" class="d-flex align-center justify-center">
+      <div style="font-size: 15px">
+        FALL2021 - <strong>CONCORDIA UNIVERSITY</strong> -
+        <strong>COEN6311 Group Super</strong>
+      </div>
+    </v-footer>
   </v-app>
 </template>
 
@@ -36,7 +43,7 @@ export default {
   name: "App",
 
   data: () => ({
-    //
+    isLogin: false,
   }),
 };
 </script>
