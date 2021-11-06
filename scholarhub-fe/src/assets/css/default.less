@@ -10,7 +10,6 @@
 body,
 html {
   backface-visibility: hidden;
-  overflow: hidden;
 }
 
 .my-toast-container {
@@ -25,4 +24,17 @@ html {
   z-index: 300 !important;
   font-family: "Roboto", sans-serif;
   font-weight: bold !important;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.default-transit5 {
+  transition: all 0.5s;
+}
+.default-transit3 {
+  transition: all 0.3s;
 }

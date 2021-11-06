@@ -1,14 +1,5 @@
 <template>
-  <v-app-bar app dense color="primary" elevation="3">
-    <!-- <div class="d-flex align-center">
-      <v-chip class="ma-2 unselectable" color="cyan" label text-color="white">
-        <v-img
-          max-height="20"
-          max-width="20"
-          src="@/assets/img/graduation-cap.png"
-        ></v-img>
-      </v-chip>
-    </div> -->
+  <v-app-bar app dense color="primary" elevation="3" hide-on-scroll>
     <v-btn small raised color="teal" @click="goHome">
       <v-img
         max-height="20"

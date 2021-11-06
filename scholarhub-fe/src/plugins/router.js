@@ -20,10 +20,14 @@ const routes = [
       import(/* webpackChunkName: "about" */ "@/views/Register.vue"),
   },
   {
+    path: "/papers",
+    name: "Papers",
+    component: () => import("@/views/PaperSearchResult.vue"),
+  },
+  {
     path: "*",
     name: "PageNotFound",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "@/views/PageNotFound.vue"),
+    component: () => import("@/views/PageNotFound.vue"),
   },
 ];
 
