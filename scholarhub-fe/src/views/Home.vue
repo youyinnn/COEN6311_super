@@ -32,13 +32,10 @@ export default {
 </script>
 
 <style scoped>
-.home {
-  height: 100%;
-}
 .home-box {
   margin: auto;
   position: relative;
-  top: -2em;
+  transform: translateY(-2em);
 }
 .man-logo {
   float: left;

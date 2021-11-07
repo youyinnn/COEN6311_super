@@ -51,6 +51,9 @@ export default {
       if (this.$props.justGo !== undefined) {
         return;
       }
+      this.search(sT);
+    },
+    search(sT) {
       this.showLoading();
       this.searchTerm = "";
       const url = this.config.paperSearchUrl;
