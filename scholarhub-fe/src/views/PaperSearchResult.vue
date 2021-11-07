@@ -164,14 +164,13 @@ export default {
       }
     },
     clearResult() {
-      console.log(123);
       this.paperData = [];
       this.page = 1;
       this.dataTotal = 0;
       this.pageTotal = 0;
     },
     pageChange(e) {
-      const currentPage = sessionStorage.getItem("currentPage");
+      const currentPage = Number(sessionStorage.getItem("currentPage"));
       if (currentPage !== e) {
         // console.log(e);
         // console.log(this.historySearchTerm);
@@ -184,6 +183,7 @@ export default {
             page: e,
           },
         });
+        sessionStorage.setItem("currentPage", e);
       }
     },
   },
@@ -199,6 +199,7 @@ export default {
       //   console.log(ins.historySearchTerm);
       if (ins.historySearchTerm !== undefined) {
         ins.$refs.searchBar.search(ins.historySearchTerm, ins.page);
+        ins.clearResult();
       }
     });
   },

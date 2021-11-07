@@ -9,14 +9,31 @@
     hide-on-scroll
   >
     <!-- <transition-group> -->
-    <v-btn key="go-home-btn" small raised color="teal" @click="goHome">
-      <v-img
-        max-height="20"
-        max-width="20"
-        src="@/assets/img/graduation-cap.png"
-      ></v-img>
-      <span class="mr-2 white--text">Home</span>
-    </v-btn>
+
+    <!-- <transition-group name="fade" mode="out-in"> -->
+    <div key="go-home-btn">
+      <v-btn small raised color="indigo" @click="goHome">
+        <v-img
+          max-height="20"
+          max-width="20"
+          src="@/assets/img/graduation-cap.png"
+        ></v-img>
+        <span class="mr-2 white--text">Home</span>
+      </v-btn>
+    </div>
+    <transition name="slide-fade" mode="out-in">
+      <div key="info-team-btn" v-if="isLogin" class="ml-4">
+        <v-btn key="info-btn" small raised color="cyan" class="mr-4 darken-1">
+          <v-icon color="white">mdi-information-outline</v-icon>
+          <span class="ml-2 white--text">Info.</span>
+        </v-btn>
+        <v-btn key="team-btn" small raised color="green" class="darken-1">
+          <v-icon color="white">mdi-forum</v-icon>
+          <span class="ml-2 white--text">Team</span>
+        </v-btn>
+      </div>
+    </transition>
+    <!-- </transition-group> -->
 
     <v-spacer key="spacer"></v-spacer>
 
@@ -43,7 +60,6 @@
         </v-btn>
       </div>
     </transition>
-    <!-- </transition-group> -->
   </v-app-bar>
 </template>
 

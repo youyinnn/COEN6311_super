@@ -48,10 +48,6 @@ export default {
       if (sT === "" || sT.length === 0) {
         return;
       }
-      console.log(this.$props.justGo);
-      if (this.$props.justGo !== undefined) {
-        this.vueMap.get("paperSearchResult").clearResult();
-      }
       this.search(sT, 1);
       this.$router
         .push({
@@ -83,8 +79,8 @@ export default {
           },
         })
         .then(function (response) {
-          console.log(response);
-          console.log(thiz.vueMap);
+          //   console.log(response);
+          //   console.log(thiz.vueMap);
           thiz.vueMap
             .get("paperSearchResult")
             .showResult(sT, response.data, page);
