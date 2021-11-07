@@ -1,9 +1,9 @@
 <template>
-  <v-container id="paperSearchResult" class="paper-search-result">
+  <div id="paperSearchResult" class="paper-search-result">
     <div class="search-bar-box">
       <SearchBar ref="searchBar" dense loading></SearchBar>
     </div>
-    <div style="width: 100%" class="mt-4 mb-4">
+    <div style="width: 100%; max-width: 900px; margin: auto" class="mt-4 mb-4">
       <v-divider></v-divider>
     </div>
     <transition name="slide-fade" mode="out-in">
@@ -60,7 +60,8 @@
                     <span class="paper-data-label"
                       ><strong>Open Access</strong></span
                     >
-                    <span>{{ paper.isOpenAccess }}</span>
+                    <span v-if="paper.isOpenAccess">Yes</span>
+                    <span v-else>No</span>
                   </div>
                   <div>
                     <span class="paper-data-label"
@@ -104,7 +105,7 @@
             </template>
           </v-hover>
         </transition-group>
-        <div class="text-center mt-2 mb-6">
+        <div class="text-center mt-2 mb-6 unselectable">
           <v-pagination
             v-model="page"
             :length="dataTotal"
@@ -128,7 +129,7 @@
         <Footer abs />
       </div>
     </transition>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -145,11 +146,14 @@ export default {
     SearchBar,
   },
   methods: {
-    showResult(st, data) {
+    showResult(st, data, page) {
       this.clearResult();
       this.historySearchTerm = st;
       this.dataTotal = data.total;
       this.paperData = data.data;
+      if (page !== undefined) {
+        this.page = page;
+      }
     },
     clearResult() {
       this.paperData = [];
@@ -168,7 +172,7 @@ export default {
     next((ins) => {
       ins.historySearchTerm = to.query.query;
       //   console.log(ins.historySearchTerm);
-      if (!ins.hasResult && ins.historySearchTerm !== undefined) {
+      if (ins.historySearchTerm !== undefined) {
         ins.$refs.searchBar.search(ins.historySearchTerm);
       }
     });
@@ -189,6 +193,7 @@ export default {
   bottom: 0;
   right: 0;
   left: 0;
+  padding: 20px;
 }
 .search-bar-box {
   width: 100%;
