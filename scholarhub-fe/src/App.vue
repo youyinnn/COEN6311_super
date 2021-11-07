@@ -1,6 +1,6 @@
 <template>
   <v-app id="app" class="app">
-    <TopBar v-bind:isLogin="isLogin" />
+    <TopBar />
 
     <v-main>
       <!-- <transition name="fade">
@@ -12,12 +12,7 @@
         </keep-alive>
       </transition>
     </v-main>
-    <v-footer padless height="30" class="d-flex align-center justify-center">
-      <div style="font-size: 15px">
-        <strong>FALL2021 - Concordia University - COEN6311 Group Super</strong>
-      </div>
-    </v-footer>
-    <LoginBox></LoginBox>
+    <LoginBox padless></LoginBox>
   </v-app>
 </template>
 
@@ -31,9 +26,7 @@ export default {
     TopBar,
     LoginBox,
   },
-  data: () => ({
-    isLogin: false,
-  }),
+  data: () => ({}),
 };
 </script>
 
@@ -60,7 +53,12 @@ app {
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
+  /* right: -10%; */
   transform: translateX(-10px);
   opacity: 0;
+}
+
+.v-main {
+  padding: 0 !important;
 }
 </style>

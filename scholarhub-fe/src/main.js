@@ -1,5 +1,7 @@
 import Vue from "vue";
+import Vuex from "vuex";
 import App from "./App.vue";
+import Footer from "@/components/Footer.vue";
 import vuetify from "./plugins/vuetify";
 import router from "./plugins/router";
 import Toasted from "vue-toasted";
@@ -76,8 +78,35 @@ Vue.mixin({
   },
 });
 
+Vue.use(Vuex);
+
+const token = localStorage.getItem("token");
+const isLogin = token !== null;
+
+const store = new Vuex.Store({
+  state: {
+    isLogin: isLogin,
+    token: token,
+  },
+  mutations: {
+    login(state, payload) {
+      state.isLogin = true;
+      state.token = payload.token;
+      localStorage.setItem("token", payload.token);
+    },
+    logout(state) {
+      state.isLogin = false;
+      state.token = "";
+      localStorage.removeItem("token");
+    },
+  },
+});
+
+Vue.component("Footer", Footer);
+
 new Vue({
   vuetify,
   router,
+  store,
   render: (h) => h(App),
 }).$mount("#app");

@@ -49,9 +49,19 @@ export default {
         return;
       }
       if (this.$props.justGo !== undefined) {
-        return;
+        if (window.location.hash !== "#/papers") {
+          this.$router
+            .push({
+              path: `/papers`,
+              query: {
+                query: sT,
+              },
+            })
+            .catch(() => {});
+        }
+      } else {
+        this.search(sT);
       }
-      this.search(sT);
     },
     search(sT) {
       this.showLoading();
@@ -68,19 +78,9 @@ export default {
         })
         .then(function (response) {
           console.log(response);
-          //   console.log(thiz.vueMap);
+          console.log(thiz.vueMap);
           thiz.hideLoading();
           thiz.vueMap.get("paperSearchResult").showResult(sT, response.data);
-          if (window.location.hash !== "#/papers") {
-            thiz.$router
-              .push({
-                path: `/papers`,
-                query: {
-                  query: sT,
-                },
-              })
-              .catch(() => {});
-          }
         })
         .catch(function (error) {
           console.log(error);

@@ -10,10 +10,11 @@
           ><span class="red--text">u</span><span class="orange--text">b</span>
         </div>
         <div>
-          <SearchBar loading></SearchBar>
+          <SearchBar just-go loading></SearchBar>
         </div>
       </div>
     </div>
+    <Footer abs />
   </v-container>
 </template>
 
@@ -32,6 +33,9 @@ export default {
 </script>
 
 <style scoped>
+.home {
+  height: 100%;
+}
 .home-box {
   margin: auto;
   position: relative;

@@ -6,7 +6,7 @@
     <div style="width: 100%" class="mt-4 mb-4">
       <v-divider></v-divider>
     </div>
-    <transition-group name="slide-fade" mode="out-in">
+    <transition name="slide-fade" mode="out-in">
       <div key="paper-list-box" v-if="hasResult" class="paper-list-box">
         <div class="hint">
           <strong class="mr-2">{{ dataTotal }} result of:</strong
@@ -104,7 +104,7 @@
             </template>
           </v-hover>
         </transition-group>
-        <div class="text-center">
+        <div class="text-center mt-2 mb-6">
           <v-pagination
             v-model="page"
             :length="dataTotal"
@@ -112,6 +112,7 @@
             @input="pageChange"
           ></v-pagination>
         </div>
+        <Footer />
       </div>
       <div
         key="no-result"
@@ -119,12 +120,14 @@
         class="no-result d-flex align-center justify-center"
       >
         <div style="transform: translateY(-20%)">
+          <!-- <div> -->
           <v-img max-height="200" max-width="200" src="@/assets/img/search.png">
           </v-img>
           <div style="padding: 10px">Key in you searh term</div>
         </div>
+        <Footer abs />
       </div>
-    </transition-group>
+    </transition>
   </v-container>
 </template>
 

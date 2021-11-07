@@ -8345,6 +8345,11 @@ vuetify@^2.4.0:
   resolved "https://registry.npmmirror.com/vuetify/download/vuetify-2.5.10.tgz#165cb3de9dbffbc94bc775aa2f698eb9fa89eabe"
   integrity sha1-Flyz3p2/+8lLx3WqL2mOufqJ6r4=
 
+vuex@^3.6.2:
+  version "3.6.2"
+  resolved "https://registry.nlark.com/vuex/download/vuex-3.6.2.tgz#236bc086a870c3ae79946f107f16de59d5895e71"
+  integrity sha1-I2vAhqhww655lG8QfxbeWdWJXnE=
+
 watchpack-chokidar2@^2.0.1:
   version "2.0.1"
   resolved "https://registry.nlark.com/watchpack-chokidar2/download/watchpack-chokidar2-2.0.1.tgz#38500072ee6ece66f3769936950ea1771be1c957"

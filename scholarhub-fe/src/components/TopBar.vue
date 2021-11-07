@@ -8,7 +8,8 @@
     elevation="3"
     hide-on-scroll
   >
-    <v-btn small raised color="teal" @click="goHome">
+    <!-- <transition-group> -->
+    <v-btn key="go-home-btn" small raised color="teal" @click="goHome">
       <v-img
         max-height="20"
         max-width="20"
@@ -17,29 +18,37 @@
       <span class="mr-2 white--text">Home</span>
     </v-btn>
 
-    <v-spacer></v-spacer>
+    <v-spacer key="spacer"></v-spacer>
 
-    <v-btn v-if="isLogin" small raised color="teal">
-      <span class="mr-2">Sign Out</span>
-      <v-icon>mdi-logout-variant</v-icon>
-    </v-btn>
-    <div v-else>
-      <v-btn small raised color="teal" class="mr-4" @click="goSignUp">
-        <span class="mr-2 white--text">Sign Up</span>
-        <v-icon color="white">mdi-clipboard-account</v-icon>
+    <transition name="fade" mode="out-in">
+      <v-btn
+        key="sign-out-btn"
+        v-if="isLogin"
+        small
+        raised
+        color="teal"
+        @click="signOut"
+      >
+        <span class="mr-2 white--text">Sign Out</span>
+        <v-icon color="white">mdi-logout-variant</v-icon>
       </v-btn>
-      <v-btn small raised color="teal" @click="showLoginBox">
-        <span class="mr-2 white--text">Sign In</span>
-        <v-icon color="white">mdi-login-variant</v-icon>
-      </v-btn>
-    </div>
+      <div key="sign-up-in-btns" v-else>
+        <v-btn small raised color="teal" class="mr-4" @click="goSignUp">
+          <span class="mr-2 white--text">Sign Up</span>
+          <v-icon color="white">mdi-clipboard-account</v-icon>
+        </v-btn>
+        <v-btn small raised color="teal" @click="showLoginBox">
+          <span class="mr-2 white--text">Sign In</span>
+          <v-icon color="white">mdi-login-variant</v-icon>
+        </v-btn>
+      </div>
+    </transition>
+    <!-- </transition-group> -->
   </v-app-bar>
 </template>
 
 <script>
 export default {
-  props: ["isLogin"],
-  setup() {},
   methods: {
     goSignUp() {
       this.$router.push("/register").catch(() => {});
@@ -50,11 +59,22 @@ export default {
     showLoginBox() {
       this.vueMap.get("loginBox").showBox();
     },
+    signOut() {
+      this.$store.commit("logout");
+      this.successToast("Sign out succeed!");
+    },
+  },
+  computed: {
+    isLogin: function () {
+      return this.$store.state.isLogin;
+    },
   },
 };
 </script>
 
 <style scoped>
 .top-bar {
+  position: relative !important;
+  max-height: 48px;
 }
 </style>

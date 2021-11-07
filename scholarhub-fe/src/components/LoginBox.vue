@@ -5,10 +5,9 @@
       'login-box': true,
       'elevation-5': true,
       'login-box-hide': boxHide,
-      'entirely-hide': boxEntirelyHide,
     }"
   >
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form ref="form" v-model="valid" lazy-validation @submit="login">
       <v-text-field
         v-model="username"
         :rules="rules"
@@ -16,6 +15,7 @@
         required
         hide-details
         dark
+        @keypress="press"
       ></v-text-field>
 
       <v-text-field
@@ -26,9 +26,12 @@
         type="password"
         hide-details
         dark
+        @keypress="press"
       ></v-text-field>
       <div class="d-flex justify-end mt-4">
-        <v-btn small class="mr-4" color="error" @click="hideBox"> Close </v-btn>
+        <v-btn outlined small class="mr-4" color="error" @click="hideBox">
+          Close
+        </v-btn>
         <v-btn small class="" color="success" @click="login"> Login </v-btn>
       </div>
     </v-form>
@@ -43,22 +46,40 @@ export default {
     rules: [(v) => !!v || "Required"],
     password: "",
     boxHide: true,
-    boxEntirelyHide: true,
   }),
 
   methods: {
-    login() {
-      this.$refs.form.validate();
+    login(e) {
+      if (e !== undefined) e.preventDefault();
+      const valid = this.$refs.form.validate();
+      if (valid) {
+        // const username = this.username;
+        // const password = this.password;
+        // console.log(username);
+        // console.log(password);
+
+        this.errorToast("Wrong username!");
+        this.errorToast("Wrong password!");
+        this.successToast("Login succeed!");
+
+        const token = "123456789";
+
+        this.$store.commit("login", {
+          token,
+        });
+        this.hideBox();
+      }
+    },
+    press(e) {
+      if (e.key === "Enter") {
+        this.login();
+      }
     },
     showBox() {
       this.boxHide = false;
-      this.boxEntirelyHide = false;
     },
     hideBox() {
       this.boxHide = true;
-      //   setTimeout(() => {
-      //     this.boxEntirelyHide = true;
-      //   }, 600);
     },
   },
 };
@@ -80,10 +101,7 @@ export default {
 }
 .login-box-hide {
   /* top: -16%; */
-  right: -31%;
+  right: -33%;
   opacity: 0;
-}
-.entirely-hide {
-  right: -31%;
 }
 </style>
