@@ -1,5 +1,5 @@
 <template>
-  <div class="clearfix search-form">
+  <div id="searchBar" class="clearfix search-form">
     <v-form ref="form" class="" @submit="submitSearch">
       <v-text-field
         :label="searchLabel"
@@ -19,7 +19,8 @@
         :class="{
           'class-show-loading': classForShowLoading,
           'ml-4': true,
-          'class-loading': true,
+          'class-loading-dense': denseData,
+          'class-loading': !denseData,
           'fill-height': true,
         }"
       ></v-progress-circular>
@@ -28,8 +29,10 @@
 </template>
 
 <script>
+const axios = require("axios").default;
+
 export default {
-  props: ["dense", "loading"],
+  props: ["dense", "loading", "justGo"],
   data: () => ({
     searchLabel: "Search Paper",
     valid: false,
@@ -38,13 +41,50 @@ export default {
   }),
   methods: {
     submitSearch(e) {
-      e.preventDefault();
-      console.log(this.searchTerm);
-      this.$router.push("/papers").catch(() => {});
+      if (e !== undefined) {
+        e.preventDefault();
+      }
+      const sT = this.searchTerm;
+      if (sT === "" || sT.length === 0) {
+        return;
+      }
+      if (this.$props.justGo !== undefined) {
+        return;
+      }
       this.showLoading();
-      setTimeout(() => {
-        this.hideLoading();
-      }, 3000);
+      this.searchTerm = "";
+      const url = this.config.paperSearchUrl;
+      const thiz = this;
+      axios
+        .get(url, {
+          params: {
+            query: sT,
+            fields:
+              "url,title,authors,abstract,venue,year,referenceCount,isOpenAccess,fieldsOfStudy",
+          },
+        })
+        .then(function (response) {
+          console.log(response);
+          //   console.log(thiz.vueMap);
+          thiz.hideLoading();
+          thiz.vueMap.get("paperSearchResult").showResult(sT, response.data);
+          if (window.location.hash !== "#/papers") {
+            thiz.$router
+              .push({
+                path: `/papers`,
+                query: {
+                  query: sT,
+                },
+              })
+              .catch(() => {});
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        .then(function () {
+          // 总是会执行
+        });
     },
     showLoading() {
       if (this.$props.loading !== undefined) {
@@ -55,7 +95,11 @@ export default {
       this.classForShowLoading = false;
     },
   },
-  computed: {},
+  computed: {
+    denseData: function () {
+      return this.$props.dense !== undefined;
+    },
+  },
 };
 </script>
 
@@ -74,10 +118,16 @@ export default {
 .class-show-loading {
   opacity: 1 !important;
 }
-.class-loading {
+.class-loading-dense {
   height: 40px !important;
   width: 40px !important;
   transform: translateX(-64px) scale(0.5);
+  position: absolute;
+}
+.class-loading {
+  height: 57px !important;
+  width: 40px !important;
+  transform: translateX(-64px) scale(0.7);
   position: absolute;
 }
 </style>

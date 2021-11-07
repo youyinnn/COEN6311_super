@@ -1,5 +1,9 @@
 <template>
-  <v-container fill-height class="pageNotFoundBox d-flex align-center">
+  <v-container
+    id="pageNotFound"
+    fill-height
+    class="pageNotFoundBox d-flex align-center"
+  >
     <v-img
       max-width="300"
       src="@/assets/img/error-404.png"

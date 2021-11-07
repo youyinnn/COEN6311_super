@@ -3,6 +3,7 @@ import App from "./App.vue";
 import vuetify from "./plugins/vuetify";
 import router from "./plugins/router";
 import Toasted from "vue-toasted";
+import config from "@/config/config";
 
 Vue.config.productionTip = false;
 
@@ -14,6 +15,7 @@ Vue.mixin({
     return {
       vueMap: vueMap,
       mapKey: "",
+      config: config,
     };
   },
   mounted: function () {
@@ -36,7 +38,7 @@ Vue.mixin({
         }
       }
       let toastOption = {
-        position: "top-right",
+        position: "top-left",
         duration: duration,
         keepOnHover: true,
         className: "my-toast",

@@ -1,5 +1,13 @@
 <template>
-  <v-app-bar app dense color="primary" elevation="3" hide-on-scroll>
+  <v-app-bar
+    class="top-bar"
+    id="topBar"
+    app
+    dense
+    color="primary"
+    elevation="3"
+    hide-on-scroll
+  >
     <v-btn small raised color="teal" @click="goHome">
       <v-img
         max-height="20"
@@ -20,7 +28,7 @@
         <span class="mr-2 white--text">Sign Up</span>
         <v-icon color="white">mdi-clipboard-account</v-icon>
       </v-btn>
-      <v-btn small raised color="teal">
+      <v-btn small raised color="teal" @click="showLoginBox">
         <span class="mr-2 white--text">Sign In</span>
         <v-icon color="white">mdi-login-variant</v-icon>
       </v-btn>
@@ -39,6 +47,14 @@ export default {
     goHome() {
       this.$router.push("/").catch(() => {});
     },
+    showLoginBox() {
+      this.vueMap.get("loginBox").showBox();
+    },
   },
 };
 </script>
+
+<style scoped>
+.top-bar {
+}
+</style>

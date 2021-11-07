@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height class="d-flex align-center">
+  <v-container id="register" fill-height class="d-flex align-center">
     <div class="regBox">
       <div class="regLogo mr-6">
         <v-img

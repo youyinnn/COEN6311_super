@@ -1,5 +1,5 @@
 <template>
-  <v-container class="home" fill-height>
+  <v-container id="home" class="home" fill-height>
     <div class="home-box">
       <div class="man-logo mr-8">
         <v-img max-width="200" src="@/assets/img/man.png"></v-img>
@@ -10,7 +10,7 @@
           ><span class="red--text">u</span><span class="orange--text">b</span>
         </div>
         <div>
-          <SearchBar></SearchBar>
+          <SearchBar loading></SearchBar>
         </div>
       </div>
     </div>
