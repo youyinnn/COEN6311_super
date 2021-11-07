@@ -48,30 +48,36 @@ export default {
       if (sT === "" || sT.length === 0) {
         return;
       }
+      console.log(this.$props.justGo);
       if (this.$props.justGo !== undefined) {
-        if (window.location.hash !== "#/papers") {
-          this.$router
-            .push({
-              path: `/papers`,
-              query: {
-                query: sT,
-              },
-            })
-            .catch(() => {});
-        }
-      } else {
-        this.search(sT);
+        this.vueMap.get("paperSearchResult").clearResult();
       }
+      this.search(sT, 1);
+      this.$router
+        .push({
+          path: `/papers`,
+          query: {
+            query: sT,
+            page: 1,
+          },
+        })
+        .catch(() => {});
     },
-    search(sT) {
+    search(sT, page) {
       this.showLoading();
       this.searchTerm = "";
       const url = this.config.paperSearchUrl;
       const thiz = this;
+      const limit = 10;
+      if (page === undefined) {
+        page = 1;
+      }
       axios
         .get(url, {
           params: {
             query: sT,
+            limit: limit,
+            offset: (page - 1) * limit,
             fields:
               "url,title,authors,abstract,venue,year,referenceCount,isOpenAccess,fieldsOfStudy",
           },
@@ -79,14 +85,17 @@ export default {
         .then(function (response) {
           console.log(response);
           console.log(thiz.vueMap);
-          thiz.hideLoading();
-          thiz.vueMap.get("paperSearchResult").showResult(sT, response.data);
+          thiz.vueMap
+            .get("paperSearchResult")
+            .showResult(sT, response.data, page);
         })
         .catch(function (error) {
           console.log(error);
+          thiz.errorToast("Search API went wrong!");
         })
         .then(function () {
           // 总是会执行
+          thiz.hideLoading();
         });
     },
     showLoading() {

@@ -12,6 +12,14 @@
           <strong class="mr-2">{{ dataTotal }} result of:</strong
           ><span>{{ historySearchTerm }}</span>
         </div>
+        <div v-if="hasResult" class="text-center mt-2 mb-6 unselectable">
+          <v-pagination
+            v-model="page"
+            :length="pageTotal"
+            :total-visible="7"
+            @input="pageChange"
+          ></v-pagination>
+        </div>
         <transition-group name="fade" mode="out-in">
           <v-hover
             class="paper-card"
@@ -105,14 +113,7 @@
             </template>
           </v-hover>
         </transition-group>
-        <div class="text-center mt-2 mb-6 unselectable">
-          <v-pagination
-            v-model="page"
-            :length="dataTotal"
-            :total-visible="7"
-            @input="pageChange"
-          ></v-pagination>
-        </div>
+
         <Footer />
       </div>
       <div
@@ -139,6 +140,7 @@ export default {
   data: () => ({
     dataTotal: 0,
     page: 1,
+    pageTotal: 1,
     paperData: [],
     historySearchTerm: "<nothing>",
   }),
@@ -149,18 +151,40 @@ export default {
     showResult(st, data, page) {
       this.clearResult();
       this.historySearchTerm = st;
+      if (data.total > 9999) {
+        this.pageTotal = 999;
+      } else {
+        this.pageTotal = Math.floor(data.total / 10);
+      }
       this.dataTotal = data.total;
       this.paperData = data.data;
       if (page !== undefined) {
         this.page = page;
+        sessionStorage.setItem("currentPage", page);
       }
     },
     clearResult() {
+      console.log(123);
       this.paperData = [];
+      this.page = 1;
+      this.dataTotal = 0;
+      this.pageTotal = 0;
     },
     pageChange(e) {
-      console.log(this.historySearchTerm);
-      console.log(e);
+      const currentPage = sessionStorage.getItem("currentPage");
+      if (currentPage !== e) {
+        // console.log(e);
+        // console.log(this.historySearchTerm);
+        // console.log(this.$refs);
+        this.$refs.searchBar.search(this.historySearchTerm, e);
+        this.$router.push({
+          path: `/papers`,
+          query: {
+            query: this.historySearchTerm,
+            page: e,
+          },
+        });
+      }
     },
   },
   beforeRouteEnter(to, from, next) {
@@ -171,9 +195,10 @@ export default {
     // because it has not been created yet when this guard is called!
     next((ins) => {
       ins.historySearchTerm = to.query.query;
+      ins.page = Number(to.query.page);
       //   console.log(ins.historySearchTerm);
       if (ins.historySearchTerm !== undefined) {
-        ins.$refs.searchBar.search(ins.historySearchTerm);
+        ins.$refs.searchBar.search(ins.historySearchTerm, ins.page);
       }
     });
   },
@@ -193,7 +218,7 @@ export default {
   bottom: 0;
   right: 0;
   left: 0;
-  padding: 20px;
+  padding-top: 20px;
 }
 .search-bar-box {
   width: 100%;
