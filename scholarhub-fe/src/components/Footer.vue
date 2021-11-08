@@ -31,6 +31,7 @@ export default {
 .footer {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  right: 0;
+  left: 0;
 }
 </style>

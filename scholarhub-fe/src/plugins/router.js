@@ -25,6 +25,11 @@ const routes = [
     component: () => import("@/views/PaperSearchResult.vue"),
   },
   {
+    path: "/paper/:id",
+    name: "Paper",
+    component: () => import("@/views/PaperDetail.vue"),
+  },
+  {
     path: "*",
     name: "PageNotFound",
     component: () => import("@/views/PageNotFound.vue"),

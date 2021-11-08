@@ -25,7 +25,7 @@
       <div key="info-team-btn" v-if="isLogin" class="ml-4">
         <v-btn key="info-btn" small raised color="cyan" class="mr-4 darken-1">
           <v-icon color="white">mdi-information-outline</v-icon>
-          <span class="ml-2 white--text">Info.</span>
+          <span class="ml-2 white--text">Info</span>
         </v-btn>
         <v-btn key="team-btn" small raised color="green" class="darken-1">
           <v-icon color="white">mdi-forum</v-icon>

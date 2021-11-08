@@ -62,14 +62,13 @@ export default {
     search(sT, page) {
       this.showLoading();
       this.searchTerm = "";
-      const url = this.config.paperSearchUrl;
       const thiz = this;
       const limit = 10;
       if (page === undefined) {
         page = 1;
       }
       axios
-        .get(url, {
+        .get(this.config.paperSearchUrl, {
           params: {
             query: sT,
             limit: limit,

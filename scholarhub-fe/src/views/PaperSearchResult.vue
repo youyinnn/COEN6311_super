@@ -28,7 +28,11 @@
           >
             <template v-slot:default="{ hover }">
               <v-card
-                class="mx-auto default-transit3 mb-4"
+                :class="{
+                  'mx-auto': true,
+                  'default-transit3': true,
+                  'mb-4': true,
+                }"
                 max-width="700"
                 :elevation="hover ? 10 : 1"
               >
@@ -83,16 +87,18 @@
                       >[{{ field }}]
                     </span>
                   </div>
-                  <!-- <div>
-                            <span class="paper-data-label"><strong>Url</strong></span>
-                            <span>{{ paper.url }}</span>
-                        </div> -->
                 </v-card-text>
                 <v-card-actions class="paper-card-action d-flex justify-end">
                   <v-btn small class="ma-2" outlined color="red">
                     Downloads
                   </v-btn>
-                  <v-btn small class="ma-2" outlined color="indigo">
+                  <v-btn
+                    small
+                    class="ma-2"
+                    outlined
+                    color="indigo"
+                    @click="goDetail(paper.paperId)"
+                  >
                     Details
                   </v-btn>
                 </v-card-actions>
@@ -112,6 +118,7 @@
               </v-card>
             </template>
           </v-hover>
+          <div key="unuse" style="height: 1px" class="mb-6"></div>
         </transition-group>
 
         <Footer />
@@ -185,6 +192,11 @@ export default {
         });
         sessionStorage.setItem("currentPage", e);
       }
+    },
+    goDetail(id) {
+      this.$router.push({
+        path: `/paper/${id}`,
+      });
     },
   },
   beforeRouteEnter(to, from, next) {
