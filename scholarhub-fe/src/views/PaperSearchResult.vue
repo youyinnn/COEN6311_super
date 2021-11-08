@@ -105,7 +105,7 @@
                 <v-expansion-panels>
                   <v-expansion-panel>
                     <v-expansion-panel-header>
-                      Abstract
+                      <strong>Abstract</strong>
                       <template v-slot:actions>
                         <v-icon color="primary"> $expand </v-icon>
                       </template>
@@ -202,9 +202,6 @@ export default {
   beforeRouteEnter(to, from, next) {
     // console.log(from);
     // console.log(next);
-    // called before the route that renders this component is confirmed.
-    // does NOT have access to `this` component instance,
-    // because it has not been created yet when this guard is called!
     next((ins) => {
       ins.historySearchTerm = to.query.query;
       ins.page = Number(to.query.page);
@@ -219,6 +216,11 @@ export default {
     hasResult: function () {
       return this.dataTotal > 0;
     },
+  },
+  mounted: function () {
+    console.log(this.$router);
+    console.log(this.historySearchTerm);
+    console.log(this.page);
   },
 };
 </script>
@@ -241,12 +243,8 @@ export default {
   display: inline-block;
   margin-right: 10px;
 }
-.v-expansion-panel-header {
-}
 .paper-list-box {
   width: 100%;
-}
-.paper-card {
 }
 .no-result {
   margin: auto;
@@ -258,9 +256,6 @@ export default {
 }
 .paper-card-action > button {
   float: right;
-}
-.paper-card {
-  /* background-color: #fefbf3 !important; */
 }
 .paper-card > .v-card__title {
   background-color: #bcd8d3;
@@ -274,9 +269,6 @@ export default {
 .paper-card > .v-card__actions {
   padding-top: 0;
   padding-bottom: 0;
-}
-.paper-card > .v-expansion-panels > * {
-  /* background-color: #f8f0df !important; */
 }
 .hint {
   max-width: 700px;

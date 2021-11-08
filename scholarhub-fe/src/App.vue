@@ -7,9 +7,9 @@
         <router-view></router-view>
       </transition> -->
       <transition name="slide-fade" mode="out-in">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+        <!-- <keep-alive> -->
+        <router-view></router-view>
+        <!-- </keep-alive> -->
       </transition>
     </v-main>
     <LoginBox padless></LoginBox>
