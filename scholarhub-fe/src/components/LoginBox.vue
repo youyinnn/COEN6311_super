@@ -88,7 +88,7 @@ export default {
 <style scoped>
 .login-box {
   position: absolute;
-  background-color: #2c394b;
+  background-color: #272f3a;
   right: 1rem;
   z-index: 3;
   top: 4rem;

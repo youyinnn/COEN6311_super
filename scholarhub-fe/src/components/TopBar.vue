@@ -37,7 +37,7 @@
 
     <v-spacer key="spacer"></v-spacer>
 
-    <transition name="fade" mode="out-in">
+    <transition name="slide-r-fade" mode="out-in">
       <v-btn
         key="sign-out-btn"
         v-if="isLogin"

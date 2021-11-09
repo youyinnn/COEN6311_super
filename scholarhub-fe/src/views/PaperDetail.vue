@@ -94,20 +94,20 @@
       </div>
 
       <v-card-actions class="paper-card-action d-flex justify-end pt-0">
-        <transition name="fade" mode="out-in">
+        <transition name="slide-r-fade" mode="out-in">
           <div v-if="userActionLoaded" key="action-after-user-data">
             <v-btn small class="ma-2 white--text" color="red">
               Downloads
             </v-btn>
             <v-btn small class="ma-2 white--text" color="green">
-              <span class="mr-2">{{ paperUserData.likes }}</span>
+              <span class="mr-2">{{ paperOperatedData.likes }}</span>
               <span>Likes</span>
               <v-icon small color="white" class="ml-2"
                 >mdi-thumb-up-outline</v-icon
               >
             </v-btn>
             <v-btn small class="ma-2 white--text darken-2" color="grey">
-              <span class="mr-2">{{ paperUserData.dislikes }}</span>
+              <span class="mr-2">{{ paperOperatedData.dislikes }}</span>
 
               <span>Dislikes</span>
               <v-icon small color="white" class="ml-2"
@@ -115,7 +115,7 @@
               >
             </v-btn>
             <v-btn small class="ma-2 white--text" color="cyan">
-              <span class="mr-2">{{ paperUserData.shared }}</span>
+              <span class="mr-2">{{ paperOperatedData.shared }}</span>
 
               <span>Share</span>
 
@@ -169,14 +169,28 @@
     <div class="like-and-comment-box">
       <v-card>
         <v-card-subtitle> Comments </v-card-subtitle>
-        <v-skeleton-loader
-          class="mx-auto"
-          type="table-heading"
-        ></v-skeleton-loader>
-        <v-skeleton-loader
-          class="mx-auto pa-4"
-          type="paragraph"
-        ></v-skeleton-loader>
+        <div v-if="!paperCommentFetched">
+          <v-skeleton-loader
+            class="mx-auto"
+            type="table-heading"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto pa-4"
+            type="paragraph"
+          ></v-skeleton-loader>
+        </div>
+        <div v-else>
+          <v-divider></v-divider>
+          <div v-for="comment in paperComments" :key="comment.id" class="">
+            <div class="commenter">
+              <strong class="mr-2">{{ comment.name }}</strong>
+              <span style="font-size: 12px; color: grey">{{
+                comment.time
+              }}</span>
+            </div>
+            <div class="comment">{{ comment.content }}</div>
+          </div>
+        </div>
       </v-card>
     </div>
   </div>
@@ -198,12 +212,14 @@ export default {
       fieldsOfStudy: [],
       abstract: " ",
     },
-    paperUserData: {
+    paperOperatedData: {
       likes: 0,
       dislikes: 0,
       shared: 0,
     },
+    paperComments: [],
     userActionLoaded: false,
+    paperCommentFetched: false,
   }),
   methods: {
     getDetail(id) {
@@ -220,10 +236,44 @@ export default {
           // console.log(response);
 
           thiz.paper = response.data;
+          // TODO: user action Data
           setTimeout(() => {
             thiz.userActionLoaded = true;
-          }, 2000);
-          console.log(thiz.$refs.card.$el);
+          }, 800);
+          // TODO: paper comment
+          setTimeout(() => {
+            thiz.paperCommentFetched = true;
+            thiz.paperComments = [
+              {
+                id: "123",
+                name: "Jack",
+                time: "2021/10/1 18:30",
+                content: `Because of the subtleties of finding partial phrase matches in
+                        different parts of the document, be cautious about interpreting
+                        the total field as a count of documents containing any particular
+                        word in the query.`,
+              },
+              {
+                id: "456",
+                name: "Jack",
+                time: "2021/10/1 18:30",
+                content: `Because of the subtleties of finding partial phrase matches in
+                        different parts of the document, be cautious about interpreting
+                        the total field as a count of documents containing any particular
+                        word in the query.`,
+              },
+              {
+                id: "789",
+                name: "Jack",
+                time: "2021/10/1 18:30",
+                content: `Because of the subtleties of finding partial phrase matches in
+                        different parts of the document, be cautious about interpreting
+                        the total field as a count of documents containing any particular
+                        word in the query.`,
+              },
+            ];
+          }, 800);
+          //   console.log(thiz.$refs.card.$el);
         })
         .catch(function (error) {
           console.log(error);
@@ -252,7 +302,7 @@ export default {
                 }px`
               );
           }, 350);
-          console.log(thiz);
+          //   console.log(thiz);
         });
     },
   },
@@ -262,23 +312,21 @@ export default {
     },
   },
   mounted: function () {
-    // this.getDetail(location.hash.split("/")[2]);
+    this.getDetail(location.hash.split("/")[2]);
   },
   beforeRouteEnter(to, from, next) {
     // console.log(to);
     // console.log(from);
     // console.log(next);
     next((ins) => {
-      ins.getDetail(to.params.id);
+      //   ins.getDetail(to.params.id);
+      console.log(ins);
     });
   },
 };
 </script>
 
 <style scoped>
-.detail-card {
-  /* height: 343px; */
-}
 .paper-detail-box {
   padding-bottom: 4em;
 }
@@ -299,5 +347,14 @@ export default {
 }
 .head-box {
   height: 56px;
+}
+.commenter {
+  padding: 0 16px;
+  padding-top: 8px;
+}
+.comment {
+  padding: 0 16px;
+  padding-top: 4px;
+  padding-bottom: 12px;
 }
 </style>
