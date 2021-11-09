@@ -73,8 +73,7 @@ export default {
             query: sT,
             limit: limit,
             offset: (page - 1) * limit,
-            fields:
-              "url,title,authors,abstract,venue,year,referenceCount,isOpenAccess,fieldsOfStudy",
+            fields: `url,title,authors,abstract,venue,year,referenceCount,isOpenAccess,fieldsOfStudy`,
           },
         })
         .then(function (response) {

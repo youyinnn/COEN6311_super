@@ -23,7 +23,14 @@
     </div>
     <transition name="slide-fade" mode="out-in">
       <div key="info-team-btn" v-if="isLogin" class="ml-4">
-        <v-btn key="info-btn" small raised color="cyan" class="mr-4 darken-1">
+        <v-btn
+          key="info-btn"
+          small
+          raised
+          color="cyan"
+          class="mr-4 darken-1"
+          @click="goUserInfo"
+        >
           <v-icon small color="white">mdi-information-outline</v-icon>
           <span class="ml-2 white--text">Info</span>
         </v-btn>
@@ -71,6 +78,9 @@ export default {
     },
     goHome() {
       this.$router.push("/").catch(() => {});
+    },
+    goUserInfo() {
+      this.$router.push("/user-info").catch(() => {});
     },
     showLoginBox() {
       this.vueMap.get("loginBox").showBox();

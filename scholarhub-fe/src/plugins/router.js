@@ -30,6 +30,11 @@ const routes = [
     component: () => import("@/views/PaperDetail.vue"),
   },
   {
+    path: "/user-info",
+    name: "UserInfo",
+    component: () => import("@/views/UserInfo.vue"),
+  },
+  {
     path: "*",
     name: "PageNotFound",
     component: () => import("@/views/PageNotFound.vue"),
