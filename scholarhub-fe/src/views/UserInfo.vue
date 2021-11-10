@@ -1,21 +1,82 @@
 <template>
-  <div id="user-info" class="user-info">
-    <v-card
-      class="info-box mx-auto mt-12 clearfix"
-      max-width="700"
-      elevation="0"
-    >
-      <v-img :src="userAvatarSrc" class="info-avatar mr-4"> </v-img>
-      <div class="info-detail">
-        <v-card-title>{{ userInfo.name }}</v-card-title>
+  <div id="user-info" class="user-info d-flex justify-center">
+    <v-card class="info-box mx-auto mt-12 mb-12 clearfix" elevation="0">
+      <v-img :src="userAvatarSrc" class="info-avatar mr-8"> </v-img>
+      <div class="info-detail elevation-3">
+        <v-card-title class="mb-4">
+          <v-text-field
+            hide-details
+            label="Username"
+            :value="userInfo.username"
+            disabled
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          <v-text-field
+            hide-details
+            label="Name"
+            :value="userInfo.name"
+          ></v-text-field>
+        </v-card-title>
 
-        <v-card-subtitle class="pb-0"> {{ userInfo.title }} </v-card-subtitle>
+        <v-card-subtitle class="pb-0 d-flex">
+          <v-text-field
+            hide-details
+            class="mb-4"
+            label="Title"
+            :value="userInfo.title"
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          <v-text-field
+            hide-details
+            class="mb-4"
+            label="Area"
+            :value="userInfo.area"
+          ></v-text-field>
+        </v-card-subtitle>
 
         <v-card-text class="text--primary">
-          <div>{{ userInfo.area }}</div>
-
-          <div>{{ userInfo.email }}</div>
+          <v-text-field
+            hide-details
+            class="mb-4"
+            label="E-mail"
+            :value="userInfo.email"
+          ></v-text-field>
+          <v-text-field
+            class="mb-4"
+            hide-details
+            label="Password"
+            type="password"
+            :value="userInfo.password"
+          ></v-text-field>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" small> Update </v-btn>
+          </v-card-actions>
         </v-card-text>
+        <v-divider></v-divider>
+        <div class="op-history">
+          <v-timeline align-top dense>
+            <v-timeline-item small
+              >A dynamic segment is denoted by a colon :. When a route is
+              matched, the value of the dynamic segments will be exposed as
+              this.$route.params in every component. Therefore, we can render
+              the current user ID by updating User's template to
+              this:</v-timeline-item
+            >
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>timeline item</v-timeline-item>
+          </v-timeline>
+        </div>
       </div>
     </v-card>
   </div>
@@ -72,14 +133,14 @@ export default {
 </script>
 
 <style scoped>
-.user-info {
-}
 .info-avatar {
   float: left;
   height: 200px;
   width: 200px;
+  border-radius: 200px !important;
 }
 .info-detail {
   float: left;
+  max-width: 700px;
 }
 </style>

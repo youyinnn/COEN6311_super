@@ -54,7 +54,7 @@ app {
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
   /* right: -10%; */
-  transform: translateX(-15px);
+  transform: translateX(-10px);
   opacity: 0;
 }
 
@@ -67,7 +67,7 @@ app {
 .slide-r-fade-enter, .slide-r-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
   /* right: -10%; */
-  transform: translateX(15px);
+  transform: translateX(10px);
   opacity: 0;
 }
 
