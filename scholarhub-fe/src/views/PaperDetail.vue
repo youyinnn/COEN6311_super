@@ -7,9 +7,9 @@
         'mx-auto': true,
         'default-transit3': true,
         'mb-4': true,
-        'mt-4': true,
+        'mt-8': true,
       }"
-      max-width="700"
+      max-width="750"
       elevation="6"
     >
       <div class="head-box default-transit5">
@@ -167,7 +167,7 @@
       </v-expansion-panels>
     </v-card>
     <div class="like-and-comment-box">
-      <v-card>
+      <v-card elevation="6">
         <v-card-subtitle> Comments </v-card-subtitle>
         <div v-if="!paperCommentFetched">
           <v-skeleton-loader
@@ -331,7 +331,7 @@ export default {
   padding-bottom: 4em;
 }
 .like-and-comment-box {
-  max-width: 700px;
+  max-width: 750px;
   margin: auto;
 }
 .paper-data-label {

@@ -34,7 +34,14 @@
           <v-icon small color="white">mdi-information-outline</v-icon>
           <span class="ml-2 white--text">Info</span>
         </v-btn>
-        <v-btn key="team-btn" small raised color="green" class="darken-1">
+        <v-btn
+          key="team-btn"
+          small
+          raised
+          color="green"
+          class="darken-1"
+          @click="goTeamPage"
+        >
           <v-icon small color="white">mdi-forum</v-icon>
           <span class="ml-2 white--text">Team</span>
         </v-btn>
@@ -71,6 +78,8 @@
 </template>
 
 <script>
+import Vue from "vue";
+
 export default {
   methods: {
     goSignUp() {
@@ -81,6 +90,11 @@ export default {
     },
     goUserInfo() {
       this.$router.push("/user-info").catch(() => {});
+      console.log(this.$router);
+      console.log(Vue);
+    },
+    goTeamPage() {
+      this.$router.push("/team").catch(() => {});
     },
     showLoginBox() {
       this.vueMap.get("loginBox").showBox();
@@ -88,6 +102,10 @@ export default {
     signOut() {
       this.$store.commit("logout");
       this.successToast("Sign out succeed!");
+      const currentRouter = this.$router.history.current.name;
+      if (currentRouter === "UserInfo" || currentRouter === "TeamPage") {
+        this.$router.push("/").catch(() => {});
+      }
     },
   },
   computed: {

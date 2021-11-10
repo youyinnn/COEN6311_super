@@ -5,7 +5,7 @@
         <v-img max-width="200" src="@/assets/img/man.png"></v-img>
       </div>
       <div style="float: left">
-        <div class="slogan mb-4">
+        <div class="slogan mb-4 text-h2 overline">
           Scholar <span class="teal--text">H</span
           ><span class="red--text">u</span><span class="orange--text">b</span>
         </div>

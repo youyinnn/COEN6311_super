@@ -1,8 +1,17 @@
 <template>
   <div id="user-info" class="user-info d-flex justify-center">
     <v-card class="info-box mx-auto mt-12 mb-12 clearfix" elevation="0">
-      <v-img :src="userAvatarSrc" class="info-avatar mr-8"> </v-img>
-      <div class="info-detail elevation-3">
+      <div class="info-avatar">
+        <v-img :src="userAvatarSrc"> </v-img>
+        <v-card-actions class="d-flex justify-center mt-4 v-card__actions">
+          <v-btn color="primary" small> Update Profile </v-btn>
+        </v-card-actions>
+      </div>
+      <div class="divider"></div>
+      <div class="info-detail elevation-0">
+        <div class="text-h5 mb-4 unselectable">Information</div>
+        <v-divider></v-divider>
+
         <v-card-title class="mb-4">
           <v-text-field
             hide-details
@@ -10,7 +19,6 @@
             :value="userInfo.username"
             disabled
           ></v-text-field>
-          <v-spacer></v-spacer>
           <v-text-field
             hide-details
             label="Name"
@@ -25,7 +33,6 @@
             label="Title"
             :value="userInfo.title"
           ></v-text-field>
-          <v-spacer></v-spacer>
           <v-text-field
             hide-details
             class="mb-4"
@@ -48,33 +55,20 @@
             type="password"
             :value="userInfo.password"
           ></v-text-field>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" small> Update </v-btn>
-          </v-card-actions>
         </v-card-text>
+        <div class="text-h5 mb-4 unselectable">Activities</div>
         <v-divider></v-divider>
-        <div class="op-history">
+        <div class="op-activities">
           <v-timeline align-top dense>
-            <v-timeline-item small
-              >A dynamic segment is denoted by a colon :. When a route is
-              matched, the value of the dynamic segments will be exposed as
-              this.$route.params in every component. Therefore, we can render
-              the current user ID by updating User's template to
-              this:</v-timeline-item
-            >
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
-            <v-timeline-item small>timeline item</v-timeline-item>
+            <v-timeline-item small>
+              <div class="text-subtitle-2">2021/10/15 17:39</div>
+              <div class="text-body-2">
+                A dynamic segment is denoted by a colon :. When a route is
+                matched, the value of the dynamic segments will be exposed as
+                this.$route.params in every component. Therefore, we can render
+                the current user ID by updating User's template to this:
+              </div>
+            </v-timeline-item>
           </v-timeline>
         </div>
       </div>
@@ -129,6 +123,13 @@ export default {
       return avatars[random(0, 11)];
     },
   },
+  mounted: function () {
+    const isLogin = this.$store.state.isLogin;
+    if (!isLogin) {
+      this.$router.push("/404");
+      this.errorToast("You should login first!");
+    }
+  },
 };
 </script>
 
@@ -139,8 +140,19 @@ export default {
   width: 200px;
   border-radius: 200px !important;
 }
+.divider {
+  float: left;
+  height: 100%;
+  border-right: 2px #e1e2e7 dashed;
+  margin: 1rem;
+  margin-left: 2rem;
+}
 .info-detail {
   float: left;
   max-width: 700px;
+}
+.v-input {
+  max-width: 250px;
+  margin-right: 3rem;
 }
 </style>

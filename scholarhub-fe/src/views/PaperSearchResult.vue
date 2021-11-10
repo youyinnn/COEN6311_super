@@ -33,7 +33,7 @@
                   'default-transit3': true,
                   'mb-4': true,
                 }"
-                max-width="700"
+                max-width="750"
                 :elevation="hover ? 10 : 1"
               >
                 <v-card-title>{{ paper.title }}</v-card-title>
@@ -132,7 +132,9 @@
           <!-- <div> -->
           <v-img max-height="200" max-width="200" src="@/assets/img/search.png">
           </v-img>
-          <div style="padding: 10px">Key in you searh term</div>
+          <div class="mt-4 text-body-1 overline" style="text-align: center">
+            Key in you searh term
+          </div>
         </div>
         <Footer abs />
       </div>
