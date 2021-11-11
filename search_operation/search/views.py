@@ -11,8 +11,6 @@ paper_id_list = [0]
 
 # Create your views here.
 def search_papers(request, keywords, number):
-    print(type(keywords), keywords)
-    print(type(number), number)
     number = str(number)
     query_url = 'https://api.semanticscholar.org/graph/v1/paper/search?query=' + keywords + '&fields=title,abstract,venue,authors,year,url,citationCount&limit=' + number
 
