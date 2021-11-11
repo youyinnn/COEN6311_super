@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
-from search.views import search_papers, delete_objects, view_paperdb
+from search.views import search_papers, delete_objects, view_paperdb, comment_paper, like_paper
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('paper/search/input=<str:keywords>&<int:number>', search_papers),
     path('paper/search/delete_all_objects', delete_objects),
-    path('paper/search/test/show_paper_db', view_paperdb)
+    path('paper/search/test/show_paper_db', view_paperdb),
+    path('paper/comment', comment_paper),
+    path('paper/like', like_paper)
 ]

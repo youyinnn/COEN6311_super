@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db import models
-from search.models import Paper_Metadata
+from search.models import Paper_Metadata, Paper_Comment
 import urllib.request
 import json
 import datetime
@@ -57,3 +57,30 @@ def view_paperdb(request):
     paper_list_obj = Paper_Metadata.objects.all()
     print(Paper_Metadata.objects.all())
     return render(request, 'papermeta.html', {'li': paper_list_obj})
+
+
+def comment_paper(request):
+    if request.method == 'POST':
+        if request.POST:
+            paper_id = request.POST.get('paper_id')
+            comment = request.POST.get('comment')
+            now_time = datetime.datetime.now()
+            Paper_Comment.objects.create(user_id=0, create_time=now_time, paper_id=paper_id, commenter_id=0,
+                                         comment=comment)
+            return HttpResponse('Save_Comment')
+    else:
+        return HttpResponse('Not_detect_Comment')
+
+
+def like_paper(request):
+    if request.method == 'POST':
+        if request.POST:
+            paper_id = request.POST.get('paper_id')
+            like = request.POST.get('like')
+            dislike = request.POST.get('dislike')
+            now_time = datetime.datetime.now()
+            Paper_Comment.objects.create(user_id=0, create_time=now_time, paper_id=paper_id, like=like,
+                                         dislike=dislike)
+            return HttpResponse('Save_Like')
+    else:
+        return HttpResponse('Not_detect_Like')
