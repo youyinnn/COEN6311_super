@@ -38,7 +38,7 @@
           key="team-btn"
           small
           raised
-          color="green"
+          color="light-green"
           class="darken-1"
           @click="goTeamPage"
         >
@@ -57,14 +57,14 @@
         v-if="isLogin"
         small
         raised
-        color="teal"
+        color="purple"
         @click="signOut"
       >
         <span class="mr-2 white--text">Sign Out</span>
         <v-icon small color="white">mdi-logout-variant</v-icon>
       </v-btn>
       <div key="sign-up-in-btns" v-else>
-        <v-btn small raised color="teal" class="mr-4" @click="goSignUp">
+        <v-btn small raised color="green" class="mr-4" @click="goSignUp">
           <span class="mr-2 white--text">Sign Up</span>
           <v-icon small color="white">mdi-clipboard-account</v-icon>
         </v-btn>

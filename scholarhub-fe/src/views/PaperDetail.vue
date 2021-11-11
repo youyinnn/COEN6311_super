@@ -6,7 +6,6 @@
         'detail-card': true,
         'mx-auto': true,
         'default-transit3': true,
-        'mb-4': true,
         'mt-8': true,
       }"
       max-width="750"
@@ -166,9 +165,34 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </v-card>
-    <div class="like-and-comment-box">
+    <transition name="fade">
+      <div class="comment-box" v-show="isLogin">
+        <v-card elevation="6">
+          <v-card-subtitle class="unselectable"> Add Comments </v-card-subtitle>
+          <v-divider></v-divider>
+          <v-card-text>
+            <v-textarea
+              dense
+              clear-icon="mdi-close-circle"
+              v-model="comment"
+              hide-details
+            ></v-textarea>
+          </v-card-text>
+          <v-card-text class="clearfix pt-1">
+            <v-btn
+              style="float: right"
+              small
+              color="success"
+              @click="addComment"
+              >Submit</v-btn
+            >
+          </v-card-text>
+        </v-card>
+      </div>
+    </transition>
+    <div class="comment-box">
       <v-card elevation="6">
-        <v-card-subtitle> Comments </v-card-subtitle>
+        <v-card-subtitle class="unselectable"> Comments </v-card-subtitle>
         <div v-if="!paperCommentFetched">
           <v-skeleton-loader
             class="mx-auto"
@@ -201,6 +225,7 @@ const axios = require("axios").default;
 
 export default {
   data: () => ({
+    comment: "",
     paper: {
       paperId: "",
       title: " ",
@@ -305,24 +330,38 @@ export default {
           //   console.log(thiz);
         });
     },
+    addComment: function () {
+      const comment = this.comment;
+      // TODO: time and request
+      const obj = {
+        content: comment,
+        time: new Date().getTime(),
+        id: new Date().getTime(),
+        name: "Jack",
+      };
+      console.log(obj);
+      this.paperComments.unshift(obj);
+    },
   },
   computed: {
     hasDetail: function () {
       return this.paper.paperId !== "";
     },
+    isLogin: function () {
+      return this.$store.state.isLogin;
+    },
   },
   mounted: function () {
     this.getDetail(location.hash.split("/")[2]);
   },
-  beforeRouteEnter(to, from, next) {
-    // console.log(to);
-    // console.log(from);
-    // console.log(next);
-    next((ins) => {
-      //   ins.getDetail(to.params.id);
-      console.log(ins);
-    });
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   // console.log(to);
+  //   // console.log(from);
+  //   // console.log(next);
+  //   next((ins) => {
+  //     //   ins.getDetail(to.params.id);
+  //   });
+  // },
 };
 </script>
 
@@ -330,9 +369,10 @@ export default {
 .paper-detail-box {
   padding-bottom: 4em;
 }
-.like-and-comment-box {
+.comment-box {
   max-width: 750px;
   margin: auto;
+  margin-top: 1rem;
 }
 .paper-data-label {
   width: 150px;

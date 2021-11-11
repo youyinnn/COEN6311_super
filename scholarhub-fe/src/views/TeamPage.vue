@@ -1,11 +1,30 @@
 <template>
   <div id="team-page" class="team-page mx-auto">
     <div class="team-list">
+      <div class="create-team-box">
+        <v-list dense>
+          <v-subheader>
+            <span>Create A Team</span>
+            <v-spacer></v-spacer>
+            <v-btn x-small color="info" class="mr-2"> Create a team</v-btn>
+          </v-subheader>
+          <v-text-field
+            dense
+            label="Name of the Team"
+            single-line
+            hide-details="auto"
+            class="mt-2 mb-2 ml-4 mr-4"
+          ></v-text-field>
+        </v-list>
+        <v-divider></v-divider>
+      </div>
       <v-card class="mx-auto" elevation="0" max-width="300" tile>
         <v-list dense>
-          <v-subheader>TEAMS</v-subheader>
+          <v-subheader>
+            <span>Teams</span>
+          </v-subheader>
 
-          <v-list-group :disabled="!hasTeam" :value="hasTeam">
+          <v-list-group :disabled="!hasTeam">
             <template v-slot:activator>
               <v-list-item-icon class="mr-4">
                 <v-icon>mdi-forum</v-icon>
@@ -22,6 +41,9 @@
                 <v-list-item-content>
                   <v-list-item-title v-text="team.name"></v-list-item-title>
                 </v-list-item-content>
+                <v-list-item-icon v-show="team.leaderId === getUserId">
+                  <v-icon>mdi-account-tie</v-icon>
+                </v-list-item-icon>
               </v-list-item>
             </v-list-item-group>
           </v-list-group>
@@ -77,6 +99,7 @@
         </v-list>
       </v-card>
     </div>
+
     <div class="team-activities-box">
       <div v-if="hasTeam" class="has-team"></div>
       <div
@@ -107,18 +130,21 @@ export default {
       { teamname: "team b", id: 456 },
     ],
     teamList: [
-      //   {
-      //     id: 123,
-      //     name: "group a",
-      //   },
-      //   {
-      //     id: 456,
-      //     name: "group b",
-      //   },
-      //   {
-      //     id: 789,
-      //     name: "group c",
-      //   },
+      {
+        id: 123,
+        name: "group a",
+        leaderId: 123,
+      },
+      {
+        id: 456,
+        name: "group b",
+        leaderId: 456,
+      },
+      {
+        id: 789,
+        name: "group c",
+        leaderId: 789,
+      },
     ],
   }),
   mounted: function () {
@@ -131,6 +157,9 @@ export default {
   computed: {
     hasTeam: function () {
       return this.teamList.length !== 0;
+    },
+    getUserId: function () {
+      return 123;
     },
   },
   methods: {

@@ -49,12 +49,11 @@
             style="float: right"
             :disabled="!valid"
             color="success"
-            class="mr-4"
             @click="submit"
           >
             Submit
           </v-btn>
-          <v-btn style="float: right" color="lime" class="mr-4" @click="reset">
+          <v-btn style="float: right" color="grey" class="mr-4" @click="reset">
             Reset Form
           </v-btn>
         </div>

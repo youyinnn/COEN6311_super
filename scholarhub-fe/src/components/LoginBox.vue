@@ -93,7 +93,7 @@ export default {
   z-index: 3;
   top: 4rem;
   padding: 1rem;
-  border-radius: 1rem;
+  border-radius: 0.7rem;
   width: 300px;
   transition: all 0.6s;
   opacity: 1;
