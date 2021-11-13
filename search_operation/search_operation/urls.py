@@ -13,14 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from django.conf.urls import url
+# from django.contrib import admin
+from django.urls import path as urlPath
 from search.views import search_papers, delete_objects, view_paperdb
+from researcher.views import register
+
+contextPath = 'scholar-hub/'
+
+def pathWithContext(path, pattern):
+    return urlPath(contextPath + path, pattern)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('paper/search/input=<str:keywords>&<int:number>', search_papers),
-    path('paper/search/delete_all_objects', delete_objects),
-    path('paper/search/test/show_paper_db', view_paperdb)
+    pathWithContext('user', register),
+    urlPath('paper/search/input=<str:keywords>&<int:number>', search_papers),
+    urlPath('paper/search/delete_all_objects', delete_objects),
+    urlPath('paper/search/test/show_paper_db', view_paperdb)
 ]
