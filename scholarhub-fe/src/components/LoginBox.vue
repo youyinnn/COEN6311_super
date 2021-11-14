@@ -39,6 +39,8 @@
 </template>
 
 <script>
+const axios = require("axios").default;
+
 export default {
   data: () => ({
     valid: true,
@@ -47,27 +49,49 @@ export default {
     password: "",
     boxHide: true,
   }),
-
+  mounted: function () {},
   methods: {
     login(e) {
       if (e !== undefined) e.preventDefault();
       const valid = this.$refs.form.validate();
       if (valid) {
-        // const username = this.username;
-        // const password = this.password;
-        // console.log(username);
-        // console.log(password);
+        const thiz = this;
+        const formData = new FormData();
+        formData.append("username", this.username);
+        formData.append("password", this.password);
 
-        this.errorToast("Wrong username!");
-        this.errorToast("Wrong password!");
-        this.successToast("Login succeed!");
+        var config = {
+          method: "post",
+          url: this.config.testEnvBackEndUrl + "user/login",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          data: formData,
+        };
 
-        const token = "123456789";
+        axios(config)
+          .then(function (response) {
+            // console.log(response.data);
+            const code = response.data.code;
+            if (code === 0) {
+              const token = response.data.body.token;
+              thiz.successToast("Login succeed!");
+              thiz.$store.commit("login", {
+                token,
+              });
+              thiz.hideBox();
+            }
 
-        this.$store.commit("login", {
-          token,
-        });
-        this.hideBox();
+            if (code === 1) {
+              thiz.errorToast("Wrong username!");
+            }
+            if (code === 2) {
+              thiz.errorToast("Wrong password!");
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       }
     },
     press(e) {

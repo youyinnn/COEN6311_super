@@ -1,10 +1,21 @@
 <template>
-  <div id="user-info" class="user-info d-flex justify-center">
-    <v-card class="info-box mx-auto mt-12 mb-12 clearfix" elevation="0">
-      <div class="info-avatar">
+  <div id="user-info" class="user-info">
+    <v-card
+      class="info-box mx-auto mt-12 mb-12 clearfix d-flex justify-center"
+      elevation="0"
+    >
+      <div
+        :class="{
+          'info-avatar': true,
+          animate__animated: true,
+          animate__fadeIn: animateAvatar,
+        }"
+      >
         <v-img :src="userAvatarSrc"> </v-img>
         <v-card-actions class="d-flex justify-center mt-4 v-card__actions">
-          <v-btn color="primary" small> Update Profile </v-btn>
+          <v-btn color="primary" small @click="updateInfo">
+            Update Profile
+          </v-btn>
         </v-card-actions>
       </div>
       <div class="divider"></div>
@@ -16,13 +27,13 @@
           <v-text-field
             hide-details
             label="Username"
-            :value="userInfo.username"
+            v-model="userInfo.username"
             disabled
           ></v-text-field>
           <v-text-field
             hide-details
             label="Name"
-            :value="userInfo.name"
+            v-model="userInfo.name"
           ></v-text-field>
         </v-card-title>
 
@@ -31,13 +42,13 @@
             hide-details
             class="mb-4"
             label="Title"
-            :value="userInfo.title"
+            v-model="userInfo.title"
           ></v-text-field>
           <v-text-field
             hide-details
             class="mb-4"
             label="Area"
-            :value="userInfo.area"
+            v-model="userInfo.area"
           ></v-text-field>
         </v-card-subtitle>
 
@@ -46,14 +57,14 @@
             hide-details
             class="mb-4"
             label="E-mail"
-            :value="userInfo.email"
+            v-model="userInfo.email"
           ></v-text-field>
           <v-text-field
             class="mb-4"
             hide-details
             label="Password"
             type="password"
-            :value="userInfo.password"
+            v-model="userInfo.password"
           ></v-text-field>
         </v-card-text>
         <div class="text-h5 mb-4 unselectable">Activities</div>
@@ -77,36 +88,8 @@
 </template>
 
 <script>
-const random = require("lodash.random");
-
-import man1 from "@/assets/img/avatars/man-1.png";
-import man2 from "@/assets/img/avatars/man-2.png";
-import man3 from "@/assets/img/avatars/man-3.png";
-import man4 from "@/assets/img/avatars/man-4.png";
-import man5 from "@/assets/img/avatars/man-5.png";
-import man6 from "@/assets/img/avatars/man-6.png";
-
-import woman1 from "@/assets/img/avatars/woman-1.png";
-import woman2 from "@/assets/img/avatars/woman-2.png";
-import woman3 from "@/assets/img/avatars/woman-3.png";
-import woman4 from "@/assets/img/avatars/woman-4.png";
-import woman5 from "@/assets/img/avatars/woman-5.png";
-import woman6 from "@/assets/img/avatars/woman-6.png";
-
-const avatars = [
-  man1,
-  man2,
-  man3,
-  man4,
-  man5,
-  man6,
-  woman1,
-  woman2,
-  woman3,
-  woman4,
-  woman5,
-  woman6,
-];
+const axios = require("axios").default;
+import "animate.css";
 
 export default {
   data: () => ({
@@ -117,10 +100,12 @@ export default {
       area: "AI,Cloud",
       title: "PhD",
     },
+    animateAvatar: false,
+    avatarHide: true,
   }),
   computed: {
     userAvatarSrc: function () {
-      return avatars[random(0, 11)];
+      return this.config.getRandomAvatars();
     },
   },
   mounted: function () {
@@ -129,6 +114,53 @@ export default {
       this.$router.push("/404");
       this.errorToast("You should login first!");
     }
+    const token = localStorage.getItem("token");
+    const info = JSON.parse(Buffer.from(token.split(".")[1], "base64"));
+    // console.log(info);
+    this.userInfo = {
+      ...info,
+    };
+    this.animateAvatar = true;
+  },
+  methods: {
+    updateInfo: function () {
+      console.log(this.userInfo);
+      const thiz = this;
+      const formData = new FormData();
+      const token = localStorage.getItem("token");
+
+      formData.append("name", this.userInfo.name);
+      if (!this.password) {
+        formData.append("password", this.userInfo.password);
+      }
+      formData.append("email", this.userInfo.email);
+      formData.append("area", this.userInfo.area);
+      formData.append("title", this.userInfo.title);
+
+      var config = {
+        method: "post",
+        url: this.config.testEnvBackEndUrl + "user/update",
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `bearer ${token}`,
+        },
+        data: formData,
+      };
+
+      axios(config)
+        .then(function (response) {
+          // console.log(response.data);
+          const code = response.data.code;
+          if (code === 0) {
+            thiz.successToast("Update succeed!");
+          } else {
+            thiz.errorToast(response.data.message);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
   },
 };
 </script>
@@ -136,9 +168,11 @@ export default {
 <style scoped>
 .info-avatar {
   float: left;
-  height: 200px;
-  width: 200px;
+  height: 200px !important;
+  width: 200px !important;
   border-radius: 200px !important;
+  animation-duration: 1s;
+  animation-delay: 0.2s;
 }
 .divider {
   float: left;
@@ -147,12 +181,15 @@ export default {
   margin: 1rem;
   margin-left: 2rem;
 }
+.info-box {
+  width: 90%;
+}
 .info-detail {
   float: left;
-  max-width: 700px;
+  width: 70%;
 }
 .v-input {
-  max-width: 250px;
+  max-width: 300px;
   margin-right: 3rem;
 }
 </style>

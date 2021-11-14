@@ -10,6 +10,7 @@ class Researcher(common.Record):
     username = models.CharField('user nickname', max_length=128, unique=True, null=False)
     password = models.CharField('user password', max_length=512, null=False)
     name = models.CharField('user fullname', max_length=64, null=False)
+    title = models.CharField('user title', max_length=64, default='')
     email = models.CharField('user email', max_length=256, unique=True, null=False)
     area = models.JSONField('user research area')
 

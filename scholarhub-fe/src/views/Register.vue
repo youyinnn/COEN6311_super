@@ -41,10 +41,12 @@
           :rules="emailRules"
           label="E-mail"
           required
-          class="mb-6"
         ></v-text-field>
 
-        <div>
+        <v-text-field v-model="area" label="Area"></v-text-field>
+        <v-text-field v-model="title" label="Title" class="mb-6"></v-text-field>
+
+        <div class="clearfix">
           <v-btn
             style="float: right"
             :disabled="!valid"
@@ -63,6 +65,8 @@
 </template>
 
 <script>
+const axios = require("axios").default;
+
 export default {
   data: () => ({
     valid: true,
@@ -78,6 +82,8 @@ export default {
       (v) => !!v || "E-mail is required",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
+    area: [],
+    title: "",
   }),
   methods: {
     submit() {
@@ -87,13 +93,43 @@ export default {
         username: this.username,
         passowrd: this.password,
         email: this.email,
-        gender: this.gender,
+        // gender: this.gender,
+        area: this.area,
       });
-      this.snackbar = true;
       if (isValid) {
-        this.successToast("Register successed!");
-      } else {
-        this.errorToast("Register failed!");
+        const thiz = this;
+        const formData = new FormData();
+        formData.append("name", this.name);
+        formData.append("username", this.username);
+        formData.append("password", this.password);
+        formData.append("email", this.email);
+        formData.append("area", this.area);
+
+        var config = {
+          method: "post",
+          url: this.config.testEnvBackEndUrl + "user",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          data: formData,
+        };
+        axios(config)
+          .then(function (response) {
+            // console.log(response.data);
+            const code = response.data.code;
+            if (code === 0) {
+              thiz.successToast("Register successed!");
+            }
+            if (code === 1) {
+              thiz.errorToast("Username has been used!");
+            }
+            if (code === 2) {
+              thiz.errorToast("Email has been used!");
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       }
     },
     reset() {
@@ -112,6 +148,7 @@ export default {
 }
 .regBox {
   margin: auto;
+  transform: translateY(-3rem);
 }
 .regFormBox {
   float: left;

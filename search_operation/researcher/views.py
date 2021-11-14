@@ -16,6 +16,7 @@ def register(request):
     #  'name': 'Fred King Sr.', 
     #  'email': 'Vivienne83@hotmail.com', 
     #  'area': '[Configuration,Infrastructure, Metrics]'
+    #  'title': 'Phd'
     # }
     postParams['password'] = pw_gen(postParams['password'])
     print(postParams)
@@ -42,17 +43,18 @@ def login(request):
         user = user[0]
 
     if password_verify(postParams['password'], user.password):
-        jwt = jwt_gen(user.id, {
+        token = jwt_gen(user.id, {
             'id': user.id,
             'username': user.username,
             'email': user.email,
             'area': user.area,
             'name': user.name,
+            'title': user.title,
             # 'time': datetime.now()
         })
 
-        return response(0, headers={
-            'Authorization': jwt
+        return response(0, body={
+            'token': token
         })
     else:
         return response(2)
@@ -71,13 +73,20 @@ def update(request):
     newProfile = {}
     newName = postParams.get('name')
     newPassword = postParams.get('password')
+    newEmail = postParams.get('email')
     newArea = postParams.get('area')
+    newTitle = postParams.get('title')
+    print(postParams)
     if newName != None:
         newProfile['name'] = newName
     if newPassword != None:
         newProfile['password'] = pw_gen(newPassword)  
     if newArea != None:
         newProfile['area'] = newArea
+    if newTitle != None:
+        newProfile['title'] = newTitle
+    if newEmail != None:
+        newProfile['email'] = newEmail
         
     query = Researcher.objects.filter(id = user_id)
     if (len(query) == 0):
