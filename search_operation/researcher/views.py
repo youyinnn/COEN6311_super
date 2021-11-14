@@ -160,6 +160,7 @@ def get_team_list_by_state(user_id, state):
             'team_id': team.id,
             'leader_id': team.leader_id,
             'name': team.name,
+            'auth_create_time': int(round(auth_map[team.id].create_time.timestamp() * 1000)),
         })
     
     return team_list

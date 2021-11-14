@@ -6,7 +6,9 @@
           <v-subheader>
             <span>Create A Team</span>
             <v-spacer></v-spacer>
-            <v-btn x-small color="info" class="mr-2"> Create a team</v-btn>
+            <v-btn x-small color="info" class="mr-2" @click="createTeam">
+              Create a team</v-btn
+            >
           </v-subheader>
           <v-text-field
             dense
@@ -14,6 +16,7 @@
             single-line
             hide-details="auto"
             class="mt-2 mb-2 ml-4 mr-4"
+            v-model="newTeamName"
           ></v-text-field>
         </v-list>
         <v-divider></v-divider>
@@ -24,7 +27,7 @@
             <span>Teams</span>
           </v-subheader>
 
-          <v-list-group :disabled="!hasTeam">
+          <v-list-group>
             <template v-slot:activator>
               <v-list-item-icon class="mr-4">
                 <v-icon>mdi-forum</v-icon>
@@ -41,7 +44,7 @@
                 <v-list-item-content>
                   <v-list-item-title v-text="team.name"></v-list-item-title>
                 </v-list-item-content>
-                <v-list-item-icon v-show="team.leaderId === getUserId">
+                <v-list-item-icon v-show="team.leader_id === getUserId">
                   <v-icon>mdi-account-tie</v-icon>
                 </v-list-item-icon>
               </v-list-item>
@@ -60,41 +63,47 @@
                     class="ma-0"
                     inline
                     color="primary"
-                    :content="invitations.length"
+                    :content="
+                      invitations.length == 0 ? '0' : invitations.length
+                    "
                   ></v-badge>
                 </v-list-item-title>
               </v-list-item-content>
             </template>
 
-            <v-list-item
-              v-for="(invitation, i) in invitations"
-              :key="i"
-              link
-              two-line
-            >
-              <v-list-item-title style="padding: 5px">
-                <p class="ma-0 mb-2 clearfix">
-                  <span style="float: left"
-                    >From: {{ invitation.teamname }}</span
-                  >
-                  <span style="float: right; font-weight: 300"
-                    >2021/10/3 18:30</span
-                  >
-                </p>
-                <div>
-                  <v-btn x-small style="float: right" color="error"
-                    >Reject</v-btn
-                  >
-                  <v-btn
-                    class="mr-4"
-                    style="float: right"
-                    x-small
-                    color="success"
-                    >Accept</v-btn
-                  >
-                </div>
-              </v-list-item-title>
-            </v-list-item>
+            <v-list-item-group>
+              <v-list-item
+                v-for="(invitation, i) in invitations"
+                :key="i"
+                two-line
+              >
+                <v-list-item-title style="padding: 5px">
+                  <p class="ma-0 mb-2 clearfix">
+                    <span style="float: left">From: {{ invitation.name }}</span>
+                    <span style="float: right; font-weight: 300">{{
+                      invitation.time
+                    }}</span>
+                  </p>
+                  <div>
+                    <v-btn
+                      x-small
+                      style="float: right"
+                      color="error"
+                      @click="handleAuth(invitation.auth_id, 3)"
+                      >Reject</v-btn
+                    >
+                    <v-btn
+                      class="mr-4"
+                      style="float: right"
+                      x-small
+                      color="success"
+                      @click="handleAuth(invitation.auth_id, 1)"
+                      >Accept</v-btn
+                    >
+                  </div>
+                </v-list-item-title>
+              </v-list-item>
+            </v-list-item-group>
           </v-list-group>
         </v-list>
       </v-card>
@@ -122,30 +131,15 @@
 </template>
 
 <script>
+const axios = require("axios").default;
+const dayjs = require("dayjs");
+
 export default {
   data: () => ({
     selectedTeam: 0,
-    invitations: [
-      { teamname: "team a", id: 123 },
-      { teamname: "team b", id: 456 },
-    ],
-    teamList: [
-      {
-        id: 123,
-        name: "group a",
-        leaderId: 123,
-      },
-      {
-        id: 456,
-        name: "group b",
-        leaderId: 456,
-      },
-      {
-        id: 789,
-        name: "group c",
-        leaderId: 789,
-      },
-    ],
+    invitations: [{}],
+    teamList: [],
+    newTeamName: "",
   }),
   mounted: function () {
     const isLogin = this.$store.state.isLogin;
@@ -153,24 +147,127 @@ export default {
       this.$router.push("/404");
       this.errorToast("You should login first!");
     }
+    this.fetchTeam();
   },
   computed: {
     hasTeam: function () {
       return this.teamList.length !== 0;
     },
+    hasTeamInvitatuon: function () {
+      return this.invitations.length !== 0;
+    },
     getUserId: function () {
-      return 123;
+      const token = localStorage.getItem("token");
+      const info = JSON.parse(Buffer.from(token.split(".")[1], "base64"));
+      return info.id;
     },
   },
   methods: {
-    changeTeam: function (v) {
-      for (let i = 0; i < this.teamList.length; i++) {
-        if (this.teamList[i].id === v.id) {
-          this.teamList[i].active = true;
-          return;
-        }
+    fetchTeam: function () {
+      console.log(123);
+      const thiz = this;
+      const token = localStorage.getItem("token");
+      var config = {
+        method: "get",
+        url: this.config.testEnvBackEndUrl + "team/list",
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `bearer ${token}`,
+        },
+      };
+      axios(config)
+        .then(function (response) {
+          const code = response.data.code;
+          const body = response.data.body;
+          if (code === 0) {
+            thiz.teamList = [...body.joined_list];
+            for (let invite of body.pending_list) {
+              invite.time = dayjs(invite.auth_create_time).format(
+                "YYYY/MM/DD HH:mm"
+              );
+            }
+            thiz.invitations = [...body.pending_list];
+            if (thiz.invitations.length === 0) {
+              thiz.invitations = [];
+            }
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    handleAuth: function (auth_id, decision) {
+      const thiz = this;
+      const formData = new FormData();
+      const token = localStorage.getItem("token");
+
+      formData.append("auth_id", auth_id);
+      formData.append("decision", decision);
+
+      var config = {
+        method: "post",
+        url: this.config.testEnvBackEndUrl + "team/invite/handle",
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `bearer ${token}`,
+        },
+        data: formData,
+      };
+      axios(config)
+        .then(function (response) {
+          // console.log(response.data);
+          const code = response.data.code;
+          const msg = response.data.message;
+          if (code === 1 || code === 2 || code === 3 || code === 4) {
+            thiz.errorToast(msg);
+          }
+          if (code === 0) {
+            thiz.successToast(msg);
+          }
+          thiz.fetchTeam();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    createTeam: function () {
+      if (!this.newTeamName) {
+        this.errorToast("Please input a team name.", {
+          position: "top-right",
+        });
+      } else {
+        const thiz = this;
+        const formData = new FormData();
+        const token = localStorage.getItem("token");
+
+        formData.append("name", this.newTeamName);
+
+        var config = {
+          method: "post",
+          url: this.config.testEnvBackEndUrl + "team/create",
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `bearer ${token}`,
+          },
+          data: formData,
+        };
+        axios(config)
+          .then(function (response) {
+            // console.log(response.data);
+            const code = response.data.code;
+            const msg = response.data.message;
+            if (code === 1) {
+              thiz.errorToast(msg);
+            }
+            if (code === 0) {
+              thiz.successToast(msg);
+            }
+            thiz.fetchTeam();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       }
-      console.log(v);
     },
   },
 };

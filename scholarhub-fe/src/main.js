@@ -28,7 +28,9 @@ Vue.mixin({
   methods: {
     toast(type, text, option) {
       let duration = 5000,
-        closeable = false;
+        closeable = false,
+        position = "top-left",
+        containerClass = "my-toast-container-left";
       if (option !== undefined) {
         if (option.closeable !== undefined) {
           closeable = option.closeable;
@@ -38,13 +40,19 @@ Vue.mixin({
         } else if (option.duration !== undefined) {
           duration = option.duration;
         }
+        if (option.position !== undefined) {
+          position = option.position;
+          if (position.endsWith("right")) {
+            containerClass = "my-toast-container-right";
+          }
+        }
       }
       let toastOption = {
-        position: "top-left",
-        duration: duration,
+        position,
+        duration,
         keepOnHover: true,
         className: "my-toast",
-        containerClass: "my-toast-container",
+        containerClass,
         action: closeable
           ? {
               text: "CLOSE",
