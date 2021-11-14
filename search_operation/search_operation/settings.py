@@ -132,3 +132,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # jwt secret
 JWT_SECRET = "supersupersupersupersupersupersupersuper"
+
+# web context
+CONTEXT = 'scholar-hub'

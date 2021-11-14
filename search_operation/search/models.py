@@ -12,3 +12,19 @@ class Paper_Metadata(models.Model):
     year = models.IntegerField()
     citations = models.IntegerField()
     url = models.TextField()
+
+
+class Paper_Comment(models.Model):
+    user_id = models.IntegerField()
+    create_time = models.DateTimeField()
+    paper_id = models.IntegerField()
+    commenter_id = models.IntegerField()
+    comment = models.TextField()
+
+
+class Paper_Like_Dislike(models.Model):
+    user_id = models.IntegerField()
+    create_time = models.DateTimeField()
+    paper_id = models.IntegerField()
+    like = models.BooleanField()
+    dislike = models.BooleanField()
