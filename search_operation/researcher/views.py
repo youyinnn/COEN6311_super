@@ -137,6 +137,40 @@ def get_team_list(request):
         'pending_list': pending_team_list,
     })
 
+@auth_require
+def get_team_member(request):
+    user_id = get_id_from_request(request)
+    getParams = request.GET.dict()
+
+    auth_query = ResearchTeamAuth.objects.filter(
+        team_id = getParams['team_id'],
+        state = const.JOINED
+    )
+    if len(auth_query) == 0:
+        return response(1, message='No such Team.')
+
+    member_id_list = []
+    member_role_tag_map = {}
+    for auth in auth_query:
+        member_id_list.append(auth.researcher_id)
+        member_role_tag_map[auth.researcher_id] = auth.role_tag
+    
+    member_query = Researcher.objects.filter(
+        id__in = [*member_id_list]
+    )
+
+    member_list = []
+    for researcher in member_query:
+        member_list.append({
+            'name': researcher.name,
+            'email': researcher.email,
+            'role_tag': member_role_tag_map[researcher.id]
+        })
+
+    return response(0, body={
+        'member_list': member_list
+    })
+
 def get_team_list_by_state(user_id, state):
     team_list = []
     # query auth first
@@ -247,7 +281,7 @@ def handle_invitation(request):
             else:
                 # decision 2: leave the team
                 if auth.state != const.JOINED:
-                    return response(3, message="Can make decision 'leave' from state which not in 'joined'.")
+                    return response(4, message="Can make decision 'leave' from state which not in 'joined'.")
 
             # make valid decision
             auth.state = decision

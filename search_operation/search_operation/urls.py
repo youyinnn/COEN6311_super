@@ -19,7 +19,7 @@ from search.views import search_papers, delete_objects, view_paperdb
 from search.views import search_papers, delete_objects, view_paperdb, comment_paper, like_paper
 from researcher.views import register, login, logout
 from researcher.views import update
-from researcher.views import create_team, get_team_list
+from researcher.views import create_team, get_team_list, get_team_member
 from researcher.views import invite_member, handle_invitation
 from researcher.views import change_team_role_tag
 
@@ -37,6 +37,7 @@ urlpatterns = [
     # TODO: with restful respect
     pathWithContext('team/create', create_team),
     pathWithContext('team/list', get_team_list),
+    pathWithContext('team/member/list', get_team_member),
     pathWithContext('team/invite', invite_member),
     pathWithContext('team/invite/handle', handle_invitation),
     pathWithContext('team/role-tag', change_team_role_tag),

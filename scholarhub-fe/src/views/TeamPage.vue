@@ -27,7 +27,7 @@
             <span>Teams</span>
           </v-subheader>
 
-          <v-list-group>
+          <v-list-group v-model="expandTeamList">
             <template v-slot:activator>
               <v-list-item-icon class="mr-4">
                 <v-icon>mdi-forum</v-icon>
@@ -36,8 +36,12 @@
                 <v-list-item-title>Joined</v-list-item-title>
               </v-list-item-content>
             </template>
-            <v-list-item-group v-model="selectedTeam" mandatory>
-              <v-list-item v-for="(team, i) in teamList" :key="i">
+            <v-list-item-group v-model="selectedTeamId" mandatory>
+              <v-list-item
+                v-for="team in teamList"
+                :key="team.id"
+                @click="selectTeam(team)"
+              >
                 <v-list-item-icon>
                   <v-icon>mdi-menu-right</v-icon>
                 </v-list-item-icon>
@@ -109,8 +113,39 @@
       </v-card>
     </div>
 
-    <div class="team-activities-box">
-      <div v-if="hasTeam" class="has-team"></div>
+    <div class="team-box">
+      <div v-if="hasTeam" class="has-team">
+        <div class="team-activities-box"></div>
+        <v-card class="team-member-box">
+          <v-card-text>Team member</v-card-text>
+          <v-divider></v-divider>
+          <v-list-item-group
+            class="team-member-group-box"
+            :class="{
+              'team-member-group-box': true,
+              animate__animated: true,
+              animate__fadeIn: teamMemberListFadeInAminate,
+            }"
+          >
+            <v-list-item
+              v-for="member in currentTeamBoxMember"
+              :key="selectedTeamId + '-' + member.email"
+              dense
+              three-line
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{ member.name }}</v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ member.role_tag }}
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  {{ member.email }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-card>
+      </div>
       <div
         v-else
         class="align-center d-flex fill-height justify-center no-team"
@@ -131,15 +166,19 @@
 </template>
 
 <script>
+import "animate.css";
 const axios = require("axios").default;
 const dayjs = require("dayjs");
 
 export default {
   data: () => ({
-    selectedTeam: 0,
-    invitations: [{}],
+    selectedTeamId: 0,
+    invitations: [],
     teamList: [],
     newTeamName: "",
+    currentTeamBoxMember: [],
+    expandTeamList: true,
+    teamMemberListFadeInAminate: true,
   }),
   mounted: function () {
     const isLogin = this.$store.state.isLogin;
@@ -147,7 +186,12 @@ export default {
       this.$router.push("/404");
       this.errorToast("You should login first!");
     }
-    this.fetchTeam();
+    const thiz = this;
+    this.fetchTeam(() => {
+      if (thiz.teamList.length > 0) {
+        thiz.selectTeam(thiz.teamList[0]);
+      }
+    });
   },
   computed: {
     hasTeam: function () {
@@ -163,8 +207,7 @@ export default {
     },
   },
   methods: {
-    fetchTeam: function () {
-      console.log(123);
+    fetchTeam: function (cb) {
       const thiz = this;
       const token = localStorage.getItem("token");
       var config = {
@@ -190,6 +233,7 @@ export default {
             if (thiz.invitations.length === 0) {
               thiz.invitations = [];
             }
+            if (cb !== undefined) cb();
           }
         })
         .catch(function (error) {
@@ -269,6 +313,44 @@ export default {
           });
       }
     },
+    fetchTeamMemberList: function (team_id) {
+      this.teamMemberListFadeInAminate = false;
+      const thiz = this;
+      const token = localStorage.getItem("token");
+      var config = {
+        method: "get",
+        url: this.config.testEnvBackEndUrl + "team/member/list",
+        params: {
+          team_id,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `bearer ${token}`,
+        },
+      };
+      axios(config)
+        .then(function (response) {
+          const code = response.data.code;
+          const msg = response.data.message;
+          if (code === 0) {
+            for (let member of response.data.body.member_list) {
+              if (member.role_tag === "") {
+                member.role_tag = "<no role>";
+              }
+            }
+            thiz.currentTeamBoxMember = response.data.body.member_list;
+            thiz.teamMemberListFadeInAminate = true;
+          } else {
+            thiz.errorToast(msg);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    selectTeam: function (team) {
+      this.fetchTeamMemberList(team.team_id);
+    },
   },
 };
 </script>
@@ -284,19 +366,40 @@ export default {
 }
 .team-list {
   position: absolute;
-  width: 300px;
+  width: 270px;
   border-right: 1px gainsboro solid;
   margin: 2rem 0;
   top: 0px;
   bottom: 0;
 }
-.team-activities-box {
+.team-box {
   position: absolute;
   margin: 2rem 0;
   padding: 0 1rem;
   top: 0;
   bottom: 0;
   right: 0;
-  left: 300px;
+  left: 270px;
+}
+.team-member-box {
+  position: absolute;
+  height: 100%;
+  width: 220px;
+  right: 1rem;
+}
+.team-activities-box {
+  position: absolute;
+  margin: 0 1rem;
+  height: 100%;
+  right: 236px;
+  left: 0;
+}
+.team-member-group-box {
+  overflow: auto;
+  position: absolute;
+  bottom: 0;
+  top: 56px;
+  animation-duration: 0.7s;
+  animation-delay: 0.2s;
 }
 </style>
