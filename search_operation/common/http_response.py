@@ -18,3 +18,9 @@ def json_builder(code, message=None, body=None):
         del obj['body']
 
     return json.dumps(obj)
+
+
+unAuthResponse = json_response_builder(999, message="Token is required")
+unvalidAuthResponse = json_response_builder(998, message="No id in token")
+expiredTokenAuthResponse = json_response_builder(997, message="Token is expired")
+notJwtAuthResponse = json_response_builder(996, message="Token is not jwt")

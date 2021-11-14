@@ -7,9 +7,8 @@ class Record(models.Model):
         primary_key=True,
     )
 
-    createTime = models.DateTimeField(
+    create_time = models.DateTimeField(
         "universal create time", 
-        db_column='create_time', 
         auto_now_add=True
     )
     # updateTime = models.DateTimeField("universal update time", db_column='update_time')

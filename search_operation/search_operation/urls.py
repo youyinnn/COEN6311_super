@@ -16,7 +16,8 @@ Including another URLconf
 # from django.contrib import admin
 from django.urls import path as urlPath
 from search.views import search_papers, delete_objects, view_paperdb
-from researcher.views import register
+from researcher.views import register, login, logout
+from researcher.views import update
 
 contextPath = 'scholar-hub/'
 
@@ -25,6 +26,9 @@ def pathWithContext(path, pattern):
 
 urlpatterns = [
     pathWithContext('user', register),
+    pathWithContext('user/login', login),
+    pathWithContext('user/logout', logout),
+    pathWithContext('user/update', update),
     urlPath('paper/search/input=<str:keywords>&<int:number>', search_papers),
     urlPath('paper/search/delete_all_objects', delete_objects),
     urlPath('paper/search/test/show_paper_db', view_paperdb)
