@@ -6,16 +6,31 @@
 
 \subsubsection*{FRS 1.1.1 - Login}
 
-% \begin{table}[!ht]
-% 	\renewcommand{\arraystretch}{1.5}
-% 	\centering
-% 	\begin{tabular}{l | L{3cm} | L{3cm} | L{5cm}}
-% 		\hline
-% 		\textbf{System Mode} & \textbf{Database} & \textbf{Back-end} & \textbf{Front-end} \\
-% 		\hline
-% 		\textbf{B/S Mode}    & MySQL 8.0         & Python 3          & Vue 3              \\
-% 		\hline
-% 	\end{tabular}
-% 	\caption{Operating environment}
-% 	\label{tb:frs111}
-% \end{table}
+\begin{table}[!ht]
+	\renewcommand{\arraystretch}{1.3}
+	\label{tb:frs111}
+	\centering
+	\begin{tabular}{ r | L{12cm}}
+		\hline
+		\multicolumn{2}{l}{\textbf{FRS 1.1.1-Login}}              \\
+		\hline
+		\textbf{Method}                       & POST              \\
+		\hline
+		\textbf{URL}                          & /user/login       \\
+		\hline
+		\textbf{needToken}                    & no                \\
+		\hline
+		\multirow[t]{2}{*}{\textbf{Params}}   & username : string \\
+		                                      & password : string \\
+		\hline
+		\multirow[t]{1}{*}{\textbf{response}} & code : integer    \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\textbf{Code:}
+\begin{itemize}
+	\item 0 : login successed
+	\item 1 : user not exist
+	\item 2 : password not match
+\end{itemize}

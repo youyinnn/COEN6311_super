@@ -7,12 +7,12 @@
   \subsection*{Conventions for HTTP response format}
 
   \begin{itemize}
-	  \item[1] Response shall format with 'application/json' content-type;
-	  \item[2] Response json shall contain a property "code";
-	  \item[3] The value of the "code" shall follow those rules:
+	  \item[1] Response shall format with \textquoteleft application/json' content-type;
+	  \item[2] Response json shall contain a property \textquote{code};
+	  \item[3] The value of the \textquote{code} shall follow those rules:
 		  \begin{itemize}
 			  \item Integer type;
-			  \item '0' stands for the request is succeed in both logical and business aspect;
+			  \item \textquoteleft 0' stands for the request is succeed in both logical and business aspect;
 			  \item Other codes stands for the request is failed;
 			  \item Specific code shall be explained in every FRS;
 		  \end{itemize}
@@ -24,8 +24,8 @@
   For Python platform, module \href{https://github.com/jpadilla/pyjwt}{PyJWT} is recommended.
 
   \begin{itemize}
-	  \item[1] The token shall be generated after the \textit{\textbf{login}} request is in code '0';
-	  \item[2] The token shall be placed in the HTTP headers with key 'Authorization';
+	  \item[1] The token shall be generated after the \textit{\textbf{login}} request is in code \textquoteleft 0';
+	  \item[2] The token shall be placed in the HTTP headers with key \textquote{Authorization};
 	  \item[3] Every auth-reqired request shall always verify the token first;
 	  \item[4] The token shall be expired after the \textit{\textbf{logout}} request or the expire time;
   \end{itemize}
@@ -35,7 +35,7 @@
   \begin{itemize}
 	  \item[1] API url should follow the fixed context path: \textquote{[host]:[port]/\textbf{scholar-hub}/[request-url]};
 	  \item[2] Only \textbf{GET} and \textbf{POST} request are allowed;
-	  \item[3] Every data of the \textbf{POST} shall be placed at the \textquote{multipart/form-data} field;
+	  \item[3] Every data of the \textbf{POST} shall be placed at the \textquoteleft multipart/form-data' field;
   \end{itemize}
  }
 
