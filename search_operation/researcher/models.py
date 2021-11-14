@@ -1,7 +1,6 @@
 from django.db import models
 from common import models as common
-from django.core import serializers
-import json
+from common.project_const import const
 
 # Create your models here.
 
@@ -22,6 +21,16 @@ class ResearchTeam(common.Record):
 
     class Meta:
         db_table = Researcher._meta.app_label + '_' + 'research_team'
+
+class ResearchTeamAuth(common.Record):
+
+    researcher_id = models.BigIntegerField('id of the researcher/team member', null=False)
+    team_id = models.BigIntegerField('id of the team', null=False)
+    state = models.IntegerField('the state of this invitation', default=const.PENDING, null=False)
+    role_tag = models.CharField('role of the invitee', max_length=64, default='')
+
+    class Meta:
+        db_table = Researcher._meta.app_label + '_' + 'research_team_auth'
 
 class TokenPool(common.Record):
 

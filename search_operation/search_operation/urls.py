@@ -19,6 +19,9 @@ from search.views import search_papers, delete_objects, view_paperdb
 from search.views import search_papers, delete_objects, view_paperdb, comment_paper, like_paper
 from researcher.views import register, login, logout
 from researcher.views import update
+from researcher.views import create_team, get_team_list
+from researcher.views import invite_member, handle_invitation
+from researcher.views import change_team_role_tag
 
 from django.conf import settings
 
@@ -30,6 +33,13 @@ urlpatterns = [
     pathWithContext('user/login', login),
     pathWithContext('user/logout', logout),
     pathWithContext('user/update', update),
+
+    # TODO: with restful respect
+    pathWithContext('team/create', create_team),
+    pathWithContext('team/list', get_team_list),
+    pathWithContext('team/invite', invite_member),
+    pathWithContext('team/invite/handle', handle_invitation),
+    pathWithContext('team/role-tag', change_team_role_tag),
 
     urlPath('paper/search/input=<str:keywords>&<int:number>', search_papers),
     urlPath('paper/search/delete_all_objects', delete_objects),
