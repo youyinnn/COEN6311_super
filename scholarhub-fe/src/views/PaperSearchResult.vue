@@ -16,7 +16,7 @@
           <v-pagination
             v-model="page"
             :length="pageTotal"
-            :total-visible="7"
+            :total-visible="9"
             @input="pageChange"
           ></v-pagination>
         </div>
@@ -95,17 +95,25 @@
                   </div>
                 </v-card-text>
                 <v-card-actions class="paper-card-action d-flex justify-end">
-                  <v-btn small class="ma-2" outlined color="red">
-                    Downloads
+                  <v-btn
+                    small
+                    class="ma-2 white--text"
+                    color="red"
+                    @click="newTab(paper.url)"
+                  >
+                    <span>Origin</span>
+                    <v-icon small color="white" class="ml-2">mdi-share</v-icon>
                   </v-btn>
                   <v-btn
                     small
-                    class="ma-2"
-                    outlined
+                    class="ma-2 white--text"
                     color="indigo"
                     @click="goDetail(paper.paperId)"
                   >
-                    Details
+                    <span>Details</span>
+                    <v-icon small color="white" class="ml-2"
+                      >mdi-details</v-icon
+                    >
                   </v-btn>
                 </v-card-actions>
                 <v-expansion-panels>
@@ -206,6 +214,9 @@ export default {
         path: `/paper/${id}`,
       });
     },
+    newTab(url) {
+      window.open(url, "_blank").focus();
+    },
   },
   beforeRouteEnter(to, from, next) {
     // console.log(from);
@@ -226,9 +237,9 @@ export default {
     },
   },
   mounted: function () {
-    console.log(this.$router);
-    console.log(this.historySearchTerm);
-    console.log(this.page);
+    // console.log(this.$router);
+    // console.log(this.historySearchTerm);
+    // console.log(this.page);
   },
 };
 </script>
