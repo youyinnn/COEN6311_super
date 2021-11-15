@@ -1,6 +1,6 @@
 <template>
   <v-container id="home" class="home" fill-height>
-    <div class="home-box">
+    <div class="home-box d-flex align-center">
       <div class="man-logo mr-8">
         <v-img max-width="200" src="@/assets/img/man.png"></v-img>
       </div>
@@ -39,7 +39,7 @@ export default {
 .home-box {
   margin: auto;
   position: relative;
-  transform: translateY(-2em);
+  transform: translateY(-4em);
 }
 .man-logo {
   float: left;

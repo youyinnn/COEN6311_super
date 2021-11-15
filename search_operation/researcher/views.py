@@ -211,8 +211,9 @@ def invite_member(request):
         id = team_id,
         leader_id = user_id
     )
+    print(team_id, user_id)
     if len(team_query) == 0:
-        return response(1, message='Not leader of this team')
+        return response(1, message='Not the leader of this team')
     else: 
         # query the invitee
         invitee_query = Researcher.objects.filter(

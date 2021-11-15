@@ -4,15 +4,22 @@
       <div class="create-team-box">
         <v-list dense>
           <v-subheader>
-            <span>Create A Team</span>
+            <span>Create a Team</span>
             <v-spacer></v-spacer>
-            <v-btn x-small color="info" class="mr-2" @click="createTeam">
-              Create a team</v-btn
+            <v-btn
+              width="60"
+              x-small
+              color="info"
+              class="mr-2"
+              @click="createTeam"
+            >
+              Create</v-btn
             >
           </v-subheader>
           <v-text-field
             dense
-            label="Name of the Team"
+            persistent-placeholder
+            placeholder="team name"
             single-line
             hide-details="auto"
             class="mt-2 mb-2 ml-4 mr-4"
@@ -21,6 +28,40 @@
         </v-list>
         <v-divider></v-divider>
       </div>
+      <transition name="he" mode="out-in">
+        <div
+          v-show="leaderOfCurrentTeam"
+          key="invite-box"
+          class="create-team-box"
+        >
+          <v-list dense>
+            <v-subheader>
+              <span>Invite a Member to This Team</span>
+              <v-spacer></v-spacer>
+              <v-btn
+                width="60"
+                x-small
+                color="green"
+                class="mr-2 white--text"
+                @click="inviteMember"
+              >
+                Invite</v-btn
+              >
+            </v-subheader>
+            <v-text-field
+              dense
+              single-line
+              persistent-placeholder
+              placeholder="email"
+              hide-details="auto"
+              class="mt-2 mb-2 ml-4 mr-4"
+              v-model="newMemberEmail"
+            ></v-text-field>
+          </v-list>
+          <v-divider></v-divider>
+        </div>
+      </transition>
+
       <v-card class="mx-auto" elevation="0" max-width="300" tile>
         <v-list dense>
           <v-subheader>
@@ -36,10 +77,10 @@
                 <v-list-item-title>Joined</v-list-item-title>
               </v-list-item-content>
             </template>
-            <v-list-item-group v-model="selectedTeamId" mandatory>
+            <v-list-item-group v-model="selectedTeamIndex" mandatory>
               <v-list-item
                 v-for="team in teamList"
-                :key="team.id"
+                :key="team.team_id"
                 @click="selectTeam(team)"
               >
                 <v-list-item-icon>
@@ -115,8 +156,14 @@
 
     <div class="team-box">
       <div v-if="hasTeam" class="has-team">
-        <div class="team-activities-box"></div>
-        <v-card class="team-member-box">
+        <v-card class="team-activities-box" elevation="5">
+          <v-card-text
+            >Activities of <strong>{{ currentTeam.name }}</strong
+            >'s member</v-card-text
+          >
+          <v-divider></v-divider>
+        </v-card>
+        <v-card class="team-member-box" elevation="5">
           <v-card-text>Team member</v-card-text>
           <v-divider></v-divider>
           <v-list-item-group
@@ -129,9 +176,10 @@
           >
             <v-list-item
               v-for="member in currentTeamBoxMember"
-              :key="selectedTeamId + '-' + member.email"
+              :key="selectedTeamIndex + '-' + member.email"
               dense
               three-line
+              @click="clickMember(member)"
             >
               <v-list-item-content>
                 <v-list-item-title>{{ member.name }}</v-list-item-title>
@@ -172,13 +220,16 @@ const dayjs = require("dayjs");
 
 export default {
   data: () => ({
-    selectedTeamId: 0,
+    selectedTeamIndex: 0,
     invitations: [],
     teamList: [],
     newTeamName: "",
     currentTeamBoxMember: [],
     expandTeamList: true,
     teamMemberListFadeInAminate: true,
+    newMemberEmail: "",
+    currentTeam: "",
+    leaderOfCurrentTeam: false,
   }),
   mounted: function () {
     const isLogin = this.$store.state.isLogin;
@@ -189,6 +240,7 @@ export default {
     const thiz = this;
     this.fetchTeam(() => {
       if (thiz.teamList.length > 0) {
+        thiz.currentTeam = thiz.teamList[0];
         thiz.selectTeam(thiz.teamList[0]);
       }
     });
@@ -349,7 +401,58 @@ export default {
         });
     },
     selectTeam: function (team) {
+      this.currentTeam = team;
+      const leaderId = team.leader_id;
+      if (leaderId === this.getUserId) {
+        this.leaderOfCurrentTeam = true;
+      } else {
+        this.leaderOfCurrentTeam = false;
+      }
       this.fetchTeamMemberList(team.team_id);
+    },
+    clickMember: function (member) {
+      console.log(member);
+    },
+    inviteMember: function () {
+      const newMemberEmail = this.newMemberEmail;
+      if (!newMemberEmail) {
+        this.errorToast("Please input an email.", {
+          position: "top-right",
+        });
+      } else {
+        const thiz = this;
+        const formData = new FormData();
+        const token = localStorage.getItem("token");
+
+        formData.append("team_id", this.currentTeam.team_id);
+        formData.append("invitee_email", this.newMemberEmail);
+
+        var config = {
+          method: "post",
+          url: this.config.testEnvBackEndUrl + "team/invite",
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `bearer ${token}`,
+          },
+          data: formData,
+        };
+        axios(config)
+          .then(function (response) {
+            // console.log(response.data);
+            const code = response.data.code;
+            const msg = response.data.message;
+            if (code === 1) {
+              thiz.errorToast(msg);
+            } else if (code === 0) {
+              thiz.successToast("Invitation is sent.");
+            } else {
+              thiz.infoToast(msg);
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     },
   },
 };
@@ -401,5 +504,18 @@ export default {
   top: 56px;
   animation-duration: 0.7s;
   animation-delay: 0.2s;
+}
+
+.he-enter-active {
+  transition: all 0.3s ease;
+  height: 98px;
+}
+.he-leave-active {
+  transition: all 0.3s ease;
+  height: 98px;
+}
+.he-enter, .he-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  height: 0;
 }
 </style>
