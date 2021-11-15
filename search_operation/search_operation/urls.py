@@ -16,7 +16,7 @@ Including another URLconf
 # from django.contrib import admin
 from django.urls import path as urlPath
 from search.views import search_papers, delete_objects, view_paperdb
-from search.views import comment_paper, like_paper
+from search.views import comment_paper, like_paper, get_paper_user_attitude
 from search.views import get_paper_comments, get_paper_like_count
 from researcher.views import register, login, logout
 from researcher.views import update
@@ -48,6 +48,7 @@ urlpatterns = [
     urlPath('paper/search/test/show_paper_db', view_paperdb),
     pathWithContext('paper/comment', comment_paper),
     pathWithContext('paper/comments', get_paper_comments),
-    pathWithContext('paper/comments', get_paper_comments),
+    pathWithContext('paper/like', like_paper),
+    pathWithContext('paper/like/user', get_paper_user_attitude),
     pathWithContext('paper/like/count', get_paper_like_count)
 ]

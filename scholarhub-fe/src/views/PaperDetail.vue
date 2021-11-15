@@ -101,54 +101,90 @@
       <v-card-actions class="paper-card-action d-flex justify-end pt-0">
         <transition name="slide-r-fade" mode="out-in">
           <div v-if="userActionLoaded" key="action-after-user-data">
-            <v-btn small class="ma-2 white--text" color="red">
-              Downloads
+            <v-btn
+              small
+              class="ma-2 white--text lighten-1"
+              color="red"
+              @click="newTab()"
+            >
+              <span>Origin</span>
+              <v-icon small color="white" class="ml-2">mdi-share</v-icon>
             </v-btn>
-            <v-btn small class="ma-2 white--text" color="green">
-              <span class="mr-2">{{ paperOperatedData.likes }}</span>
+            <v-btn
+              color="green"
+              :class="{
+                'ma-2': true,
+                'white--text': true,
+                'mr-0': true,
+                animate__animated: true,
+                animate__bounceIn: likeNumberAnimate,
+              }"
+              style="padding: 0"
+              min-width="30"
+              small
+            >
+              {{ paperOperatedData.likes }}
+            </v-btn>
+            <v-btn
+              :disabled="likeBtnDisable"
+              small
+              class="ma-2 white--text ml-1"
+              color="green"
+              @click="putAttitude(1)"
+            >
               <span>Likes</span>
-              <v-icon small color="white" class="ml-2"
-                >mdi-thumb-up-outline</v-icon
-              >
+              <v-icon small color="white" class="ml-2">mdi-thumb-up</v-icon>
             </v-btn>
-            <v-btn small class="ma-2 white--text darken-2" color="grey">
-              <span class="mr-2">{{ paperOperatedData.dislikes }}</span>
-
+            <v-btn
+              color="orange"
+              :class="{
+                'ma-2': true,
+                'white--text': true,
+                'mr-0': true,
+                animate__animated: true,
+                animate__bounceIn: dislikeNumberAnimate,
+              }"
+              style="padding: 0"
+              min-width="30"
+              small
+            >
+              {{ paperOperatedData.dislikes }}
+            </v-btn>
+            <v-btn
+              :disabled="dislikeBtnDisable"
+              small
+              class="ma-2 white--text ml-1"
+              color="orange"
+              @click="putAttitude(0)"
+            >
               <span>Dislikes</span>
-              <v-icon small color="white" class="ml-2"
-                >mdi-thumb-down-outline</v-icon
-              >
+              <v-icon small color="white" class="ml-2">mdi-thumb-down</v-icon>
             </v-btn>
-            <v-btn small class="ma-2 white--text" color="cyan">
-              <span class="mr-2">{{ paperOperatedData.shared }}</span>
-
+            <v-btn
+              color="cyan"
+              class="ma-2 white--text mr-0"
+              style="padding: 0"
+              min-width="20"
+              small
+            >
+              {{ paperOperatedData.shared }}
+            </v-btn>
+            <v-btn
+              :disabled="!isLogin"
+              small
+              class="ma-2 white--text ml-1"
+              color="cyan"
+            >
               <span>Share</span>
-
               <v-icon small color="white" class="ml-2"
-                >mdi-share-variant-outline</v-icon
+                >mdi-share-variant</v-icon
               >
             </v-btn>
           </div>
           <div v-else key="action-before-user-data">
             <v-skeleton-loader
-              class="ma-2"
-              type="button"
-              max-height="28"
-              style="display: inline-block"
-            ></v-skeleton-loader
-            ><v-skeleton-loader
-              class="ma-2"
-              type="button"
-              max-height="28"
-              style="display: inline-block"
-            ></v-skeleton-loader
-            ><v-skeleton-loader
-              class="ma-2"
-              type="button"
-              max-height="28"
-              style="display: inline-block"
-            ></v-skeleton-loader
-            ><v-skeleton-loader
+              v-for="i in [1, 2, 3, 4, 5, 6, 7]"
+              :key="i"
               class="ma-2"
               type="button"
               max-height="28"
@@ -160,7 +196,7 @@
       <v-expansion-panels>
         <v-expansion-panel>
           <v-expansion-panel-header>
-            <strong>Abstract</strong>
+            <strong class="unselectable">Abstract</strong>
             <template v-slot:actions>
               <v-icon color="primary"> $expand </v-icon>
             </template>
@@ -174,13 +210,14 @@
     <transition name="fade">
       <div class="comment-box" v-show="isLogin">
         <v-card elevation="6">
-          <v-card-subtitle class="unselectable"> Add Comments </v-card-subtitle>
+          <v-card-subtitle class="unselectable"> Add Comment </v-card-subtitle>
           <v-divider></v-divider>
           <v-card-text>
             <v-textarea
               dense
               clear-icon="mdi-close-circle"
               v-model="comment"
+              rows="2"
               hide-details
             ></v-textarea>
           </v-card-text>
@@ -214,6 +251,9 @@
           <div v-for="comment in paperComments" :key="comment.id" class="">
             <div class="commenter">
               <strong class="mr-2">{{ comment.name }}</strong>
+              <span class="mr-2" style="font-size: 14px; color: grey">{{
+                comment.email
+              }}</span>
               <span style="font-size: 12px; color: grey">{{
                 comment.time
               }}</span>
@@ -227,6 +267,9 @@
 </template>
 
 <script>
+const dayjs = require("dayjs");
+import "animate.css";
+
 export default {
   data: () => ({
     comment: "",
@@ -240,6 +283,7 @@ export default {
       isOpenAccess: false,
       fieldsOfStudy: [],
       abstract: " ",
+      url: "",
     },
     paperOperatedData: {
       likes: 0,
@@ -249,10 +293,15 @@ export default {
     paperComments: [],
     userActionLoaded: false,
     paperCommentFetched: false,
+    paperId: "",
+    userAttitudeExist: false,
+    userLikeThisPaper: false,
+    likeNumberAnimate: false,
+    dislikeNumberAnimate: false,
   }),
   methods: {
-    getDetail(id) {
-      console.log(id);
+    getDetail() {
+      const id = this.paperId;
       this.ax.get(
         `${this.config.paperDetailUrl}/${id}`,
         {
@@ -263,43 +312,8 @@ export default {
           isAuth: true,
           success: (response) => {
             this.paper = response.data;
-            // TODO: user action Data
-            setTimeout(() => {
-              this.userActionLoaded = true;
-            }, 800);
-            // TODO: paper comment
-            setTimeout(() => {
-              this.paperCommentFetched = true;
-              this.paperComments = [
-                {
-                  id: "123",
-                  name: "Jack",
-                  time: "2021/10/1 18:30",
-                  content: `Because of the subtleties of finding partial phrase matches in
-                        different parts of the document, be cautious about interpreting
-                        the total field as a count of documents containing any particular
-                        word in the query.`,
-                },
-                {
-                  id: "456",
-                  name: "Jack",
-                  time: "2021/10/1 18:30",
-                  content: `Because of the subtleties of finding partial phrase matches in
-                        different parts of the document, be cautious about interpreting
-                        the total field as a count of documents containing any particular
-                        word in the query.`,
-                },
-                {
-                  id: "789",
-                  name: "Jack",
-                  time: "2021/10/1 18:30",
-                  content: `Because of the subtleties of finding partial phrase matches in
-                        different parts of the document, be cautious about interpreting
-                        the total field as a count of documents containing any particular
-                        word in the query.`,
-                },
-              ];
-            }, 800);
+            this.getPaperAttitudeRecords();
+            this.getPaperComments();
           },
           error: () => {
             this.errorToast("Search API went wrong!");
@@ -308,19 +322,102 @@ export default {
         }
       );
     },
-    addComment: function () {
-      const comment = this.comment;
-      // TODO: time and request
-      const obj = {
-        content: comment,
-        time: new Date().getTime(),
-        id: new Date().getTime(),
-        name: "Jack",
-      };
-      console.log(obj);
-      this.paperComments.unshift(obj);
+    getPaperAttitudeFromUser() {
+      if (this.isLogin) {
+        this.ax.get(
+          this.config.testEnvBackEndUrl + "paper/like/user",
+          { paper_id: this.paperId },
+          {
+            isAuth: true,
+            success: (response) => {
+              this.userAttitudeExist = response.data.body.exist;
+              this.userLikeThisPaper =
+                response.data.body.like === undefined
+                  ? false
+                  : response.data.body.like;
+            },
+          }
+        );
+      }
     },
-    fixHeight: function () {
+    getPaperAttitudeRecords() {
+      this.ax.get(
+        this.config.testEnvBackEndUrl + "paper/like/count",
+        { paper_id: this.paperId },
+        {
+          success: (response) => {
+            const result = response.data.body.result;
+            if (result !== undefined) {
+              this.paperOperatedData.likes = result.like;
+              this.paperOperatedData.dislikes = result.dislike;
+              this.getPaperAttitudeFromUser();
+            }
+            this.userActionLoaded = true;
+          },
+        }
+      );
+    },
+    putAttitude(like) {
+      this.ax.post(
+        this.config.testEnvBackEndUrl + "paper/like",
+        { paper_id: this.paperId, like },
+        {
+          isAuth: true,
+          success: () => {
+            this.getPaperAttitudeRecords();
+            if (like === 1) {
+              this.likeNumberAnimate = false;
+              setTimeout(() => {
+                this.likeNumberAnimate = true;
+              }, 10);
+            } else {
+              this.dislikeNumberAnimate = false;
+              setTimeout(() => {
+                this.dislikeNumberAnimate = true;
+              }, 10);
+            }
+          },
+        }
+      );
+    },
+    getPaperComments() {
+      this.paperCommentFetched = true;
+      this.ax.get(
+        this.config.testEnvBackEndUrl + "paper/comments",
+        { paper_id: this.paperId },
+        {
+          success: (response) => {
+            this.paperCommentFetched = true;
+            for (let comment of response.data.body.comment_list) {
+              comment.time = dayjs(comment.time).format("YYYY/MM/DD HH:mm");
+            }
+            this.paperComments = response.data.body.comment_list;
+          },
+        }
+      );
+    },
+    newTab() {
+      window.open(this.paper.url, "_blank").focus();
+    },
+    addComment() {
+      this.ax.post(
+        this.config.testEnvBackEndUrl + "paper/comment",
+        {
+          paper_id: this.paperId,
+          comment: this.comment,
+        },
+        {
+          isAuth: true,
+          success: (response) => {
+            console.log(response);
+          },
+          final: () => {
+            this.getPaperComments();
+          },
+        }
+      );
+    },
+    fixHeight() {
       setTimeout(() => {
         // console.log(thiz.$refs.card.$el.scrollHeight);
         this.$refs.card.$el
@@ -349,11 +446,43 @@ export default {
       return this.paper.paperId !== "";
     },
     isLogin: function () {
+      this.getPaperAttitudeRecords();
       return this.$store.state.isLogin;
+    },
+    likeBtnDisable: function () {
+      if (this.isLogin) {
+        if (!this.userAttitudeExist) {
+          // attitude btn can be click
+          return false;
+        } else {
+          if (this.userLikeThisPaper) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
+      // disable when logout
+      return true;
+    },
+    dislikeBtnDisable: function () {
+      if (this.isLogin) {
+        if (!this.userAttitudeExist) {
+          return false;
+        } else {
+          if (this.userLikeThisPaper) {
+            return false;
+          } else {
+            return true;
+          }
+        }
+      }
+      return true;
     },
   },
   mounted: function () {
-    this.getDetail(location.hash.split("/")[2]);
+    this.paperId = location.hash.split("/")[2];
+    this.getDetail(this.paperId);
   },
   // beforeRouteEnter(to, from, next) {
   //   // console.log(to);

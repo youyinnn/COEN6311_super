@@ -17,7 +17,7 @@ class Paper_Metadata(models.Model):
 class Paper_Comment(common.Record):
     # user_id = models.IntegerField()
     # create_time = models.DateTimeField()
-    paper_id = models.IntegerField()
+    paper_id = models.CharField("external paper id", max_length=1024, null=True)
     commenter_id = models.IntegerField()
     commenter_name = models.CharField('user fullname', max_length=64, null=True)
     commenter_email = models.CharField('user email', max_length=256, null=True)
@@ -26,6 +26,6 @@ class Paper_Comment(common.Record):
 class Paper_Like_Dislike(common.Record):
     user_id = models.IntegerField()
     # create_time = models.DateTimeField()
-    paper_id = models.IntegerField()
+    paper_id = models.CharField("external paper id", max_length=1024, null=True)
     like = models.BooleanField()
     # dislike = models.BooleanField()

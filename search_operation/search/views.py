@@ -153,3 +153,24 @@ def get_paper_like_count(request):
     return response(0, body={
         'result': result
     })
+
+@auth_require
+@require_http_methods(["GET"])
+def get_paper_user_attitude(request):
+    user_id = get_id_from_request(request)
+    paper_id = request.GET.get('paper_id')
+    query = Paper_Like_Dislike.objects.filter(
+        paper_id = paper_id,
+        user_id = user_id
+    )
+
+    if len(query) == 0:
+        body={
+            'exist': False
+        }
+    else:
+        body={
+            'exist': True,
+            'like': query[0].like
+        }
+    return response(0, body=body)

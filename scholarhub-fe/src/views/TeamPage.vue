@@ -22,8 +22,9 @@
             placeholder="team name"
             single-line
             hide-details="auto"
-            class="mt-2 mb-2 ml-4 mr-4"
+            class="mt-2 mb-2 ml-4 mr-4 elevation-4"
             v-model="newTeamName"
+            solo
           ></v-text-field>
         </v-list>
         <v-divider></v-divider>
@@ -54,8 +55,9 @@
               persistent-placeholder
               placeholder="email"
               hide-details="auto"
-              class="mt-2 mb-2 ml-4 mr-4"
+              class="mt-2 mb-2 ml-4 mr-4 elevation-4"
               v-model="newMemberEmail"
+              solo
             ></v-text-field>
           </v-list>
           <v-divider></v-divider>
@@ -158,9 +160,9 @@
       <div v-if="hasTeam" class="has-team">
         <v-card class="team-activities-box" elevation="5">
           <v-card-text
-            >Activities of <strong>{{ currentTeam.name }}</strong
-            >'s member</v-card-text
-          >
+            style="font-weight: 900; font-size: 16px; font-family: 'Roboto'"
+            >Activities of &lt; <strong>{{ currentTeam.name }}</strong> &gt;
+          </v-card-text>
           <v-divider></v-divider>
         </v-card>
         <v-card class="team-member-box" elevation="5">
@@ -436,6 +438,7 @@ export default {
 }
 .team-activities-box {
   position: absolute;
+  background-color: #f5f5f5 !important;
   margin: 0 1rem;
   height: 100%;
   right: 236px;
