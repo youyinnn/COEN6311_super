@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db import models
-from search.models import Paper_Metadata, Paper_Comment
+from search.models import Paper_Metadata, Paper_Comment, Paper_Like_Dislike
 import urllib.request
 import json
 import datetime
@@ -56,29 +56,100 @@ def view_paperdb(request):
     print(Paper_Metadata.objects.all())
     return render(request, 'papermeta.html', {'li': paper_list_obj})
 
+from common.http_response import json_response_builder as response
+from django.views.decorators.http import require_http_methods
+from common.jwt import auth_require
+from common.jwt import get_user_id as get_id_from_request
+from common.jwt import get_user_name as get_name_from_request
+from common.jwt import get_user_email as get_email_from_request
 
+@auth_require
+@require_http_methods(["POST"])
 def comment_paper(request):
-    if request.method == 'POST':
-        if request.POST:
-            paper_id = request.POST.get('paper_id')
-            comment = request.POST.get('comment')
-            now_time = datetime.datetime.now()
-            Paper_Comment.objects.create(user_id=0, create_time=now_time, paper_id=paper_id, commenter_id=0,
-                                         comment=comment)
-            return HttpResponse('Save_Comment')
-    else:
-        return HttpResponse('Not_detect_Comment')
+    paper_id = request.POST.get('paper_id')
+    comment = request.POST.get('comment')
+    commenter_id = get_id_from_request(request)
+    commenter_name = get_name_from_request(request)
+    commenter_email = get_email_from_request(request)
+    Paper_Comment.objects.create(
+        paper_id = paper_id, 
+        commenter_id = commenter_id,
+        commenter_name = commenter_name,
+        commenter_email = commenter_email,
+        comment = comment
+    )
+    return response(0)
 
-
+@auth_require
+@require_http_methods(["POST"])
 def like_paper(request):
-    if request.method == 'POST':
-        if request.POST:
-            paper_id = request.POST.get('paper_id')
-            like = request.POST.get('like')
-            dislike = request.POST.get('dislike')
-            now_time = datetime.datetime.now()
-            Paper_Comment.objects.create(user_id=0, create_time=now_time, paper_id=paper_id, like=like,
-                                         dislike=dislike)
-            return HttpResponse('Save_Like')
+    paper_id = request.POST.get('paper_id')
+    like = False if request.POST.get('like') == '0' else True
+    user_id = get_id_from_request(request)
+
+    attitude_query = Paper_Like_Dislike.objects.filter(
+        user_id=user_id,
+        paper_id=paper_id,
+    )
+
+    if len(attitude_query) == 0:
+        Paper_Like_Dislike.objects.create(
+            user_id = user_id,
+            paper_id = paper_id,
+            like = like
+        )
     else:
-        return HttpResponse('Not_detect_Like')
+        attitude = attitude_query[0]
+        old_like = attitude.like
+        if (old_like == like):
+            return response(1, message="Same attitude.")
+        else:
+            attitude.like = like
+            attitude.save(update_fields=['like'])
+    return response(0)
+
+@require_http_methods(["GET"])
+def get_paper_comments(request):
+    paper_id = request.GET.get('paper_id')
+    comment_list = []
+    query = Paper_Comment.objects.filter(
+        paper_id = paper_id
+    )
+    if len(query) == 0:
+        # no comment
+        return response(0, body={
+        'comment_list': comment_list
+    })
+    for comment in query:
+        comment_list.append({
+            'time': int(round(comment.create_time.timestamp() * 1000)),
+            'content': comment.comment,
+            'name': comment.commenter_name,
+            'email': comment.commenter_email,
+            'u_id': comment.commenter_id,
+        })
+    return response(0, body={
+        'comment_list': comment_list
+    })
+
+@require_http_methods(["GET"])
+def get_paper_like_count(request):
+    paper_id = request.GET.get('paper_id')
+    result = {
+        'like': 0,
+        'dislike': 0
+    }
+
+    query = Paper_Like_Dislike.objects.filter(
+        paper_id = paper_id
+    )
+
+    for attitude in query:
+        if (attitude.like == True): 
+            result['like'] = result['like'] + 1
+        else:
+            result['dislike'] = result['dislike'] + 1
+
+    return response(0, body={
+        'result': result
+    })

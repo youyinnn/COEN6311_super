@@ -16,6 +16,14 @@ def gen(holder_id, payload):
 def get_user_id(carrier):
     return get_value(carrier, 'id')
 
+def get_user_name(carrier):
+    return get_value(carrier, 'name')
+    
+def get_user_email(carrier):
+    return get_value(carrier, 'email')
+
+
+
 def get_value(carrier, param_key, secret=settings.JWT_SECRET):
     # carrier is str
     if isinstance(carrier, str):

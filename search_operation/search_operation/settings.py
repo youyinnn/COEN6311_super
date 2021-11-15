@@ -42,16 +42,25 @@ INSTALLED_APPS = [
 
     'search.apps.SearchConfig',
     'researcher.apps.ResearcherConfig',
+
+    # CORS 
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     # 'django.middleware.security.SecurityMiddleware',
     # 'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     # 'django.contrib.auth.middleware.AuthenticationMiddleware',
     # 'django.contrib.messages.middleware.MessageMiddleware',
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# CORS for front-end testing
+CORS_ALLOWED_ORIGINS = [
+    'http://192.168.0.165:8080',
 ]
 
 ROOT_URLCONF = 'search_operation.urls'
