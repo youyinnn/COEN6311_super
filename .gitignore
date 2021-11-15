@@ -10,7 +10,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+# dist/
 downloads/
 eggs/
 .eggs/
@@ -138,5 +138,5 @@ dmypy.json
 *.out
 *.synctex.gz
 
-dist
+# dist
 node_modules

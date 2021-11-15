@@ -208,7 +208,7 @@
       </v-expansion-panels>
     </v-card>
     <transition name="fade">
-      <div class="comment-box" v-show="isLogin">
+      <div class="comment-box">
         <v-card elevation="6">
           <v-card-subtitle class="unselectable"> Add Comment </v-card-subtitle>
           <v-divider></v-divider>
@@ -227,6 +227,7 @@
               small
               color="success"
               @click="addComment"
+              :disabled="!isLogin"
               >Submit</v-btn
             >
           </v-card-text>

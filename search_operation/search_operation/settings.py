@@ -61,7 +61,10 @@ MIDDLEWARE = [
 # CORS for front-end testing
 CORS_ALLOWED_ORIGINS = [
     'http://192.168.0.165:8080',
+    'null',
 ]
+
+CORS_ORIGINS_ALLOW_ALL = True
 
 ROOT_URLCONF = 'search_operation.urls'
 
