@@ -65,8 +65,6 @@
 </template>
 
 <script>
-const axios = require("axios").default;
-
 export default {
   data: () => ({
     valid: true,
@@ -88,48 +86,32 @@ export default {
   methods: {
     submit() {
       const isValid = this.$refs.regForm.validate();
-      console.log({
-        name: this.name,
-        username: this.username,
-        passowrd: this.password,
-        email: this.email,
-        // gender: this.gender,
-        area: this.area,
-      });
       if (isValid) {
-        const thiz = this;
-        const formData = new FormData();
-        formData.append("name", this.name);
-        formData.append("username", this.username);
-        formData.append("password", this.password);
-        formData.append("email", this.email);
-        formData.append("area", this.area);
-
-        var config = {
-          method: "post",
-          url: this.config.testEnvBackEndUrl + "user",
-          headers: {
-            "Content-Type": "multipart/form-data",
+        this.ax.post(
+          this.config.testEnvBackEndUrl + "user",
+          {
+            name: this.name,
+            username: this.username,
+            password: this.password,
+            email: this.email,
+            area: this.area,
+            title: this.title,
           },
-          data: formData,
-        };
-        axios(config)
-          .then(function (response) {
-            // console.log(response.data);
-            const code = response.data.code;
-            if (code === 0) {
-              thiz.successToast("Register successed!");
-            }
-            if (code === 1) {
-              thiz.errorToast("Username has been used!");
-            }
-            if (code === 2) {
-              thiz.errorToast("Email has been used!");
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+          {
+            success: (response) => {
+              const code = response.data.code;
+              if (code === 0) {
+                this.successToast("Register successed!");
+              }
+              if (code === 1) {
+                this.errorToast("Username has been used!");
+              }
+              if (code === 2) {
+                this.errorToast("Email has been used!");
+              }
+            },
+          }
+        );
       }
     },
     reset() {

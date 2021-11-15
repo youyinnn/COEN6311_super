@@ -78,8 +78,6 @@
 </template>
 
 <script>
-const axios = require("axios").default;
-
 export default {
   methods: {
     goSignUp() {
@@ -98,25 +96,18 @@ export default {
       this.vueMap.get("loginBox").showBox();
     },
     signOut() {
-      const thiz = this;
-      const token = localStorage.getItem("token");
-      this.$store.commit("logout");
-      var config = {
-        method: "get",
-        url: this.config.testEnvBackEndUrl + "user/logout",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `bearer ${token}`,
-        },
-      };
+      this.ax.get(
+        this.config.testEnvBackEndUrl + "user/logout",
+        {},
+        {
+          isAuth: true,
+          success: () => {
+            this.$store.commit("logout");
+            this.successToast("Sign out succeed!");
+          },
+        }
+      );
 
-      axios(config)
-        .then(function () {
-          thiz.successToast("Sign out succeed!");
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
       const currentRouter = this.$router.history.current.name;
       if (currentRouter === "UserInfo" || currentRouter === "TeamPage") {
         this.$router.push("/").catch(() => {});

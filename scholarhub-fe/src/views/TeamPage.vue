@@ -215,7 +215,6 @@
 
 <script>
 import "animate.css";
-const axios = require("axios").default;
 const dayjs = require("dayjs");
 
 export default {
@@ -260,71 +259,50 @@ export default {
   },
   methods: {
     fetchTeam: function (cb) {
-      const thiz = this;
-      const token = localStorage.getItem("token");
-      var config = {
-        method: "get",
-        url: this.config.testEnvBackEndUrl + "team/list",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `bearer ${token}`,
-        },
-      };
-      axios(config)
-        .then(function (response) {
-          const code = response.data.code;
-          const body = response.data.body;
-          if (code === 0) {
-            thiz.teamList = [...body.joined_list];
-            for (let invite of body.pending_list) {
-              invite.time = dayjs(invite.auth_create_time).format(
-                "YYYY/MM/DD HH:mm"
-              );
+      this.ax.get(
+        this.config.testEnvBackEndUrl + "team/list",
+        {},
+        {
+          isAuth: true,
+          success: (response) => {
+            const code = response.data.code;
+            const body = response.data.body;
+            if (code === 0) {
+              this.teamList = [...body.joined_list];
+              for (let invite of body.pending_list) {
+                invite.time = dayjs(invite.auth_create_time).format(
+                  "YYYY/MM/DD HH:mm"
+                );
+              }
+              this.invitations = [...body.pending_list];
+              if (this.invitations.length === 0) {
+                this.invitations = [];
+              }
+              if (cb !== undefined) cb();
             }
-            thiz.invitations = [...body.pending_list];
-            if (thiz.invitations.length === 0) {
-              thiz.invitations = [];
-            }
-            if (cb !== undefined) cb();
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+          },
+        }
+      );
     },
     handleAuth: function (auth_id, decision) {
-      const thiz = this;
-      const formData = new FormData();
-      const token = localStorage.getItem("token");
-
-      formData.append("auth_id", auth_id);
-      formData.append("decision", decision);
-
-      var config = {
-        method: "post",
-        url: this.config.testEnvBackEndUrl + "team/invite/handle",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `bearer ${token}`,
-        },
-        data: formData,
-      };
-      axios(config)
-        .then(function (response) {
-          // console.log(response.data);
-          const code = response.data.code;
-          const msg = response.data.message;
-          if (code === 1 || code === 2 || code === 3 || code === 4) {
-            thiz.errorToast(msg);
-          }
-          if (code === 0) {
-            thiz.successToast(msg);
-          }
-          thiz.fetchTeam();
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      this.ax.post(
+        this.config.testEnvBackEndUrl + "team/invite/handle",
+        { auth_id, decision },
+        {
+          isAuth: true,
+          success: (response) => {
+            const code = response.data.code;
+            const msg = response.data.message;
+            if (code === 1 || code === 2 || code === 3 || code === 4) {
+              this.errorToast(msg);
+            }
+            if (code === 0) {
+              this.successToast(msg);
+            }
+            this.fetchTeam();
+          },
+        }
+      );
     },
     createTeam: function () {
       if (!this.newTeamName) {
@@ -332,73 +310,50 @@ export default {
           position: "top-right",
         });
       } else {
-        const thiz = this;
-        const formData = new FormData();
-        const token = localStorage.getItem("token");
-
-        formData.append("name", this.newTeamName);
-
-        var config = {
-          method: "post",
-          url: this.config.testEnvBackEndUrl + "team/create",
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `bearer ${token}`,
-          },
-          data: formData,
-        };
-        axios(config)
-          .then(function (response) {
-            // console.log(response.data);
-            const code = response.data.code;
-            const msg = response.data.message;
-            if (code === 1) {
-              thiz.errorToast(msg);
-            }
-            if (code === 0) {
-              thiz.successToast(msg);
-            }
-            thiz.fetchTeam();
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        this.ax.post(
+          this.config.testEnvBackEndUrl + "team/create",
+          { name: this.newTeamName },
+          {
+            isAuth: true,
+            success: (response) => {
+              const code = response.data.code;
+              const msg = response.data.message;
+              if (code === 1) {
+                this.errorToast(msg);
+              }
+              if (code === 0) {
+                this.successToast(msg);
+              }
+              this.fetchTeam();
+            },
+          }
+        );
       }
     },
     fetchTeamMemberList: function (team_id) {
       this.teamMemberListFadeInAminate = false;
-      const thiz = this;
-      const token = localStorage.getItem("token");
-      var config = {
-        method: "get",
-        url: this.config.testEnvBackEndUrl + "team/member/list",
-        params: {
-          team_id,
-        },
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `bearer ${token}`,
-        },
-      };
-      axios(config)
-        .then(function (response) {
-          const code = response.data.code;
-          const msg = response.data.message;
-          if (code === 0) {
-            for (let member of response.data.body.member_list) {
-              if (member.role_tag === "") {
-                member.role_tag = "<no role>";
+      this.ax.get(
+        this.config.testEnvBackEndUrl + "team/member/list",
+        { team_id },
+        {
+          isAuth: true,
+          success: (response) => {
+            const code = response.data.code;
+            const msg = response.data.message;
+            if (code === 0) {
+              for (let member of response.data.body.member_list) {
+                if (member.role_tag === "") {
+                  member.role_tag = "<no role>";
+                }
               }
+              this.currentTeamBoxMember = response.data.body.member_list;
+              this.teamMemberListFadeInAminate = true;
+            } else {
+              this.errorToast(msg);
             }
-            thiz.currentTeamBoxMember = response.data.body.member_list;
-            thiz.teamMemberListFadeInAminate = true;
-          } else {
-            thiz.errorToast(msg);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+          },
+        }
+      );
     },
     selectTeam: function (team) {
       this.currentTeam = team;
@@ -420,38 +375,27 @@ export default {
           position: "top-right",
         });
       } else {
-        const thiz = this;
-        const formData = new FormData();
-        const token = localStorage.getItem("token");
-
-        formData.append("team_id", this.currentTeam.team_id);
-        formData.append("invitee_email", this.newMemberEmail);
-
-        var config = {
-          method: "post",
-          url: this.config.testEnvBackEndUrl + "team/invite",
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `bearer ${token}`,
+        this.ax.post(
+          this.config.testEnvBackEndUrl + "team/invite",
+          {
+            team_id: this.currentTeam.team_id,
+            invitee_email: this.newMemberEmail,
           },
-          data: formData,
-        };
-        axios(config)
-          .then(function (response) {
-            // console.log(response.data);
-            const code = response.data.code;
-            const msg = response.data.message;
-            if (code === 1) {
-              thiz.errorToast(msg);
-            } else if (code === 0) {
-              thiz.successToast("Invitation is sent.");
-            } else {
-              thiz.infoToast(msg);
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+          {
+            isAuth: true,
+            success: (response) => {
+              const code = response.data.code;
+              const msg = response.data.message;
+              if (code === 1) {
+                this.errorToast(msg);
+              } else if (code === 0) {
+                this.successToast("Invitation is sent.");
+              } else {
+                this.infoToast(msg);
+              }
+            },
+          }
+        );
       }
     },
   },

@@ -39,8 +39,6 @@
 </template>
 
 <script>
-const axios = require("axios").default;
-
 export default {
   data: () => ({
     valid: true,
@@ -55,43 +53,32 @@ export default {
       if (e !== undefined) e.preventDefault();
       const valid = this.$refs.form.validate();
       if (valid) {
-        const thiz = this;
-        const formData = new FormData();
-        formData.append("username", this.username);
-        formData.append("password", this.password);
-
-        var config = {
-          method: "post",
-          url: this.config.testEnvBackEndUrl + "user/login",
-          headers: {
-            "Content-Type": "multipart/form-data",
+        this.ax.post(
+          this.config.testEnvBackEndUrl + "user/login",
+          {
+            username: this.username,
+            password: this.password,
           },
-          data: formData,
-        };
-
-        axios(config)
-          .then(function (response) {
-            // console.log(response.data);
-            const code = response.data.code;
-            if (code === 0) {
-              const token = response.data.body.token;
-              thiz.successToast("Login succeed!");
-              thiz.$store.commit("login", {
-                token,
-              });
-              thiz.hideBox();
-            }
-
-            if (code === 1) {
-              thiz.errorToast("Wrong username!");
-            }
-            if (code === 2) {
-              thiz.errorToast("Wrong password!");
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+          {
+            success: (response) => {
+              const code = response.data.code;
+              if (code === 0) {
+                const token = response.data.body.token;
+                this.successToast("Login succeed!");
+                this.$store.commit("login", {
+                  token,
+                });
+                this.hideBox();
+              }
+              if (code === 1) {
+                this.errorToast("Wrong username!");
+              }
+              if (code === 2) {
+                this.errorToast("Wrong password!");
+              }
+            },
+          }
+        );
       }
     },
     press(e) {

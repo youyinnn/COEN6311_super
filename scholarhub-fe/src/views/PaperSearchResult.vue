@@ -70,6 +70,12 @@
                   </div>
                   <div>
                     <span class="paper-data-label"
+                      ><strong>Citation Count</strong></span
+                    >
+                    <span>{{ paper.citationCount }}</span>
+                  </div>
+                  <div>
+                    <span class="paper-data-label"
                       ><strong>Open Access</strong></span
                     >
                     <span v-if="paper.isOpenAccess">Yes</span>

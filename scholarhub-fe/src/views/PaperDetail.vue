@@ -70,6 +70,12 @@
               </div>
               <div>
                 <span class="paper-data-label"
+                  ><strong>Citation Count</strong></span
+                >
+                <span>{{ paper.citationCount }}</span>
+              </div>
+              <div>
+                <span class="paper-data-label"
                   ><strong>Open Access</strong></span
                 >
                 <span v-if="paper.isOpenAccess">Yes</span>
@@ -221,8 +227,6 @@
 </template>
 
 <script>
-const axios = require("axios").default;
-
 export default {
   data: () => ({
     comment: "",
@@ -248,87 +252,61 @@ export default {
   }),
   methods: {
     getDetail(id) {
-      //   console.log(id);
-      const thiz = this;
-      axios
-        .get(`${thiz.config.paperDetailUrl}/${id}`, {
-          params: {
-            fields:
-              "url,title,authors,abstract,venue,year,referenceCount,isOpenAccess,fieldsOfStudy",
+      console.log(id);
+      this.ax.get(
+        `${this.config.paperDetailUrl}/${id}`,
+        {
+          fields:
+            "url,title,authors,abstract,venue,year,referenceCount,isOpenAccess,fieldsOfStudy,citationCount",
+        },
+        {
+          isAuth: true,
+          success: (response) => {
+            this.paper = response.data;
+            // TODO: user action Data
+            setTimeout(() => {
+              this.userActionLoaded = true;
+            }, 800);
+            // TODO: paper comment
+            setTimeout(() => {
+              this.paperCommentFetched = true;
+              this.paperComments = [
+                {
+                  id: "123",
+                  name: "Jack",
+                  time: "2021/10/1 18:30",
+                  content: `Because of the subtleties of finding partial phrase matches in
+                        different parts of the document, be cautious about interpreting
+                        the total field as a count of documents containing any particular
+                        word in the query.`,
+                },
+                {
+                  id: "456",
+                  name: "Jack",
+                  time: "2021/10/1 18:30",
+                  content: `Because of the subtleties of finding partial phrase matches in
+                        different parts of the document, be cautious about interpreting
+                        the total field as a count of documents containing any particular
+                        word in the query.`,
+                },
+                {
+                  id: "789",
+                  name: "Jack",
+                  time: "2021/10/1 18:30",
+                  content: `Because of the subtleties of finding partial phrase matches in
+                        different parts of the document, be cautious about interpreting
+                        the total field as a count of documents containing any particular
+                        word in the query.`,
+                },
+              ];
+            }, 800);
           },
-        })
-        .then(function (response) {
-          // console.log(response);
-
-          thiz.paper = response.data;
-          // TODO: user action Data
-          setTimeout(() => {
-            thiz.userActionLoaded = true;
-          }, 800);
-          // TODO: paper comment
-          setTimeout(() => {
-            thiz.paperCommentFetched = true;
-            thiz.paperComments = [
-              {
-                id: "123",
-                name: "Jack",
-                time: "2021/10/1 18:30",
-                content: `Because of the subtleties of finding partial phrase matches in
-                        different parts of the document, be cautious about interpreting
-                        the total field as a count of documents containing any particular
-                        word in the query.`,
-              },
-              {
-                id: "456",
-                name: "Jack",
-                time: "2021/10/1 18:30",
-                content: `Because of the subtleties of finding partial phrase matches in
-                        different parts of the document, be cautious about interpreting
-                        the total field as a count of documents containing any particular
-                        word in the query.`,
-              },
-              {
-                id: "789",
-                name: "Jack",
-                time: "2021/10/1 18:30",
-                content: `Because of the subtleties of finding partial phrase matches in
-                        different parts of the document, be cautious about interpreting
-                        the total field as a count of documents containing any particular
-                        word in the query.`,
-              },
-            ];
-          }, 800);
-          //   console.log(thiz.$refs.card.$el);
-        })
-        .catch(function (error) {
-          console.log(error);
-          thiz.errorToast("Search API went wrong!");
-        })
-        .then(function () {
-          // 高度动画
-          setTimeout(() => {
-            // console.log(thiz.$refs.card.$el.scrollHeight);
-            thiz.$refs.card.$el
-              .getElementsByClassName("head-box")[0]
-              .style.setProperty(
-                "height",
-                `${
-                  thiz.$refs.card.$el.getElementsByClassName("head-box")[0]
-                    .scrollHeight
-                }px`
-              );
-            thiz.$refs.card.$el
-              .getElementsByClassName("detail-box")[0]
-              .style.setProperty(
-                "height",
-                `${
-                  thiz.$refs.card.$el.getElementsByClassName("detail-box")[0]
-                    .scrollHeight
-                }px`
-              );
-          }, 350);
-          //   console.log(thiz);
-        });
+          error: () => {
+            this.errorToast("Search API went wrong!");
+          },
+          final: this.fixHeight,
+        }
+      );
     },
     addComment: function () {
       const comment = this.comment;
@@ -341,6 +319,29 @@ export default {
       };
       console.log(obj);
       this.paperComments.unshift(obj);
+    },
+    fixHeight: function () {
+      setTimeout(() => {
+        // console.log(thiz.$refs.card.$el.scrollHeight);
+        this.$refs.card.$el
+          .getElementsByClassName("head-box")[0]
+          .style.setProperty(
+            "height",
+            `${
+              this.$refs.card.$el.getElementsByClassName("head-box")[0]
+                .scrollHeight
+            }px`
+          );
+        this.$refs.card.$el
+          .getElementsByClassName("detail-box")[0]
+          .style.setProperty(
+            "height",
+            `${
+              this.$refs.card.$el.getElementsByClassName("detail-box")[0]
+                .scrollHeight
+            }px`
+          );
+      }, 350);
     },
   },
   computed: {

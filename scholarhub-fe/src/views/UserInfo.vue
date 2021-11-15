@@ -88,7 +88,6 @@
 </template>
 
 <script>
-const axios = require("axios").default;
 import "animate.css";
 
 export default {
@@ -125,41 +124,26 @@ export default {
   methods: {
     updateInfo: function () {
       console.log(this.userInfo);
-      const thiz = this;
-      const formData = new FormData();
-      const token = localStorage.getItem("token");
-
-      formData.append("name", this.userInfo.name);
-      if (!this.password) {
-        formData.append("password", this.userInfo.password);
-      }
-      formData.append("email", this.userInfo.email);
-      formData.append("area", this.userInfo.area);
-      formData.append("title", this.userInfo.title);
-
-      var config = {
-        method: "post",
-        url: this.config.testEnvBackEndUrl + "user/update",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `bearer ${token}`,
-        },
-        data: formData,
+      const formDataMap = {
+        name: this.userInfo.name,
+        email: this.userInfo.email,
+        area: this.userInfo.area,
+        title: this.userInfo.title,
       };
-
-      axios(config)
-        .then(function (response) {
-          // console.log(response.data);
+      if (this.userInfo.password !== undefined) {
+        formDataMap["password"] = this.userInfo.password;
+      }
+      this.ax.post(this.config.testEnvBackEndUrl + "user/update", formDataMap, {
+        isAuth: true,
+        success: (response) => {
           const code = response.data.code;
           if (code === 0) {
-            thiz.successToast("Update succeed!");
+            this.successToast("Update succeed!");
           } else {
-            thiz.errorToast(response.data.message);
+            this.errorToast(response.data.message);
           }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+        },
+      });
     },
   },
 };

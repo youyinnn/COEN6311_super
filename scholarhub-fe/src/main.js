@@ -6,6 +6,7 @@ import vuetify from "./plugins/vuetify";
 import router from "./plugins/router";
 import Toasted from "vue-toasted";
 import config from "@/config/config";
+import ax from "./plugins/axios-helper";
 
 Vue.config.productionTip = false;
 
@@ -15,9 +16,10 @@ const vueMap = new Map();
 Vue.mixin({
   data: function () {
     return {
-      vueMap: vueMap,
+      vueMap,
       mapKey: "",
-      config: config,
+      config,
+      ax,
     };
   },
   mounted: function () {

@@ -1,5 +1,5 @@
 from django.db import models
-
+from common import models as common
 
 # Create your models here.
 class Paper_Metadata(models.Model):
@@ -14,17 +14,18 @@ class Paper_Metadata(models.Model):
     url = models.TextField()
 
 
-class Paper_Comment(models.Model):
-    user_id = models.IntegerField()
-    create_time = models.DateTimeField()
+class Paper_Comment(common.Record):
+    # user_id = models.IntegerField()
+    # create_time = models.DateTimeField()
     paper_id = models.IntegerField()
     commenter_id = models.IntegerField()
+    commenter_name = models.CharField('user fullname', max_length=64, null=True)
+    commenter_email = models.CharField('user email', max_length=256, null=True)
     comment = models.TextField()
 
-
-class Paper_Like_Dislike(models.Model):
+class Paper_Like_Dislike(common.Record):
     user_id = models.IntegerField()
-    create_time = models.DateTimeField()
+    # create_time = models.DateTimeField()
     paper_id = models.IntegerField()
     like = models.BooleanField()
-    dislike = models.BooleanField()
+    # dislike = models.BooleanField()

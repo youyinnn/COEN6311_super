@@ -29,8 +29,6 @@
 </template>
 
 <script>
-const axios = require("axios").default;
-
 export default {
   props: ["dense", "loading", "justGo"],
   data: () => ({
@@ -62,35 +60,32 @@ export default {
     search(sT, page) {
       this.showLoading();
       this.searchTerm = "";
-      const thiz = this;
       const limit = 10;
       if (page === undefined) {
         page = 1;
       }
-      axios
-        .get(this.config.paperSearchUrl, {
-          params: {
-            query: sT,
-            limit: limit,
-            offset: (page - 1) * limit,
-            fields: `url,title,authors,abstract,venue,year,referenceCount,isOpenAccess,fieldsOfStudy`,
+      this.ax.get(
+        this.config.paperSearchUrl,
+        {
+          query: sT,
+          limit: limit,
+          offset: (page - 1) * limit,
+          fields: `url,title,authors,abstract,venue,year,referenceCount,isOpenAccess,fieldsOfStudy,citationCount`,
+        },
+        {
+          success: (response) => {
+            this.vueMap
+              .get("paperSearchResult")
+              .showResult(sT, response.data, page);
           },
-        })
-        .then(function (response) {
-          //   console.log(response);
-          //   console.log(thiz.vueMap);
-          thiz.vueMap
-            .get("paperSearchResult")
-            .showResult(sT, response.data, page);
-        })
-        .catch(function (error) {
-          console.log(error);
-          thiz.errorToast("Search API went wrong!");
-        })
-        .then(function () {
-          // 总是会执行
-          thiz.hideLoading();
-        });
+          error: () => {
+            this.errorToast("Search API went wrong!");
+          },
+          final: () => {
+            this.hideLoading();
+          },
+        }
+      );
     },
     showLoading() {
       if (this.$props.loading !== undefined) {
