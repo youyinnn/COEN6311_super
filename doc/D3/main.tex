@@ -79,7 +79,7 @@ The above data is available in the user search engine database and the ICDE data
 \end{figure}
 
 \textbf{With the internal architecture design}, the system can be divided into three logical stacked layers
-with implementing the MVC pattern\footnote{The MVC pattern introduced in the project is not exactly the same MVC pattern presented by the textbook\cite{textbook}, which mvc is used by the project will be discuss at section \ref{sec:1.3}.} at the same time.
+with implementing the MVC pattern\footnote{The MVC pattern introduced in the project is not exactly the same MVC pattern presented by the textbook\cite{textbook}, this will be discuss at section \ref{sec:1.3}.} at the same time.
 Different layer focuses on the different logical data type as can be seen in Fig. \ref{fig:arch-dataflow}.
 
 \begin{figure}[!ht]
@@ -128,7 +128,7 @@ For how the system extrenal architecture was designed is quite simple: the proje
 web-based application, hence a trodictional B/S architecture is used to describe the
 physical component of the system.
 
-As for the internal system architecture design, the process is shown in Fig. \ref{fig:arch-process}.
+As for the internal system architecture design, the acticitiy diagram of the process is shown in Fig. \ref{fig:arch-process}.
 As discussed before, each system layer was divided by what data type it handles.
 Activities with the blue color are the main activities that decide how the process is perform.
 And the objects with the green color are the outcome product after certain activities. After the process
@@ -235,8 +235,8 @@ libraries, frameworks and platforms.
 		\hline
 		SRS 1.1     & 1            & Service                     & 1                & 70  & 4                &                 \\
 		User        &              & Controller                  & 1                & 7   & 4                & 4               \\
-		Information &              & Persistence\footnotemark[1] & 1                & 41  & 0                &                 \\
-		Management  &              & Vue \footnotemark[2]        & 2                & 318 & 0                & 2               \\
+		Information &              & Persistence\footnotemark[7] & 1                & 41  & 0                &                 \\
+		Management  &              & Vue \footnotemark[8]        & 2                & 318 & 0                & 2               \\
 		\hline
 		SRS 1.2     & 1            & Service                     & 3                & 30  & 2                &                 \\
 		Login       &              & Controller                  & 1                & 4   & 2                & 2               \\
