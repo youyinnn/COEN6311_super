@@ -39,11 +39,12 @@
 \section{Introduction}
 
 This is the third deliverable report of COEN6311 course group project.
-The report articulates the system architecture designs and presents the current progress the group has done so far.
+This report articulates the system architecture designs and presents the current progress the group has done so far.
 
-The report consists of two parts:
-the first part introduce the system architecture designs and the associated software engineering process will be discussed first.
-And the reversion of the system will be presented after.
+The report consists of two parts.
+The first part will first introduces the system architecture designs and the software engineering process which comes up with those designs.
+And then the reversion of the system will be presented.
+And finally, more details of the Layered MVC pattern will be discussed.
 
 The second part illustrates the software metrics and granularity of components.
 
@@ -56,14 +57,13 @@ The second part illustrates the software metrics and granularity of components.
 
 This section will First discuss the design of both external and internal architecture and the reason of why they are design in this way.
 After that, the process of how the designs are designed will be presented.
-% Finally, the association between system internal architecture design and the software engineering process will be presented.
 
 \subsubsection{\textbf{Architectural Designs}}
 \label{sec:1.1.1}
 
-As described in the previous delivery, the software architecture is designed and illustrated based on requirements that have been specified in detail.
+As described in the previous deliveries, the software external and internal architectures are designed based on requirements that have been specified in detail.
 Fig. \ref{fig:sys-context} and  Fig. \ref{fig:sys-arch}\footnote{The internal architecture has been redesigned due to some reversions, so it looks different from the previous one.}
-demonstrate the external system architectural view and the logical view of the system architecture by block diagram.
+demonstrate the logical view and physical view of the system by block diagram respectively.
 
 \textbf{With the external architecture design}, the users are able to register, log in, update user information, search paper, evaluate and share paper through the web browser.
 User activities which involve paper operations can be captured and accessed through the ICDE API for the system itself
@@ -92,20 +92,20 @@ Different layer focuses on the different logical data type as can be seen in Fig
 
 \begin{itemize}
 	\item[1] \textbf{The controller layer} contains the controllers which are responsible for receiving and responding to the HTTP requests sent from users' browsers.
-		This layer is focus on the communication between the system and the browsers.
-		Each controller accepts one business aspect requests and calls the corresponding service methods to retrieve the demanding data,
+		This layer focuses on the communication between the system and the browsers.
+		Each controller accepts one business aspect of requests and calls the corresponding service methods to retrieve the demanding data,
 		and warps the date to unified standard HTTP responses which will return to the browsers.
 	\item[2] \textbf{The service layer\footnote{This layer is also well known as bussiness layer/logical layer.}} contains the services which are responsible for preparing and organizing the system data.
-		This layer is focus on responsing the call from controllers and calls the corresponding module methods to manipulate the data.
-		Each service should abled to handle the date in bi-direction. For instance one service receives the raw data sent from the controller and do some calculation before passing the data to the presistence module.
-		Or service calls methods from several persistence module and aggregates those different data sets into one set then return it to the controller.
+		This layer focuses on responsing the call from controllers and calls the corresponding module methods to manipulate the data.
+		Each service should be able to handle the data in bi-direction. For instance, one service receives the raw data sent from the controller and do some calculation before passing the data to the persistence module.
+		Or service calls methods from several persistence modules and aggregates those different data sets into one set then return it to the controller.
 	\item[3] \textbf{The module layer} contains two parts of the system,
 		\begin{itemize}
-			\item \textbf{Part one}\footnote{This part is also well known as the persistence layer.} is all about the data persistence modules which are responsible for data presistence and data query.
-			      This layer part is focus on the communication between the system and the databases.
+			\item \textbf{Part one}\footnote{This part is also well known as the persistence layer.} is all about the data persistence modules which are responsible for data persistence and data query.
+			      This layer part focuses on the communication between the system and the databases.
 			      Each module takes the corresponding data sent from services and saves them into the databases, or queries data for the services.
-			\item \textbf{Part two} is the all the other common modules or utilities that can be reused in any part of the system.
-			      For instance, the common super classes or string formating handler or customized file reader etc.
+			\item \textbf{Part two} contains all the common modules or utilities that can be reused in any part of the system.
+			      For instance, the common superclasses or string formating handler or customized file reader etc.
 		\end{itemize}
 
 \end{itemize}
@@ -124,13 +124,12 @@ Different layer focuses on the different logical data type as can be seen in Fig
 \subsubsection{\textbf{Software Engineering Process for Designing the Architecture}}
 \label{sec:1.1.2}
 
-For how the system extrenal architecture was designed is quite simple: the project is designed to be a
-web-based application, hence a trodictional B/S architecture is used to describe the
-physical component of the system.
+For how the system external architecture was designed is quite simple: the project is designed to be a
+web-based application, hence a traditional B/S architecture is used to describe the physical component of the system.
 
-As for the internal system architecture design, the acticitiy diagram of the process is shown in Fig. \ref{fig:arch-process}.
+As for the internal system architecture design, the activity diagram of the process is shown in Fig. \ref{fig:arch-process}.
 As discussed before, each system layer was divided by what data type it handles.
-Activities with the blue color are the main activities that decide how the process is perform.
+Activities with the blue color are the main activities that decide how the process is performed.
 And the objects with the green color are the outcome product after certain activities. After the process
 
 \begin{figure*}[!ht]
@@ -150,11 +149,11 @@ hence the effects of the system changing are small and smooth.
 The following features were cancelled:
 
 \begin{itemize}
-	\item \textbf{Paper Upload \& Download Module:} At the initinal system requirement, the system should able to upload and download the pdf file of the paper.
+	\item \textbf{Paper Upload \& Download Module:} At the initial system requirement, the system should be able to upload and download the pdf file of the paper.
 	      But due to the copyright issues, the system could not maintain the pdf file database so those two features were removed.
-	      Instead, the system only return an url which leads to the original paper page.
-	\item \textbf{WebSocket Module:} At the initinal system requirement, team activities was designed to be updated in real-time,
-	      not just polling requests by the front-end javascript so the system will maintain a websocket server for instance notification.
+	      Instead, the system only returns an URL that leads to the original paper page.
+	\item \textbf{WebSocket Module:} At the initial system requirement, team activities were designed to be updated in real-time,
+	      not just polling requests by the front-end javascript so the system will maintain a WebSocket server for instant notification.
 	      But after the latest evaluation of the user experience of the system, this real-time notification requirement is not that important.
 	      So the module was removed to reduce the complexity of the system.
 \end{itemize}
@@ -163,15 +162,15 @@ The following features were cancelled:
 \label{sec:1.3}
 
 
-For the internal system architectura design of this project,
+For the internal system architecture design of this project,
 \textbf{a combination of MVC architecture pattern and layered architecture pattern has been applied.}
 
 As can be referred to\cite{mvc_versions}, there are various versions of how to interpret the Model-View-Controller over its original philosophy,
-the disputable part is \textquotedblleft Can model layer be communicating with the view layer?\textquotedblright .
+the disputable part is \textquotedblleft Can the model layer be communicating with the view layer?\textquotedblright .
 
-The version which introduced by the textbook\cite{textbook} put the answer yes on the question, which is quite disputable.
+The version introduced by the textbook\cite{textbook} put the answer yes on the question, which is quite disputable.
 Because the mission of the model by its definition is all about managing the data,
-it should never put effort into how many views are subscribing to which models and even send notification to the views.
+it should never put effort into how many views are subscribing to which models and even send notifications to the views.
 
 If the answer is no, which makes sense, the MVC is actually a layered structure\cite{mvc_2,mvc_3}
 since the model layer should not and should never directly communicate with the view layer.
@@ -214,11 +213,11 @@ Disadvantages of both:
 	      For this project, the controller layer and the service layer can be merged to one layer.
 \end{itemize}
 
-Overall, the MVC pattern and the Layer architecture pattern are share the same idea:
-MVC pattern makes each part focusing on their own jobs while further layering the each part is more sensible for component separation and management.
+Overall, the MVC pattern and the Layer architecture pattern share the same idea:
+MVC pattern makes each part focus on their own jobs while further layering each part is more sensible for component separation and management.
 
-Therefore, the project takes the advantage of this for both pattern.
-A layered architecture abstracts the overall view of the system
+A layered architecture abstracts the overall view of the system.
+Therefore, the project takes the advantage of this for both patterns.
 
 \section{Part II}
 
@@ -254,7 +253,7 @@ libraries, frameworks and platforms.
 		Engine      &              & Vue                         & 1                & 531 & 0                & 2               \\
 		\hline
 		SRS 6.1     & 2            & Service                     & 1                & 200 & 6                &                 \\
-		Team        &              & Controller                  & 1                & 11  & 0                & 6               \\
+		Team        &              & Controller                  & 1                & 11  & 6                & 6               \\
 		Information &              & Persistence                 & 0                & 0   & 0                &                 \\
 		Management  &              & Vue                         & 1                & 468 & 0                & 2               \\
 		\hline
@@ -265,15 +264,7 @@ libraries, frameworks and platforms.
 \footnotetext[7]{The persistence layer.}
 \footnotetext[8]{The view layer which use Vue Framework to implement.}
 
-% Software metrics and granularity of components. The components’ granularity is at the level of classes/objects, packages, libraries, frameworks and platforms.
-
-% Please make a statistical count of software metrics from all your tasks implemented so far and
-% form a table given the template below.
-
-
 \begin{thebibliography}{00}
-	% \bibitem{mvc_1} Deacon J. Model-view-controller (mvc) architecture[J]. Online][Citado em: 10 de março de 2006.] http://www. jdl. co. uk/briefings/MVC. pdf, 2009.
-	% \bibitem{layered_1} Richards, Mark. Software architecture patterns. Vol. 4. 1005 Gravenstein Highway North, Sebastopol, CA 95472: O'Reilly Media, Incorporated, 2015.
 	\bibitem{textbook} Sommerville I. Software Engineering GE[M]. Pearson Australia Pty Limited, 2016.
 	\bibitem{mvc_versions} Aihara D S. Study About the Relationship Between the Model-View-Controller Pattern and Usabiltity[J]. 2009.
 	\bibitem{mvc_2} D. Zhang, Z. Wei and Y. Yang, "Research on Lightweight MVC Framework Based on Spring MVC and Mybatis," 2013 Sixth International Symposium on Computational Intelligence and Design, 2013, pp. 350-353, doi: 10.1109/ISCID.2013.94.
