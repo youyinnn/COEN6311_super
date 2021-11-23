@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'search.apps.SearchConfig',
     'researcher.apps.ResearcherConfig',
+    'icde.apps.IcdeConfig',
 
     # CORS 
     'corsheaders',
