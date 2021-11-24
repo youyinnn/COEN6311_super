@@ -113,17 +113,20 @@ export default {
       this.$router.push("/404");
       this.errorToast("You should login first!");
     }
-    const token = localStorage.getItem("token");
-    const info = JSON.parse(Buffer.from(token.split(".")[1], "base64"));
-    // console.log(info);
-    this.userInfo = {
-      ...info,
-    };
+    this.fetchInfo();
     this.animateAvatar = true;
   },
   methods: {
-    updateInfo: function () {
-      console.log(this.userInfo);
+    fetchInfo() {
+      const token = localStorage.getItem("token");
+      const info = JSON.parse(Buffer.from(token.split(".")[1], "base64"));
+      // console.log(info);
+      this.userInfo = {
+        ...info,
+      };
+    },
+    updateInfo() {
+      // console.log(this.userInfo);
       const formDataMap = {
         name: this.userInfo.name,
         email: this.userInfo.email,
@@ -139,9 +142,16 @@ export default {
           const code = response.data.code;
           if (code === 0) {
             this.successToast("Update succeed!");
+            // console.log(response.data.body.new_token);
+            this.$store.commit("login", {
+              token: response.data.body.new_token,
+            });
           } else {
             this.errorToast(response.data.message);
           }
+        },
+        final: () => {
+          this.fetchInfo();
         },
       });
     },

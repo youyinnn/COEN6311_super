@@ -98,3 +98,15 @@ def comment_paper(request):
     ICDE.paper_comment_record(user_id, paper_id)
 
 
+@auth_require
+def get_user_activities(request):
+    user_id = get_id_from_request(request)
+    icde_record_list = ICDE.query_to_list(IcdeRecord.objects.filter(
+        user_id = user_id
+    ))
+
+    return response(0, body={
+        'records': icde_record_list
+    })
+
+

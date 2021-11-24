@@ -91,11 +91,26 @@ def update(request):
     if (len(query) == 0):
         return response(1, "No such user")
     else:
-        Researcher(id = user_id, **newProfile).save(
-            update_fields=[*list(newProfile)])
-        # TODO: exoire token if update password
-        print('password' in newProfile)
-        return response(0)
+        try:
+            Researcher(id = user_id, **newProfile).save(
+                update_fields=[*list(newProfile)])
+            user = Researcher.objects.filter(id=user_id)[0]
+            token = jwt_gen(user_id, {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'area': user.area,
+                'name': user.name,
+                'title': user.title,
+            })
+            return response(0, body={
+                'new_token': token
+            })
+        except IntegrityError as e:
+            stre = str(e)
+            print(stre)
+            return response(2, message="This e-mail has been used.")
+
 
 
 from common.project_const import const

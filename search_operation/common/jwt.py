@@ -5,11 +5,12 @@ from researcher.models import TokenPool
 
 def gen(holder_id, payload):
     query = TokenPool.objects.filter(holder_id = holder_id)
+    token = jwt.encode(payload, settings.JWT_SECRET, algorithm="HS256")
     if (len(query) == 0):
-        token = jwt.encode(payload, settings.JWT_SECRET, algorithm="HS256")
         TokenPool(holder_id = holder_id, token=token).save()
     else:
-        token = query[0].token
+        query[0].token = token
+        query[0].save(update_fields=['token'])
     return token
 
 # carrier can be token str or HttpRequest

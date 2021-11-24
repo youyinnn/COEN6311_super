@@ -25,6 +25,7 @@ from researcher.views import invite_member, handle_invitation
 from researcher.views import change_team_role_tag
 from icde.views import get_paper_team_share_records, share_paper
 from icde.views import search_paper, go_paper_origin, go_paper_detail_page
+from icde.views import get_user_activities
 
 from django.conf import settings
 
@@ -59,4 +60,5 @@ urlpatterns = [
     pathWithContext('icde/search-paper', search_paper),
     pathWithContext('icde/go-paper-origin', go_paper_origin),
     pathWithContext('icde/go-paper-detail-page', go_paper_detail_page),
+    pathWithContext('icde/user-activities', get_user_activities),
 ]
