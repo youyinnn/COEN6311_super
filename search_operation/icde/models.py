@@ -9,6 +9,7 @@ class IcdeRecord(common.Record):
     user_id = models.BigIntegerField('id of the user', null=False)
     paper_id = models.CharField("external paper id", max_length=1024, null=False)
     team_id = models.BigIntegerField('id of the team', null=True)
+    team_name = models.CharField('name of the team', max_length=1024, null=True)
     input_text = models.CharField('operation input text', max_length=32768, null=False)
     operation_type = models.CharField('the type of the operation', max_length=64, null=False)
     paper_title = models.CharField("name of the paper", max_length=1024, null=False)
@@ -55,13 +56,14 @@ def paper_dislike_click_record(user_id, paper_id, paper_title):
         paper_title = paper_title,
     )
 
-def paper_share_click_record(user_id, paper_id, team_id, paper_title):
+def paper_share_click_record(user_id, paper_id, team_id, team_name, paper_title):
     IcdeRecord.objects.create(
         user_id = user_id,
         operation_type =  const.PAPER_SHARE,
         paper_id = paper_id,
         paper_title = paper_title,
         team_id = team_id,
+        team_name = team_name,
     )
 
 def paper_comment_record(user_id, paper_id, paper_title):
@@ -80,7 +82,9 @@ def query_to_list(query):
             'create_time': int(round(record.create_time.timestamp() * 1000)),
             'user_id': record.user_id,
             'paper_id': record.paper_id,
+            'paper_title': record.paper_title,
             'team_id': record.team_id,
+            'team_name': record.team_name,
             'operation_type': record.operation_type,
             'input_text': record.input_text
         })

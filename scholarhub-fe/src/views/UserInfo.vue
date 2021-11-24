@@ -67,20 +67,53 @@
             v-model="userInfo.password"
           ></v-text-field>
         </v-card-text>
-        <div class="text-h5 mb-4 unselectable">Activities</div>
+        <div class="text-h5 mb-4 unselectable">
+          Activities
+          <span class="text-subtitle-2">{{ activities.length }} Records</span>
+        </div>
         <v-divider></v-divider>
         <div class="op-activities">
-          <v-timeline align-top dense>
-            <v-timeline-item small>
-              <div class="text-subtitle-2">2021/10/15 17:39</div>
-              <div class="text-body-2">
-                A dynamic segment is denoted by a colon :. When a route is
-                matched, the value of the dynamic segments will be exposed as
-                this.$route.params in every component. Therefore, we can render
-                the current user ID by updating User's template to this:
-              </div>
-            </v-timeline-item>
-          </v-timeline>
+          <div>
+            <v-tabs v-model="tab" align-with-title>
+              <v-tabs-slider></v-tabs-slider>
+
+              <v-tab v-for="item in items" :key="item">
+                {{ item }}
+              </v-tab>
+            </v-tabs>
+            <v-divider></v-divider>
+            <v-timeline
+              v-if="displayActivities[tab].length === 0"
+              align-top
+              dense
+            >
+              <v-timeline-item small>
+                <div class="text-subtitle-2"></div>
+                <div class="text-body-2">You have no activities here.</div>
+              </v-timeline-item>
+            </v-timeline>
+            <v-tabs-items v-else v-model="tab">
+              <v-tab-item v-for="item in items" :key="item">
+                <v-timeline
+                  :key="activity.id"
+                  v-for="activity in displayActivities[tab]"
+                  align-top
+                  dense
+                >
+                  <v-timeline-item small yr>
+                    <div class="d-flex align-center text-subtitle-2 mb-2">
+                      <v-icon :color="activity.iconColor" class="mr-2">
+                        {{ activity.icon }}
+                      </v-icon>
+                      <strong class="mr-2">{{ activity.label }}</strong>
+                      <span>{{ activity.create_time }}</span>
+                    </div>
+                    <div class="text-body-2" v-html="activity.content"></div>
+                  </v-timeline-item>
+                </v-timeline>
+              </v-tab-item>
+            </v-tabs-items>
+          </div>
         </div>
       </div>
     </v-card>
@@ -88,7 +121,7 @@
 </template>
 
 <script>
-// const dayjs = require("dayjs");
+const dayjs = require("dayjs");
 import "animate.css";
 
 export default {
@@ -102,6 +135,10 @@ export default {
     },
     animateAvatar: false,
     avatarHide: true,
+    activities: [],
+    displayActivities: [[], [], [], [], []],
+    tab: 0,
+    items: ["Search", "Visit", "Like/Dislike", "Share", "Comment"],
   }),
   computed: {
     userAvatarSrc: function () {
@@ -167,7 +204,78 @@ export default {
             const code = response.data.code;
             if (code === 0) {
               const body = response.data.body;
-              console.log(body);
+              const records = body.records;
+              for (let record of records) {
+                record.create_time = dayjs(record.create_time).format(
+                  "YYYY/MM/DD HH:mm"
+                );
+                record.icon = "mdi-close";
+                record.iconColor = "green";
+                switch (record.operation_type) {
+                  case "paper_search":
+                    record.label = "Searching";
+                    record.icon = "mdi-text-search";
+                    record.iconColor = "blue";
+                    record.content = `In <strong>'${record.input_text}'</strong>`;
+                    break;
+                  case "paper_detail_click":
+                    record.label = "Visiting details";
+                    record.icon = "mdi-card-text";
+                    record.iconColor = "indigo lighten-1";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                  case "paper_origin_click":
+                    record.label = "Visiting origin";
+                    record.icon = "mdi-share";
+                    record.iconColor = "red";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                  case "paper_like_click":
+                    record.label = "Likes";
+                    record.icon = "mdi-thumb-up";
+                    record.iconColor = "green";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                  case "paper_dislike_click":
+                    record.label = "Dislikes";
+                    record.icon = "mdi-thumb-down";
+                    record.iconColor = "orange";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                  case "paper_share":
+                    record.label = "Shared";
+                    record.icon = "mdi-share-variant";
+                    record.iconColor = "cyan";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a> to <strong>Team-${record.team_name}</strong>`;
+                    break;
+                  case "paper_comment":
+                    record.label = "Commented";
+                    record.icon = "mdi-comment-processing";
+                    record.iconColor = "pink lighten-2";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                }
+              }
+              this.activities = records;
+              this.displayActivities[0] = records.filter(
+                (record) => record.operation_type === "paper_search"
+              );
+              this.displayActivities[1] = records.filter(
+                (record) =>
+                  record.operation_type === "paper_detail_click" ||
+                  record.operation_type === "paper_origin_click"
+              );
+              this.displayActivities[2] = records.filter(
+                (record) =>
+                  record.operation_type === "paper_like_click" ||
+                  record.operation_type === "paper_dislike_click"
+              );
+              this.displayActivities[3] = records.filter(
+                (record) => record.operation_type === "paper_share"
+              );
+              this.displayActivities[4] = records.filter(
+                (record) => record.operation_type === "paper_comment"
+              );
             }
           },
         }

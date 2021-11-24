@@ -6,7 +6,6 @@
     dense
     color="primary"
     elevation="3"
-    hide-on-scroll
   >
     <!-- <transition-group> -->
 

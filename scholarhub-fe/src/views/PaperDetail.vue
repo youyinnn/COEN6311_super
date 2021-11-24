@@ -214,7 +214,7 @@
                     v-for="team in teamList"
                     dense
                     :disabled="team.shared"
-                    @click="shareThisPaperTo(team.team_id)"
+                    @click="shareThisPaperTo(team.team_id, team.name)"
                   >
                     <span style="color: black !important">{{ team.name }}</span>
                     <v-spacer></v-spacer>
@@ -292,9 +292,10 @@
           </v-card-text>
           <v-card-text class="clearfix pt-1">
             <v-btn
+              class="white--text"
               style="float: right"
               small
-              color="success"
+              color="pink lighten-2"
               @click="addComment"
               :disabled="!isLogin"
               >Submit</v-btn
@@ -372,6 +373,7 @@ export default {
     dislikeNumberAnimate: false,
     sharedNumberAnimate: false,
     teamList: [],
+    teamListShowLock: false,
   }),
   methods: {
     getDetail() {
@@ -550,13 +552,14 @@ export default {
         }
       );
     },
-    shareThisPaperTo(team_id) {
+    shareThisPaperTo(team_id, team_name) {
       this.ax.post(
         this.config.testEnvBackEndUrl + "icde/share-paper",
         {
           paper_id: this.paperId,
           paper_title: this.paperTitle,
           team_id,
+          team_name,
         },
         {
           isAuth: true,

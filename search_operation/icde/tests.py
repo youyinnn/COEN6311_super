@@ -49,7 +49,7 @@ class IcdeTestcase(TestCase):
         self.assertEqual(record.paper_title, "paper")    
 
     def test_paper_share_record(self):
-        ICDE.paper_share_click_record(123, "456", 789, "paper")
+        ICDE.paper_share_click_record(123, "456", 789, "team", "paper")
         query = IcdeRecord.objects.all()
         record = query[0]
         # print(record.__dict__)
@@ -57,4 +57,5 @@ class IcdeTestcase(TestCase):
         self.assertEqual(record.operation_type, const.PAPER_SHARE)
         self.assertEqual(record.paper_id, "456")
         self.assertEqual(record.team_id, 789)
+        self.assertEqual(record.team_name, "team")
         self.assertEqual(record.paper_title, "paper")    

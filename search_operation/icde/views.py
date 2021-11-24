@@ -13,9 +13,10 @@ def share_paper(request):
     user_id = get_id_from_request(request)
     postParams = request.POST.dict()
     team_id = postParams.get('team_id')
+    team_name = postParams.get('team_name')
     paper_id =  postParams.get('paper_id')
     paper_title =  postParams.get('paper_title')
-    ICDE.paper_share_click_record(user_id, paper_id, team_id, paper_title)
+    ICDE.paper_share_click_record(user_id, paper_id, team_id, team_name, paper_title)
     return response(0)
 
 @auth_require
@@ -103,8 +104,6 @@ def comment_paper(request):
     user_id = get_id_from_request(request)
     ICDE.paper_comment_record(user_id, paper_id, paper_title)
 
-from search.models import  Paper_Comment
-
 @auth_require
 def get_user_activities(request):
     user_id = get_id_from_request(request)
@@ -112,20 +111,10 @@ def get_user_activities(request):
         user_id = user_id
     ))
 
-    comment_query = Paper_Comment.objects.filter(
-        commenter_id = user_id
-    )
+    icde_record_list.sort(reverse=True, key=lambda record : record['create_time'])
     
-    comment_list = [{
-        'id': comment.id,
-        'create_time': int(round(comment.create_time.timestamp() * 1000)),
-        'paper_id': comment.paper_id,
-        'paper_title': comment.paper_title,
-    } for comment in comment_query]
-
     return response(0, body={
         'records': icde_record_list,
-        'comment': comment_list
     })
 
 
