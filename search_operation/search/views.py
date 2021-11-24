@@ -62,10 +62,13 @@ from common.jwt import auth_require
 from common.jwt import get_user_id as get_id_from_request
 from common.jwt import get_user_name as get_name_from_request
 from common.jwt import get_user_email as get_email_from_request
+from icde.views import like_paper as icde_like_record
+from icde.views import comment_paper as icde_comment_paper
 
 @auth_require
 @require_http_methods(["POST"])
 def comment_paper(request):
+    icde_comment_paper(request)
     paper_id = request.POST.get('paper_id')
     comment = request.POST.get('comment')
     commenter_id = get_id_from_request(request)
@@ -83,6 +86,7 @@ def comment_paper(request):
 @auth_require
 @require_http_methods(["POST"])
 def like_paper(request):
+    icde_like_record(request)
     paper_id = request.POST.get('paper_id')
     like = False if request.POST.get('like') == '0' else True
     user_id = get_id_from_request(request)

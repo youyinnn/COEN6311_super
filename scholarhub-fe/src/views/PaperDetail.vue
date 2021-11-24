@@ -199,6 +199,11 @@
                   team_list_class: true,
                   unselectable: true,
                 }"
+                @mouseout="
+                  () => {
+                    teamListShow = false;
+                  }
+                "
               >
                 <div v-if="teamList.length > 0">
                   <v-btn
@@ -311,7 +316,7 @@
             type="paragraph"
           ></v-skeleton-loader>
         </div>
-        <div v-else>
+        <div style="padding-bottom: 2rem" v-else>
           <v-divider></v-divider>
           <div v-for="comment in paperComments" :key="comment.id" class="">
             <div class="commenter">
@@ -466,6 +471,16 @@ export default {
     },
     newTab() {
       window.open(this.paper.url, "_blank").focus();
+      this.ax.post(
+        this.config.testEnvBackEndUrl + "icde/go-paper-origin",
+        {
+          is_login: this.$store.state.isLogin,
+          paper_id: this.paperId,
+        },
+        {
+          isAuth: this.$store.state.isLogin,
+        }
+      );
     },
     addComment() {
       this.ax.post(
@@ -477,7 +492,11 @@ export default {
         {
           isAuth: true,
           success: (response) => {
-            console.log(response);
+            const code = response.data.code;
+            if (code === 0) {
+              this.successToast("Comment success.");
+              this.comment = "";
+            }
           },
           final: () => {
             this.getPaperComments();
@@ -521,8 +540,6 @@ export default {
             const body = response.data.body;
             if (code === 0) {
               this.teamList = [...body.joined_team_list];
-              console.log(this.teamList);
-              console.log(body);
               this.paperOperatedData.shared = body.total_shared;
               if (cb !== undefined) cb();
             }
@@ -597,6 +614,16 @@ export default {
     this.paperId = location.hash.split("/")[2];
     this.getDetail(this.paperId);
     this.fetchTeamListAndSharedData();
+    this.ax.post(
+      this.config.testEnvBackEndUrl + "icde/go-paper-detail-page",
+      {
+        is_login: this.$store.state.isLogin,
+        paper_id: this.paperId,
+      },
+      {
+        isAuth: this.$store.state.isLogin,
+      }
+    );
   },
   // beforeRouteEnter(to, from, next) {
   //   // console.log(to);

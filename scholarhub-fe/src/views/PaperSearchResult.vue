@@ -99,7 +99,7 @@
                     small
                     class="ma-2 white--text"
                     color="red"
-                    @click="newTab(paper.url)"
+                    @click="newTab(paper.url, paper.paperId)"
                   >
                     <span>Origin</span>
                     <v-icon small color="white" class="ml-2">mdi-share</v-icon>
@@ -214,8 +214,18 @@ export default {
         path: `/paper/${id}`,
       });
     },
-    newTab(url) {
+    newTab(url, id) {
       window.open(url, "_blank").focus();
+      this.ax.post(
+        this.config.testEnvBackEndUrl + "icde/go-paper-origin",
+        {
+          is_login: this.$store.state.isLogin,
+          paper_id: id,
+        },
+        {
+          isAuth: this.$store.state.isLogin,
+        }
+      );
     },
   },
   beforeRouteEnter(to, from, next) {

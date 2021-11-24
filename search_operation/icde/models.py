@@ -58,6 +58,13 @@ def paper_share_click_record(user_id, paper_id, team_id):
         team_id = team_id,
     )
 
+def paper_comment_record(user_id, paper_id):
+    IcdeRecord.objects.create(
+        user_id = user_id,
+        operation_type =  const.PAPER_COMMENT,
+        paper_id = paper_id,
+    )
+
 def query_to_list(query):
     list = []
     for record in query:

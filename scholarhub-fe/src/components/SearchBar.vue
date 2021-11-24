@@ -86,6 +86,16 @@ export default {
           },
         }
       );
+      this.ax.post(
+        this.config.testEnvBackEndUrl + "icde/search-paper",
+        {
+          query: sT,
+          is_login: this.$store.state.isLogin,
+        },
+        {
+          isAuth: this.$store.state.isLogin,
+        }
+      );
     },
     showLoading() {
       if (this.$props.loading !== undefined) {
