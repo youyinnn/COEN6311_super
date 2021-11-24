@@ -71,6 +71,19 @@ app {
   opacity: 0;
 }
 
+.small-slide-r-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.small-slide-r-fade-leave-active {
+  transition: all 0.3s ease;
+}
+.small-slide-r-fade-enter, .small-slide-r-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  /* right: -10%; */
+  transform: translateX(3px);
+  opacity: 0;
+}
+
 .v-main {
   padding: 0 !important;
 }

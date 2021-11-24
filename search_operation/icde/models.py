@@ -6,8 +6,9 @@ from common.project_const import const
 
 class IcdeRecord(common.Record):
 
-    user_id = models.BigIntegerField('id of the user', unique=True, null=False)
-    paper_id = models.BigIntegerField('id of the paper', unique=True, null=True)
+    user_id = models.BigIntegerField('id of the user', null=False)
+    paper_id = models.CharField("external paper id", max_length=1024, null=False)
+    team_id = models.BigIntegerField('id of the team', null=True)
     input_text = models.CharField('operation input text', max_length=32768, null=False)
     operation_type = models.CharField('the type of the operation', max_length=64, null=False)
 
@@ -49,10 +50,24 @@ def paper_dislike_click_record(user_id, paper_id):
         paper_id = paper_id
     )
 
-def paper_share_click_record(user_id, paper_id):
+def paper_share_click_record(user_id, paper_id, team_id):
     IcdeRecord.objects.create(
         user_id = user_id,
         operation_type =  const.PAPER_SHARE,
-        paper_id = paper_id
+        paper_id = paper_id,
+        team_id = team_id,
     )
 
+def query_to_list(query):
+    list = []
+    for record in query:
+        list.append({
+            'id' : record.id,
+            'create_time': int(round(record.create_time.timestamp() * 1000)),
+            'user_id': record.user_id,
+            'paper_id': record.paper_id,
+            'team_id': record.team_id,
+            'operation_type': record.operation_type,
+            'input_text': record.input_text
+        })
+    return list

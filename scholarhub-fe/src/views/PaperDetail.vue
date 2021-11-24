@@ -162,9 +162,15 @@
             </v-btn>
             <v-btn
               color="cyan"
-              class="ma-2 white--text mr-0"
+              :class="{
+                'ma-2': true,
+                'white--text': true,
+                'mr-0': true,
+                animate__animated: true,
+                animate__bounceIn: sharedNumberAnimate,
+              }"
               style="padding: 0"
-              min-width="20"
+              min-width="30"
               small
             >
               {{ paperOperatedData.shared }}
@@ -174,12 +180,70 @@
               small
               class="ma-2 white--text ml-1"
               color="cyan"
+              @click="
+                () => {
+                  teamListShow = !teamListShow;
+                }
+              "
             >
               <span>Share</span>
               <v-icon small color="white" class="ml-2"
                 >mdi-share-variant</v-icon
               >
             </v-btn>
+            <transition name="fade" mode="out-in">
+              <v-card
+                key="teamList"
+                v-if="teamListShow"
+                :class="{
+                  team_list_class: true,
+                  unselectable: true,
+                }"
+              >
+                <div v-if="teamList.length > 0">
+                  <v-btn
+                    small
+                    tile
+                    class="team_item"
+                    :key="team.team_id"
+                    v-for="team in teamList"
+                    dense
+                    :disabled="team.shared"
+                    @click="shareThisPaperTo(team.team_id)"
+                  >
+                    <span style="color: black !important">{{ team.name }}</span>
+                    <v-spacer></v-spacer>
+                    <transition name="small-slide-r-fade" mode="out-in">
+                      <v-icon
+                        key="shard-close"
+                        v-if="!team.shared"
+                        class="ml-3"
+                        small
+                        color="gray darken-2"
+                      >
+                        mdi-close-outline
+                      </v-icon>
+                      <v-icon
+                        v-else
+                        key="shard-check"
+                        class="ml-3"
+                        small
+                        style="color: green !important"
+                      >
+                        mdi-check-outline
+                      </v-icon>
+                    </transition>
+                  </v-btn>
+                </div>
+                <v-list-item v-else dense dark>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      >You do not joined any team</v-list-item-title
+                    >
+                  </v-list-item-content>
+                </v-list-item>
+              </v-card>
+            </transition>
           </div>
           <div v-else key="action-before-user-data">
             <v-skeleton-loader
@@ -273,6 +337,7 @@ import "animate.css";
 
 export default {
   data: () => ({
+    teamListShow: false,
     comment: "",
     paper: {
       paperId: "",
@@ -299,6 +364,8 @@ export default {
     userLikeThisPaper: false,
     likeNumberAnimate: false,
     dislikeNumberAnimate: false,
+    sharedNumberAnimate: false,
+    teamList: [],
   }),
   methods: {
     getDetail() {
@@ -441,6 +508,51 @@ export default {
           );
       }, 350);
     },
+    fetchTeamListAndSharedData(cb) {
+      this.ax.get(
+        this.config.testEnvBackEndUrl + "icde/shared-team-list",
+        {
+          paper_id: this.paperId,
+        },
+        {
+          isAuth: true,
+          success: (response) => {
+            const code = response.data.code;
+            const body = response.data.body;
+            if (code === 0) {
+              this.teamList = [...body.joined_team_list];
+              console.log(this.teamList);
+              console.log(body);
+              this.paperOperatedData.shared = body.total_shared;
+              if (cb !== undefined) cb();
+            }
+          },
+        }
+      );
+    },
+    shareThisPaperTo(team_id) {
+      this.ax.post(
+        this.config.testEnvBackEndUrl + "icde/share-paper",
+        {
+          paper_id: this.paperId,
+          team_id,
+        },
+        {
+          isAuth: true,
+          success: (response) => {
+            const code = response.data.code;
+            if (code === 0) {
+              this.successToast("Share succeed.");
+              this.sharedNumberAnimate = false;
+              setTimeout(() => {
+                this.sharedNumberAnimate = true;
+              }, 10);
+              this.fetchTeamListAndSharedData();
+            }
+          },
+        }
+      );
+    },
   },
   computed: {
     hasDetail: function () {
@@ -484,6 +596,7 @@ export default {
   mounted: function () {
     this.paperId = location.hash.split("/")[2];
     this.getDetail(this.paperId);
+    this.fetchTeamListAndSharedData();
   },
   // beforeRouteEnter(to, from, next) {
   //   // console.log(to);
@@ -527,5 +640,14 @@ export default {
   padding: 0 16px;
   padding-top: 4px;
   padding-bottom: 12px;
+}
+.team_list_class {
+  position: absolute;
+  z-index: 10;
+  right: 16px;
+}
+.team_item {
+  display: block;
+  width: 100%;
 }
 </style>

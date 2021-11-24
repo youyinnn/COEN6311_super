@@ -23,6 +23,7 @@ from researcher.views import update
 from researcher.views import create_team, get_team_list, get_team_member
 from researcher.views import invite_member, handle_invitation
 from researcher.views import change_team_role_tag
+from icde.views import get_paper_team_share_records, share_paper
 
 from django.conf import settings
 
@@ -50,5 +51,8 @@ urlpatterns = [
     pathWithContext('paper/comments', get_paper_comments),
     pathWithContext('paper/like', like_paper),
     pathWithContext('paper/like/user', get_paper_user_attitude),
-    pathWithContext('paper/like/count', get_paper_like_count)
+    pathWithContext('paper/like/count', get_paper_like_count),
+
+    pathWithContext('icde/share-paper', share_paper),
+    pathWithContext('icde/shared-team-list', get_paper_team_share_records),
 ]
