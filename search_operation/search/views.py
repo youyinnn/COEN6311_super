@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.db import models
 from search.models import Paper_Metadata, Paper_Comment, Paper_Like_Dislike
 import urllib.request
 import json

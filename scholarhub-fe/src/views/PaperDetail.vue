@@ -20,7 +20,7 @@
             v-if="!hasDetail"
           ></v-skeleton-loader>
           <v-card-title v-else key="card-title">
-            <span>{{ paper.title }}</span></v-card-title
+            <span>{{ paperTitle }}</span></v-card-title
           >
         </transition>
       </div>
@@ -199,7 +199,7 @@
                   team_list_class: true,
                   unselectable: true,
                 }"
-                @mouseout="
+                @mouseleave="
                   () => {
                     teamListShow = false;
                   }
@@ -365,6 +365,7 @@ export default {
     userActionLoaded: false,
     paperCommentFetched: false,
     paperId: "",
+    paperTitle: "",
     userAttitudeExist: false,
     userLikeThisPaper: false,
     likeNumberAnimate: false,
@@ -433,7 +434,7 @@ export default {
     putAttitude(like) {
       this.ax.post(
         this.config.testEnvBackEndUrl + "paper/like",
-        { paper_id: this.paperId, like },
+        { paper_id: this.paperId, like, paper_title: this.paper.title },
         {
           isAuth: true,
           success: () => {
@@ -476,6 +477,7 @@ export default {
         {
           is_login: this.$store.state.isLogin,
           paper_id: this.paperId,
+          paper_title: this.paperTitle,
         },
         {
           isAuth: this.$store.state.isLogin,
@@ -488,6 +490,7 @@ export default {
         {
           paper_id: this.paperId,
           comment: this.comment,
+          paper_title: this.paper.title,
         },
         {
           isAuth: true,
@@ -552,6 +555,7 @@ export default {
         this.config.testEnvBackEndUrl + "icde/share-paper",
         {
           paper_id: this.paperId,
+          paper_title: this.paperTitle,
           team_id,
         },
         {
@@ -611,7 +615,11 @@ export default {
     },
   },
   mounted: function () {
-    this.paperId = location.hash.split("/")[2];
+    const routeParams = this.$route.params;
+    this.paperId = routeParams.id;
+    this.paperTitle = routeParams.paperTitle;
+    // console.log(this.paperId);
+    // console.log(this.paperTitle);
     this.getDetail(this.paperId);
     this.fetchTeamListAndSharedData();
     this.ax.post(
@@ -619,6 +627,7 @@ export default {
       {
         is_login: this.$store.state.isLogin,
         paper_id: this.paperId,
+        paper_title: this.paperTitle,
       },
       {
         isAuth: this.$store.state.isLogin,
@@ -660,13 +669,14 @@ export default {
   height: 56px;
 }
 .commenter {
-  padding: 0 16px;
-  padding-top: 8px;
+  padding: 0 20px;
+  padding-top: 20px;
 }
 .comment {
-  padding: 0 16px;
-  padding-top: 4px;
-  padding-bottom: 12px;
+  margin: 8px 16px;
+  padding: 6px 12px;
+  border: solid 1px rgb(0 0 0 / 28%);
+  border-radius: 4px;
 }
 .team_list_class {
   position: absolute;

@@ -14,7 +14,8 @@ def share_paper(request):
     postParams = request.POST.dict()
     team_id = postParams.get('team_id')
     paper_id =  postParams.get('paper_id')
-    ICDE.paper_share_click_record(user_id, paper_id, team_id)
+    paper_title =  postParams.get('paper_title')
+    ICDE.paper_share_click_record(user_id, paper_id, team_id, paper_title)
     return response(0)
 
 @auth_require
@@ -60,22 +61,25 @@ def go_paper_origin(request):
     postParams = request.POST.dict()
     is_login = postParams.get('is_login') == 'true'
     paper_id = postParams.get('paper_id')
+    paper_title = postParams.get('paper_title')
+
     if is_login:
         user_id = get_id_from_request(request)
-        ICDE.paper_origin_click_record(user_id, paper_id)
+        ICDE.paper_origin_click_record(user_id, paper_id, paper_title)
     else:
-        ICDE.paper_search_record(-1, paper_id)
+        ICDE.paper_search_record(-1, paper_id, paper_title)
     return response(0)
 
 def go_paper_detail_page(request):
     postParams = request.POST.dict()
     is_login = postParams.get('is_login') == 'true'
     paper_id = postParams.get('paper_id')
+    paper_title = postParams.get('paper_title')
     if is_login:
         user_id = get_id_from_request(request)
-        ICDE.paper_detail_click_record(user_id, paper_id)
+        ICDE.paper_detail_click_record(user_id, paper_id, paper_title)
     else:
-        ICDE.paper_detail_click_record(-1, paper_id)
+        ICDE.paper_detail_click_record(-1, paper_id, paper_title)
     return response(0)
 
 @auth_require
@@ -83,20 +87,23 @@ def like_paper(request):
     postParams = request.POST.dict()
     user_id = get_id_from_request(request)
     paper_id = postParams.get('paper_id')
+    paper_title = postParams.get('paper_title')
     like = False if postParams.get('like') == '0' else True
     if like: 
-        ICDE.paper_like_click_record(user_id, paper_id)
+        ICDE.paper_like_click_record(user_id, paper_id, paper_title)
     else:
-        ICDE.paper_dislike_click_record(user_id, paper_id)
+        ICDE.paper_dislike_click_record(user_id, paper_id, paper_title)
     return response(0)
 
 @auth_require
 def comment_paper(request):
     postParams = request.POST.dict()
     paper_id = postParams.get('paper_id')
+    paper_title = postParams.get('paper_title')
     user_id = get_id_from_request(request)
-    ICDE.paper_comment_record(user_id, paper_id)
+    ICDE.paper_comment_record(user_id, paper_id, paper_title)
 
+from search.models import  Paper_Comment
 
 @auth_require
 def get_user_activities(request):
@@ -105,8 +112,20 @@ def get_user_activities(request):
         user_id = user_id
     ))
 
+    comment_query = Paper_Comment.objects.filter(
+        commenter_id = user_id
+    )
+    
+    comment_list = [{
+        'id': comment.id,
+        'create_time': int(round(comment.create_time.timestamp() * 1000)),
+        'paper_id': comment.paper_id,
+        'paper_title': comment.paper_title,
+    } for comment in comment_query]
+
     return response(0, body={
-        'records': icde_record_list
+        'records': icde_record_list,
+        'comment': comment_list
     })
 
 

@@ -14,43 +14,47 @@ class IcdeTestcase(TestCase):
         self.assertEqual(record.input_text, "adder")
 
     def test_paper_detail_record(self):
-        ICDE.paper_detail_click_record(123, 456)
+        ICDE.paper_detail_click_record(123, "456", "paper")
         query = IcdeRecord.objects.all()
         record = query[0]
         self.assertEqual(record.user_id, 123)
         self.assertEqual(record.operation_type, const.PAPER_DETAIL_CLICK)
-        self.assertEqual(record.paper_id, 456)    
+        self.assertEqual(record.paper_id, "456")    
+        self.assertEqual(record.paper_title, "paper")    
         
     def test_paper_origin_record(self):
-        ICDE.paper_origin_click_record(123, 456)
+        ICDE.paper_origin_click_record(123, "456", "paper")
         query = IcdeRecord.objects.all()
         record = query[0]
         self.assertEqual(record.user_id, 123)
         self.assertEqual(record.operation_type, const.PAPER_ORIGIN_CLICK)
-        self.assertEqual(record.paper_id, 456)
+        self.assertEqual(record.paper_id, "456")
+        self.assertEqual(record.paper_title, "paper")    
 
     def test_paper_like_record(self):
-        ICDE.paper_like_click_record(123, 456)
+        ICDE.paper_like_click_record(123, "456", "paper")
         query = IcdeRecord.objects.all()
         record = query[0]
         self.assertEqual(record.user_id, 123)
         self.assertEqual(record.operation_type, const.PAPER_LIKE_CLICK)
-        self.assertEqual(record.paper_id, 456)
+        self.assertEqual(record.paper_id, "456")
 
     def test_paper_dilike_record(self):
-        ICDE.paper_dislike_click_record(123, 456)
+        ICDE.paper_dislike_click_record(123, "456", "paper")
         query = IcdeRecord.objects.all()
         record = query[0]
         self.assertEqual(record.user_id, 123)
         self.assertEqual(record.operation_type, const.PAPER_DISLIKE_CLICK)
-        self.assertEqual(record.paper_id, 456)
+        self.assertEqual(record.paper_id, "456")
+        self.assertEqual(record.paper_title, "paper")    
 
     def test_paper_share_record(self):
-        ICDE.paper_share_click_record(123, 456, 789)
+        ICDE.paper_share_click_record(123, "456", 789, "paper")
         query = IcdeRecord.objects.all()
         record = query[0]
-        print(record.__dict__)
+        # print(record.__dict__)
         self.assertEqual(record.user_id, 123)
         self.assertEqual(record.operation_type, const.PAPER_SHARE)
-        self.assertEqual(record.paper_id, 456)
+        self.assertEqual(record.paper_id, "456")
         self.assertEqual(record.team_id, 789)
+        self.assertEqual(record.paper_title, "paper")    

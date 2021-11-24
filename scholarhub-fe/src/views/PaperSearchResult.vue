@@ -99,7 +99,7 @@
                     small
                     class="ma-2 white--text"
                     color="red"
-                    @click="newTab(paper.url, paper.paperId)"
+                    @click="newTab(paper.url, paper.paperId, paper.title)"
                   >
                     <span>Origin</span>
                     <v-icon small color="white" class="ml-2">mdi-share</v-icon>
@@ -108,7 +108,7 @@
                     small
                     class="ma-2 white--text"
                     color="indigo"
-                    @click="goDetail(paper.paperId)"
+                    @click="goDetail(paper.paperId, paper.title)"
                   >
                     <span>Details</span>
                     <v-icon small color="white" class="ml-2"
@@ -209,18 +209,25 @@ export default {
         sessionStorage.setItem("currentPage", e);
       }
     },
-    goDetail(id) {
+    goDetail(id, title) {
+      // console.log(encodeURI(title));
+      // console.log(decodeURI(encodeURI(title)));
       this.$router.push({
-        path: `/paper/${id}`,
+        name: `Paper`,
+        params: {
+          paperTitle: title,
+          id: id,
+        },
       });
     },
-    newTab(url, id) {
+    newTab(url, id, title) {
       window.open(url, "_blank").focus();
       this.ax.post(
         this.config.testEnvBackEndUrl + "icde/go-paper-origin",
         {
           is_login: this.$store.state.isLogin,
           paper_id: id,
+          paper_title: title,
         },
         {
           isAuth: this.$store.state.isLogin,

@@ -88,6 +88,7 @@
 </template>
 
 <script>
+// const dayjs = require("dayjs");
 import "animate.css";
 
 export default {
@@ -115,6 +116,7 @@ export default {
     }
     this.fetchInfo();
     this.animateAvatar = true;
+    this.getUserActivities();
   },
   methods: {
     fetchInfo() {
@@ -154,6 +156,22 @@ export default {
           this.fetchInfo();
         },
       });
+    },
+    getUserActivities() {
+      this.ax.get(
+        this.config.testEnvBackEndUrl + "icde/user-activities",
+        {},
+        {
+          isAuth: true,
+          success: (response) => {
+            const code = response.data.code;
+            if (code === 0) {
+              const body = response.data.body;
+              console.log(body);
+            }
+          },
+        }
+      );
     },
   },
 };

@@ -46,7 +46,9 @@ export default {
       if (sT === "" || sT.length === 0) {
         return;
       }
-      this.search(sT, 1);
+      if (this.$props.justGo === undefined) {
+        this.search(sT, 1);
+      }
       this.$router
         .push({
           path: `/papers`,
