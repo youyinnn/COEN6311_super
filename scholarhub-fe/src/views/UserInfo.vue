@@ -93,14 +93,14 @@
               </v-timeline-item>
             </v-timeline>
             <v-tabs-items v-else v-model="tab">
-              <v-tab-item v-for="item in items" :key="item">
+              <v-tab-item v-for="item in items" :key="item" transition="none">
                 <v-timeline
                   :key="activity.id"
                   v-for="activity in displayActivities[tab]"
                   align-top
                   dense
                 >
-                  <v-timeline-item small yr>
+                  <v-timeline-item small>
                     <div class="d-flex align-center text-subtitle-2 mb-2">
                       <v-icon :color="activity.iconColor" class="mr-2">
                         {{ activity.icon }}
@@ -311,5 +311,8 @@ export default {
 .v-input {
   max-width: 300px;
   margin-right: 3rem;
+}
+.tab-item {
+  transition: all 0.8s ease-in-out;
 }
 </style>

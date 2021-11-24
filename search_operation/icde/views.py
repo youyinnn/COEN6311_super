@@ -111,10 +111,60 @@ def get_user_activities(request):
         user_id = user_id
     ))
 
+    # icde_record_list = user_icde_record_filter(icde_record_list)
+
     icde_record_list.sort(reverse=True, key=lambda record : record['create_time'])
     
     return response(0, body={
         'records': icde_record_list,
     })
 
+def user_icde_record_filter(records):
+    new_list = []
+    previous_record = None
+    for record in records:
+        if previous_record == None:
+            previous_record = record
+        else:
+            if (record['operation_type'] == const.PAPER_DETAIL_CLICK and previous_record['operation_type'] == const.PAPER_DETAIL_CLICK) and (record['paper_id'] == previous_record['paper_id']):
+                continue
+        new_list.append(record)
+        previous_record = record
 
+    return new_list
+
+from researcher.models import ResearchTeamAuth
+
+@auth_require
+def get_team_member_activities(request):
+    getParams = request.GET.dict()
+    team_id = getParams.get('team_id')
+
+    auth_query = ResearchTeamAuth.objects.filter(
+        team_id = team_id,
+        state = const.JOINED
+    ).values()
+
+    team_member_id_list = [auth['researcher_id'] for auth in auth_query]
+
+    icde_record_list = ICDE.query_to_list(IcdeRecord.objects.filter(
+        user_id__in = team_member_id_list
+    ))
+
+    icde_record_list.sort(reverse=True, key=lambda record : record['create_time'])
+
+    new_list = []
+
+    for record in icde_record_list:
+        if team_icde_record_filter(record, team_id):
+            new_list.append(record)
+
+    return response(0, body={
+        'records': new_list,
+    })
+
+def team_icde_record_filter(record, team_id):
+    if record['operation_type'] == const.PAPER_SHARE and record['team_id'] != int(team_id):
+        print(record)
+        return False
+    return True

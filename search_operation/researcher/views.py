@@ -177,6 +177,7 @@ def get_team_member(request):
     member_list = []
     for researcher in member_query:
         member_list.append({
+            'id': researcher.id,
             'name': researcher.name,
             'email': researcher.email,
             'role_tag': member_role_tag_map[researcher.id]

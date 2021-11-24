@@ -161,15 +161,54 @@
         <v-card class="team-activities-box" elevation="5">
           <v-card-text
             style="font-weight: 900; font-size: 16px; font-family: 'Roboto'"
-            >Activities of &lt; <strong>{{ currentTeam.name }}</strong> &gt;
+            >Member activities of &lt;
+            <strong>{{ currentTeam.name }}</strong> &gt;
           </v-card-text>
           <v-divider></v-divider>
+          <div
+            :class="{
+              'timeline-box': true,
+              animate__animated: true,
+              animate__fadeIn: teamMemberActivitiesAminate,
+            }"
+          >
+            <v-timeline
+              key="no-team-activities"
+              v-if="teamActivities.length === 0"
+              align-top
+              dense
+            >
+              <v-timeline-item small>
+                <div class="text-subtitle-2"></div>
+                <div class="text-body-2">No activities here.</div>
+              </v-timeline-item>
+            </v-timeline>
+            <v-timeline
+              :key="activity.id"
+              v-for="activity in teamActivities"
+              align-top
+              dense
+            >
+              <v-timeline-item
+                small
+                fill-dot
+                :color="activity.iconColor"
+                :icon="activity.icon"
+              >
+                <div class="d-flex align-center text-subtitle-2 mb-2">
+                  <strong v-html="activity.user_name" class="mr-2"></strong>
+                  <strong class="mr-2">{{ activity.label }}</strong>
+                  <span>{{ activity.create_time }}</span>
+                </div>
+                <div class="text-body-2" v-html="activity.content"></div>
+              </v-timeline-item>
+            </v-timeline>
+          </div>
         </v-card>
         <v-card class="team-member-box" elevation="5">
           <v-card-text>Team member</v-card-text>
           <v-divider></v-divider>
           <v-list-item-group
-            class="team-member-group-box"
             :class="{
               'team-member-group-box': true,
               animate__animated: true,
@@ -224,10 +263,13 @@ export default {
     selectedTeamIndex: 0,
     invitations: [],
     teamList: [],
+    teamMemmberMap: null,
+    teamActivities: [],
     newTeamName: "",
     currentTeamBoxMember: [],
     expandTeamList: true,
     teamMemberListFadeInAminate: true,
+    teamMemberActivitiesAminate: true,
     newMemberEmail: "",
     currentTeam: "",
     leaderOfCurrentTeam: false,
@@ -334,6 +376,7 @@ export default {
     },
     fetchTeamMemberList: function (team_id) {
       this.teamMemberListFadeInAminate = false;
+      this.teamMemberActivitiesAminate = false;
       this.ax.get(
         this.config.testEnvBackEndUrl + "team/member/list",
         { team_id },
@@ -343,13 +386,16 @@ export default {
             const code = response.data.code;
             const msg = response.data.message;
             if (code === 0) {
+              this.teamMemmberMap = new Map();
               for (let member of response.data.body.member_list) {
                 if (member.role_tag === "") {
                   member.role_tag = "<no role>";
                 }
+                this.teamMemmberMap.set(member.id, member.name);
               }
               this.currentTeamBoxMember = response.data.body.member_list;
               this.teamMemberListFadeInAminate = true;
+              this.fetchTeamMemberActivities(team_id);
             } else {
               this.errorToast(msg);
             }
@@ -400,6 +446,83 @@ export default {
         );
       }
     },
+    fetchTeamMemberActivities(team_id) {
+      this.ax.get(
+        this.config.testEnvBackEndUrl + "icde/team-activities",
+        { team_id },
+        {
+          isAuth: true,
+          success: (response) => {
+            const code = response.data.code;
+            if (code === 0) {
+              const body = response.data.body;
+              const records = body.records;
+              const token = localStorage.getItem("token");
+              const info = JSON.parse(
+                Buffer.from(token.split(".")[1], "base64")
+              );
+              for (let record of records) {
+                record.create_time = dayjs(record.create_time).format(
+                  "YYYY/MM/DD HH:mm"
+                );
+                if (record.user_id === info.id) {
+                  record.user_name = `<span style="color: green">You</span>`;
+                } else {
+                  record.user_name = this.teamMemmberMap.get(record.user_id);
+                }
+                switch (record.operation_type) {
+                  case "paper_search":
+                    record.label = "Searching";
+                    record.icon = "mdi-text-search";
+                    record.iconColor = "blue";
+                    record.content = `In <strong>'${record.input_text}'</strong>`;
+                    break;
+                  case "paper_detail_click":
+                    record.label = "Visiting details";
+                    record.icon = "mdi-card-text";
+                    record.iconColor = "indigo lighten-1";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                  case "paper_origin_click":
+                    record.label = "Visiting origin";
+                    record.icon = "mdi-share";
+                    record.iconColor = "red";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                  case "paper_like_click":
+                    record.label = "Likes";
+                    record.icon = "mdi-thumb-up";
+                    record.iconColor = "green";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                  case "paper_dislike_click":
+                    record.label = "Dislikes";
+                    record.icon = "mdi-thumb-down";
+                    record.iconColor = "orange";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                  case "paper_share":
+                    record.label = "Shared";
+                    record.icon = "mdi-share-variant";
+                    record.iconColor = "cyan";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                  case "paper_comment":
+                    record.label = "Commented";
+                    record.icon = "mdi-comment-processing";
+                    record.iconColor = "pink lighten-2";
+                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    break;
+                }
+              }
+              // console.log(records);
+              this.teamActivities = records;
+              this.teamMemberActivitiesAminate = true;
+            }
+          },
+        }
+      );
+    },
   },
 };
 </script>
@@ -432,17 +555,18 @@ export default {
 }
 .team-member-box {
   position: absolute;
+  background-color: #4242421c !important;
   height: 100%;
   width: 220px;
   right: 1rem;
 }
 .team-activities-box {
   position: absolute;
-  background-color: #f5f5f5 !important;
   margin: 0 1rem;
   height: 100%;
   right: 236px;
   left: 0;
+  overflow: hidden;
 }
 .team-member-group-box {
   overflow: auto;
@@ -454,15 +578,34 @@ export default {
 }
 
 .he-enter-active {
-  transition: all 0.3s ease;
-  height: 98px;
+  transition: all 0.4s ease;
+  height: 110px;
 }
 .he-leave-active {
-  transition: all 0.3s ease;
-  height: 98px;
+  transition: all 0.4s ease;
+  height: 110px;
 }
 .he-enter, .he-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
   height: 0;
+}
+
+.v-timeline {
+  padding-top: 12px;
+}
+.v-timeline-item {
+  padding-bottom: 12px;
+}
+.timeline-box {
+  overflow: auto;
+  overflow-x: hidden;
+  bottom: 0;
+  position: absolute;
+  top: 54px;
+  padding-bottom: 3rem;
+  right: 0;
+  left: 0;
+  animation-duration: 0.9s;
+  animation-delay: 0.4s;
 }
 </style>
