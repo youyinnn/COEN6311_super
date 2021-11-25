@@ -5,19 +5,34 @@
     app
     dense
     color="primary"
-    elevation="3"
+    elevation="6"
   >
-    <!-- <transition-group> -->
-
-    <!-- <transition-group name="fade" mode="out-in"> -->
     <div key="go-home-btn">
-      <v-btn small raised color="indigo" @click="goHome">
+      <v-btn
+        small
+        class="mr-4"
+        raised
+        color="indigo"
+        @click="goHome"
+        elevation="4"
+      >
         <v-img
           max-height="20"
           max-width="20"
           src="@/assets/img/graduation-cap.png"
         ></v-img>
         <span class="mr-2 white--text">Home</span>
+      </v-btn>
+      <v-btn
+        key="trending-btn"
+        small
+        raised
+        color="blue-grey"
+        @click="goTrendingPage"
+        elevation="4"
+      >
+        <v-icon small color="white">mdi-trending-up</v-icon>
+        <span class="ml-2 white--text">Trending</span>
       </v-btn>
     </div>
     <transition name="slide-fade" mode="out-in">
@@ -29,6 +44,7 @@
           color="cyan"
           class="mr-4 darken-1"
           @click="goUserInfo"
+          elevation="4"
         >
           <v-icon small color="white">mdi-information-outline</v-icon>
           <span class="ml-2 white--text">Info</span>
@@ -38,8 +54,9 @@
           small
           raised
           color="light-green"
-          class="darken-1"
+          class="darken-1 mr-4"
           @click="goTeamPage"
+          elevation="4"
         >
           <v-icon small color="white">mdi-forum</v-icon>
           <span class="ml-2 white--text">Team</span>
@@ -58,16 +75,24 @@
         raised
         color="purple"
         @click="signOut"
+        elevation="4"
       >
         <span class="mr-2 white--text">Sign Out</span>
         <v-icon small color="white">mdi-logout-variant</v-icon>
       </v-btn>
       <div key="sign-up-in-btns" v-else>
-        <v-btn small raised color="green" class="mr-4" @click="goSignUp">
+        <v-btn
+          small
+          raised
+          color="green"
+          class="mr-4"
+          @click="goSignUp"
+          elevation="4"
+        >
           <span class="mr-2 white--text">Sign Up</span>
           <v-icon small color="white">mdi-clipboard-account</v-icon>
         </v-btn>
-        <v-btn small raised color="teal" @click="showLoginBox">
+        <v-btn small raised color="teal" @click="showLoginBox" elevation="4">
           <span class="mr-2 white--text">Sign In</span>
           <v-icon small color="white">mdi-login-variant</v-icon>
         </v-btn>
@@ -90,6 +115,9 @@ export default {
     },
     goTeamPage() {
       this.$router.push("/team").catch(() => {});
+    },
+    goTrendingPage() {
+      this.$router.push("/trending").catch(() => {});
     },
     showLoginBox() {
       this.vueMap.get("loginBox").showBox();

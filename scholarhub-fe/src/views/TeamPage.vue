@@ -481,37 +481,37 @@ export default {
                     record.label = "Visiting details";
                     record.icon = "mdi-card-text";
                     record.iconColor = "indigo lighten-1";
-                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    record.content = `<a href="${location.origin}/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
                     break;
                   case "paper_origin_click":
                     record.label = "Visiting origin";
                     record.icon = "mdi-share";
                     record.iconColor = "red";
-                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    record.content = `<a href="${location.origin}/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
                     break;
                   case "paper_like_click":
                     record.label = "Likes";
                     record.icon = "mdi-thumb-up";
                     record.iconColor = "green";
-                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    record.content = `<a href="${location.origin}/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
                     break;
                   case "paper_dislike_click":
                     record.label = "Dislikes";
                     record.icon = "mdi-thumb-down";
                     record.iconColor = "orange";
-                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    record.content = `<a href="${location.origin}/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
                     break;
                   case "paper_share":
                     record.label = "Shared";
                     record.icon = "mdi-share-variant";
                     record.iconColor = "cyan";
-                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    record.content = `<a href="${location.origin}/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
                     break;
                   case "paper_comment":
                     record.label = "Commented";
                     record.icon = "mdi-comment-processing";
                     record.iconColor = "pink lighten-2";
-                    record.content = `<a href="/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
+                    record.content = `<a href="${location.origin}/#/paper/${record.paper_title}/${record.paper_id}">${record.paper_title}</a>`;
                     break;
                 }
               }

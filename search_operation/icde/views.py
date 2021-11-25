@@ -103,6 +103,11 @@ def get_team_member_activities(request):
 
     new_list = []
 
+    def team_icde_record_filter(record, team_id):
+        if record['operation_type'] == const.PAPER_SHARE and record['team_id'] != int(team_id):
+            return False
+        return True
+
     for record in icde_record_list:
         if team_icde_record_filter(record, team_id):
             new_list.append(record)
@@ -111,7 +116,94 @@ def get_team_member_activities(request):
         'records': new_list,
     })
 
-def team_icde_record_filter(record, team_id):
-    if record['operation_type'] == const.PAPER_SHARE and record['team_id'] != int(team_id):
-        return False
-    return True
+
+
+from django.db import connection
+
+def dictfetchall(cursor):
+    "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
+
+def get_search_term_trending_list():
+
+    with connection.cursor() as cursor:
+        cursor.execute('''
+            select count(1) as count, input_text from icde_icde_record 
+            where operation_type = %s group by input_text order by count desc
+            limit 30
+        ''', [const.PAPER_SEARCH])
+        row = dictfetchall(cursor)
+    
+    return row
+
+def get_click_rate_trending_list():
+
+    with connection.cursor() as cursor:
+        cursor.execute('''
+            select count(1) as count, paper_id, paper_title from icde_icde_record 
+            where operation_type in (%s, %s) group by paper_id order by count desc
+            limit 30
+        ''', [const.PAPER_DETAIL_CLICK, const.PAPER_ORIGIN_CLICK])
+        row = dictfetchall(cursor)
+    
+    return row
+
+
+def get_like_trending_list():
+
+    with connection.cursor() as cursor:
+        cursor.execute('''
+            select count(1) as count, paper_id, paper_title from icde_icde_record 
+            where operation_type = %s group by paper_id order by count desc
+            limit 30
+        ''', [const.PAPER_LIKE_CLICK])
+        row = dictfetchall(cursor)
+    
+    return row
+
+def get_dislike_trending_list():
+
+    with connection.cursor() as cursor:
+        cursor.execute('''
+            select count(1) as count, paper_id, paper_title from icde_icde_record 
+            where operation_type = %s group by paper_id order by count desc
+            limit 30
+        ''', [const.PAPER_DISLIKE_CLICK])
+        row = dictfetchall(cursor)
+    
+    return row
+    
+def get_share_trending_list():
+
+    with connection.cursor() as cursor:
+        cursor.execute('''
+            select count(1) as count, paper_id, paper_title from icde_icde_record 
+            where operation_type = %s group by paper_id order by count desc
+            limit 30
+        ''', [const.PAPER_SHARE])
+        row = dictfetchall(cursor)
+    
+    return row
+
+
+def get_all_trending_list(request):
+
+    searh_term_trending = get_search_term_trending_list()
+    click_rate_trending = get_click_rate_trending_list()
+    like_trending = get_like_trending_list()
+    dislike_trending = get_dislike_trending_list()
+    share_trending = get_share_trending_list()
+    
+    return response(0, body={
+        'tranding_list': [
+            searh_term_trending, 
+            click_rate_trending, 
+            like_trending, 
+            dislike_trending,
+            share_trending
+        ]
+    })

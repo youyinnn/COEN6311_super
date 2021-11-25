@@ -3476,7 +3476,7 @@ eslint-scope@^4.0.3:
 
 eslint-scope@^5.0.0, eslint-scope@^5.1.1:
   version "5.1.1"
-  resolved "https://registry.nlark.com/eslint-scope/download/eslint-scope-5.1.1.tgz#e786e59a66cb92b3f6c1fb0d508aab174848f48c"
+  resolved "https://registry.npmmirror.com/eslint-scope/download/eslint-scope-5.1.1.tgz?cache=0&sync_timestamp=1637466831846&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Feslint-scope%2Fdownload%2Feslint-scope-5.1.1.tgz#e786e59a66cb92b3f6c1fb0d508aab174848f48c"
   integrity sha1-54blmmbLkrP2wfsNUIqrF0hI9Iw=
   dependencies:
     esrecurse "^4.3.0"
@@ -3495,9 +3495,9 @@ eslint-visitor-keys@^1.0.0, eslint-visitor-keys@^1.1.0:
   integrity sha1-MOvR73wv3/AcOk8VEESvJfqwUj4=
 
 eslint@^6.7.2:
-  version "6.8.0"
-  resolved "https://registry.npmmirror.com/eslint/download/eslint-6.8.0.tgz#62262d6729739f9275723824302fb227c8c93ffb"
-  integrity sha1-YiYtZylzn5J1cjgkMC+yJ8jJP/s=
+  version "6.7.2"
+  resolved "https://registry.npmmirror.com/eslint/download/eslint-6.7.2.tgz?cache=0&sync_timestamp=1637475772589&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Feslint%2Fdownload%2Feslint-6.7.2.tgz#c17707ca4ad7b2d8af986a33feba71e18a9fecd1"
+  integrity sha1-wXcHykrXstivmGoz/rpx4Yqf7NE=
   dependencies:
     "@babel/code-frame" "^7.0.0"
     ajv "^6.10.0"
@@ -3539,7 +3539,7 @@ eslint@^6.7.2:
 
 espree@^6.1.2, espree@^6.2.1:
   version "6.2.1"
-  resolved "https://registry.nlark.com/espree/download/espree-6.2.1.tgz?cache=0&sync_timestamp=1631307337216&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fespree%2Fdownload%2Fespree-6.2.1.tgz#77fc72e1fd744a2052c20f38a5b575832e82734a"
+  resolved "https://registry.npmmirror.com/espree/download/espree-6.2.1.tgz?cache=0&sync_timestamp=1637466610670&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fespree%2Fdownload%2Fespree-6.2.1.tgz#77fc72e1fd744a2052c20f38a5b575832e82734a"
   integrity sha1-d/xy4f10SiBSwg84pbV1gy6Cc0o=
   dependencies:
     acorn "^7.1.1"
@@ -3929,7 +3929,7 @@ flat-cache@^2.0.1:
 
 flatted@^2.0.0:
   version "2.0.2"
-  resolved "https://registry.nlark.com/flatted/download/flatted-2.0.2.tgz?cache=0&sync_timestamp=1627541277008&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fflatted%2Fdownload%2Fflatted-2.0.2.tgz#4575b21e2bcee7434aa9be662f4b7b5f9c2b5138"
+  resolved "https://registry.npmmirror.com/flatted/download/flatted-2.0.2.tgz?cache=0&sync_timestamp=1636473886170&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fflatted%2Fdownload%2Fflatted-2.0.2.tgz#4575b21e2bcee7434aa9be662f4b7b5f9c2b5138"
   integrity sha1-RXWyHivO50NKqb5mL0t7X5wrUTg=
 
 flush-write-stream@^1.0.0:
@@ -6667,7 +6667,7 @@ process@^0.11.10:
 
 progress@^2.0.0:
   version "2.0.3"
-  resolved "https://registry.nlark.com/progress/download/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
+  resolved "https://registry.npmmirror.com/progress/download/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha1-foz42PW48jnBvGi+tOt4Vn1XLvg=
 
 promise-inflight@^1.0.1:
@@ -7804,7 +7804,7 @@ svgo@^1.0.0:
 
 table@^5.2.3:
   version "5.4.6"
-  resolved "https://registry.npmmirror.com/table/download/table-5.4.6.tgz?cache=0&sync_timestamp=1633019371192&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Ftable%2Fdownload%2Ftable-5.4.6.tgz#1292d19500ce3f86053b05f0e8e7e4a3bb21079e"
+  resolved "https://registry.npmmirror.com/table/download/table-5.4.6.tgz?cache=0&sync_timestamp=1636037164220&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Ftable%2Fdownload%2Ftable-5.4.6.tgz#1292d19500ce3f86053b05f0e8e7e4a3bb21079e"
   integrity sha1-EpLRlQDOP4YFOwXw6Ofko7shB54=
   dependencies:
     ajv "^6.10.2"
@@ -8017,7 +8017,7 @@ type-fest@^0.6.0:
 
 type-fest@^0.8.1:
   version "0.8.1"
-  resolved "https://registry.npmmirror.com/type-fest/download/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
+  resolved "https://registry.npmmirror.com/type-fest/download/type-fest-0.8.1.tgz?cache=0&sync_timestamp=1637149861923&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Ftype-fest%2Fdownload%2Ftype-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha1-CeJJ696FHTseSNJ8EFREZn8XuD0=
 
 type-is@~1.6.17, type-is@~1.6.18:
@@ -8283,7 +8283,7 @@ vue-cli-plugin-vuetify@~2.4.3:
 
 vue-eslint-parser@^7.0.0:
   version "7.11.0"
-  resolved "https://registry.npmmirror.com/vue-eslint-parser/download/vue-eslint-parser-7.11.0.tgz?cache=0&sync_timestamp=1635567064356&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fvue-eslint-parser%2Fdownload%2Fvue-eslint-parser-7.11.0.tgz#214b5dea961007fcffb2ee65b8912307628d0daf"
+  resolved "https://registry.npmmirror.com/vue-eslint-parser/download/vue-eslint-parser-7.11.0.tgz#214b5dea961007fcffb2ee65b8912307628d0daf"
   integrity sha1-IUtd6pYQB/z/su5luJEjB2KNDa8=
   dependencies:
     debug "^4.1.1"

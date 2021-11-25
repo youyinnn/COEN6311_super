@@ -26,6 +26,7 @@ from researcher.views import change_team_role_tag
 from icde.views import get_paper_team_share_records, share_paper
 from icde.views import search_paper, go_paper_origin, go_paper_detail_page
 from icde.views import get_user_activities, get_team_member_activities
+from icde.views import get_all_trending_list
 
 from django.conf import settings
 
@@ -62,4 +63,6 @@ urlpatterns = [
     pathWithContext('icde/access/shared-team-list', get_paper_team_share_records),
     pathWithContext('icde/access/user-activities', get_user_activities),
     pathWithContext('icde/access/team-activities', get_team_member_activities),
+
+    pathWithContext('icde/access/all-trending', get_all_trending_list),
 ]

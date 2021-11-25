@@ -40,6 +40,11 @@ const routes = [
     component: () => import("@/views/TeamPage.vue"),
   },
   {
+    path: "/trending",
+    name: "TrendingPage",
+    component: () => import("@/views/Trending.vue"),
+  },
+  {
     path: "*",
     name: "PageNotFound",
     component: () => import("@/views/PageNotFound.vue"),

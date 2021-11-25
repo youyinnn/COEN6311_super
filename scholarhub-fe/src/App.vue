@@ -6,7 +6,7 @@
       <!-- <transition name="fade">
         <router-view></router-view>
       </transition> -->
-      <transition name="slide-fade" mode="out-in">
+      <transition name="fade" mode="out-in">
         <!-- <keep-alive> -->
         <router-view></router-view>
         <!-- </keep-alive> -->
