@@ -89,7 +89,7 @@ export default {
         }
       );
       this.ax.post(
-        this.config.testEnvBackEndUrl + "icde/search-paper",
+        this.config.testEnvBackEndUrl + "icde/capture/search-paper",
         {
           query: sT,
           is_login: this.$store.state.isLogin,

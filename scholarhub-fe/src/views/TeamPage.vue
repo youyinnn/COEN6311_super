@@ -448,7 +448,7 @@ export default {
     },
     fetchTeamMemberActivities(team_id) {
       this.ax.get(
-        this.config.testEnvBackEndUrl + "icde/team-activities",
+        this.config.testEnvBackEndUrl + "icde/access/team-activities",
         { team_id },
         {
           isAuth: true,

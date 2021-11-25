@@ -100,7 +100,7 @@
                   align-top
                   dense
                 >
-                  <v-timeline-item small>
+                  <v-timeline-item small :color="activity.iconColor">
                     <div class="d-flex align-center text-subtitle-2 mb-2">
                       <v-icon :color="activity.iconColor" class="mr-2">
                         {{ activity.icon }}
@@ -127,11 +127,11 @@ import "animate.css";
 export default {
   data: () => ({
     userInfo: {
-      username: "jack123",
-      email: "jack@gmail.com",
-      name: "Jack Simith",
-      area: "AI,Cloud",
-      title: "PhD",
+      username: "",
+      email: "",
+      name: "",
+      area: "",
+      title: "",
     },
     animateAvatar: false,
     avatarHide: true,
@@ -196,7 +196,7 @@ export default {
     },
     getUserActivities() {
       this.ax.get(
-        this.config.testEnvBackEndUrl + "icde/user-activities",
+        this.config.testEnvBackEndUrl + "icde/access/user-activities",
         {},
         {
           isAuth: true,
@@ -314,5 +314,8 @@ export default {
 }
 .tab-item {
   transition: all 0.8s ease-in-out;
+}
+.v-timeline-item {
+  padding-bottom: 12px;
 }
 </style>

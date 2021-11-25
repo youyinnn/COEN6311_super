@@ -223,7 +223,7 @@ export default {
     newTab(url, id, title) {
       window.open(url, "_blank").focus();
       this.ax.post(
-        this.config.testEnvBackEndUrl + "icde/go-paper-origin",
+        this.config.testEnvBackEndUrl + "icde/capture/go-paper-origin",
         {
           is_login: this.$store.state.isLogin,
           paper_id: id,

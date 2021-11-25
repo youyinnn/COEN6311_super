@@ -475,7 +475,7 @@ export default {
     newTab() {
       window.open(this.paper.url, "_blank").focus();
       this.ax.post(
-        this.config.testEnvBackEndUrl + "icde/go-paper-origin",
+        this.config.testEnvBackEndUrl + "icde/capture/go-paper-origin",
         {
           is_login: this.$store.state.isLogin,
           paper_id: this.paperId,
@@ -534,7 +534,7 @@ export default {
     },
     fetchTeamListAndSharedData(cb) {
       this.ax.get(
-        this.config.testEnvBackEndUrl + "icde/shared-team-list",
+        this.config.testEnvBackEndUrl + "icde/access/shared-team-list",
         {
           paper_id: this.paperId,
         },
@@ -554,7 +554,7 @@ export default {
     },
     shareThisPaperTo(team_id, team_name) {
       this.ax.post(
-        this.config.testEnvBackEndUrl + "icde/share-paper",
+        this.config.testEnvBackEndUrl + "icde/capture/share-paper",
         {
           paper_id: this.paperId,
           paper_title: this.paperTitle,
@@ -626,7 +626,7 @@ export default {
     this.getDetail(this.paperId);
     this.fetchTeamListAndSharedData();
     this.ax.post(
-      this.config.testEnvBackEndUrl + "icde/go-paper-detail-page",
+      this.config.testEnvBackEndUrl + "icde/capture/go-paper-detail-page",
       {
         is_login: this.$store.state.isLogin,
         paper_id: this.paperId,

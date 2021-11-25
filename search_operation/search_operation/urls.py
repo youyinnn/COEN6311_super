@@ -55,11 +55,11 @@ urlpatterns = [
     pathWithContext('paper/like/user', get_paper_user_attitude),
     pathWithContext('paper/like/count', get_paper_like_count),
 
-    pathWithContext('icde/share-paper', share_paper),
-    pathWithContext('icde/shared-team-list', get_paper_team_share_records),
-    pathWithContext('icde/search-paper', search_paper),
-    pathWithContext('icde/go-paper-origin', go_paper_origin),
-    pathWithContext('icde/go-paper-detail-page', go_paper_detail_page),
-    pathWithContext('icde/user-activities', get_user_activities),
-    pathWithContext('icde/team-activities', get_team_member_activities),
+    pathWithContext('icde/capture/share-paper', share_paper),
+    pathWithContext('icde/capture/search-paper', search_paper),
+    pathWithContext('icde/capture/go-paper-origin', go_paper_origin),
+    pathWithContext('icde/capture/go-paper-detail-page', go_paper_detail_page),
+    pathWithContext('icde/access/shared-team-list', get_paper_team_share_records),
+    pathWithContext('icde/access/user-activities', get_user_activities),
+    pathWithContext('icde/access/team-activities', get_team_member_activities),
 ]
