@@ -26,6 +26,10 @@ Vue.mixin({
     // 方便在任意组件访问其他组件
     this.vueMap.set(this.$el.id, this);
     this.mapKey = this.$el.id;
+    this.ax.universalErrorHandler = (error) => {
+      if (String(error.message) === "Network Error")
+        this.errorToast("Server is down");
+    };
   },
   methods: {
     toast(type, text, option) {

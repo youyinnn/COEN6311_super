@@ -1,6 +1,7 @@
 const axios = require("axios").default;
 
 const ax = {
+  universalErrorHandler: () => {},
   post: function (url, formDataMap, config) {
     // isAuth, success, error, final
     let headers = {
@@ -34,9 +35,9 @@ const ax = {
       headers,
       params: paramsDataMap,
     };
-    this.execute(ax_config, config);
+    this.execute(ax_config, config, this.universalErrorHandler);
   },
-  execute: function (ax_config, config) {
+  execute: (ax_config, config, universalErrorHandler) => {
     axios(ax_config)
       .then(function (response) {
         if (
@@ -47,6 +48,7 @@ const ax = {
         }
       })
       .catch(function (error) {
+        universalErrorHandler(error);
         if (config.error !== undefined && typeof config.error === "function") {
           config.error(error);
         } else {

@@ -102,6 +102,7 @@ export default {
               const code = response.data.code;
               if (code === 0) {
                 this.successToast("Register successed!");
+                this.$router.push("/").catch(() => {});
               }
               if (code === 1) {
                 this.errorToast("Username has been used!");
