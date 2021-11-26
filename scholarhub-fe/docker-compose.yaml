@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  web:
+    container_name: scholar-hub-fe
+    image: nginx
+    volumes:
+      - ./dist:/usr/share/nginx/html
+      # - ./nginx.config:/etc/nginx/templates
+    ports:
+      - "8080:80"
+    environment:
+      - NGINX_PORT=80

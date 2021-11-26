@@ -28,12 +28,16 @@ const avatars = [
 ];
 
 const random = require("lodash.random");
+const url =
+  process.env.NODE_ENV === "development"
+    ? "http://127.0.0.1:8000/scholar-hub/"
+    : "localhost:8089/scholar-hub/";
 
 const config = {
   paperSearchUrl: "https://api.semanticscholar.org/graph/v1/paper/search",
   paperDetailUrl: "https://api.semanticscholar.org/graph/v1/paper",
 
-  testEnvBackEndUrl: "http://127.0.0.1:8000/scholar-hub/",
+  testEnvBackEndUrl: url,
   avatars,
   getRandomAvatars: () => {
     return avatars[random(0, 11)];
