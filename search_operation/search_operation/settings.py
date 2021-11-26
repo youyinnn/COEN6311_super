@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-bww0@kvdj^5(5@fj@a5xz5b9bs-p#uc0lolyzs_iaddu*a^lwt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['concordia.youyinnn.top']
+ALLOWED_HOSTS = ['concordia.youyinnn.top', '127.0.0.1']
 
 
 # Application definition
