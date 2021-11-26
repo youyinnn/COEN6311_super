@@ -31,7 +31,7 @@ const random = require("lodash.random");
 const url =
   process.env.NODE_ENV === "development"
     ? "http://127.0.0.1:8000/scholar-hub/"
-    : "http://frankfurt.youyinnn.top:8089/scholar-hub/";
+    : "http://concordia.youyinnn.top:8089/scholar-hub/";
 
 const config = {
   paperSearchUrl: "https://api.semanticscholar.org/graph/v1/paper/search",

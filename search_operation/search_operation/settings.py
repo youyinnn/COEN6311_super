@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-bww0@kvdj^5(5@fj@a5xz5b9bs-p#uc0lolyzs_iaddu*a^lwt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['frankfurt.youyinnn.top']
+ALLOWED_HOSTS = ['concordia.youyinnn.top']
 
 
 # Application definition
@@ -62,7 +62,7 @@ MIDDLEWARE = [
 # CORS for front-end testing
 CORS_ALLOWED_ORIGINS = [
     'http://192.168.0.165:8080',
-    'http://frankfurt.youyinnn.top:8080',
+    'http://concordia.youyinnn.top:8080',
     'null',
 ]
 
