@@ -15,7 +15,7 @@
     >
       <v-tabs class="mt-2" v-model="tab" color="green">
         <v-tab>Search Terms</v-tab>
-        <v-tab>Click Rates</v-tab>
+        <v-tab>Click Rate</v-tab>
         <v-tab>Likes</v-tab>
         <v-tab>Dislikes</v-tab>
         <v-tab>Most shared</v-tab>

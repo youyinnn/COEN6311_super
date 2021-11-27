@@ -16,12 +16,8 @@
         @click="goHome"
         elevation="4"
       >
-        <v-img
-          max-height="20"
-          max-width="20"
-          src="@/assets/img/graduation-cap.png"
-        ></v-img>
-        <span class="mr-2 white--text">Home</span>
+        <v-icon small color="white">mdi-home</v-icon>
+        <span class="ml-2 white--text">Home</span>
       </v-btn>
       <v-btn
         key="trending-btn"

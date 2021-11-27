@@ -87,4 +87,7 @@ app {
 .v-main {
   padding: 0 !important;
 }
+.v-tab {
+  text-transform: none !important;
+}
 </style>

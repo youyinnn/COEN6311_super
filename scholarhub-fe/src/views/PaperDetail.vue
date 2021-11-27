@@ -240,7 +240,7 @@
                     </transition>
                   </v-btn>
                 </div>
-                <v-list-item v-else dense dark>
+                <v-list-item v-else dense>
                   <v-list-item-content>
                     <v-list-item-title
                       >You do not joined any team</v-list-item-title
@@ -545,6 +545,7 @@ export default {
             const body = response.data.body;
             if (code === 0) {
               this.teamList = [...body.joined_team_list];
+              console.log(this.teamList);
               this.paperOperatedData.shared = body.total_shared;
               if (cb !== undefined) cb();
             }
