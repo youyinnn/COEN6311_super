@@ -61,6 +61,7 @@
         </div>
       </v-form>
     </div>
+    <Footer abs />
   </v-container>
 </template>
 
@@ -131,7 +132,7 @@ export default {
 }
 .regBox {
   margin: auto;
-  transform: translateY(-3rem);
+  transform: translateY(-2rem);
 }
 .regFormBox {
   float: left;

@@ -73,7 +73,7 @@ def capture_go_to_origin_activity(request):
         user_id = get_id_from_request(request)
         ICDE.paper_origin_click_record(user_id, paper_id, paper_title)
     else:
-        ICDE.paper_search_record(-1, paper_id, paper_title)
+        ICDE.paper_origin_click_record(-1, paper_id, paper_title)
 
 def capture_go_to_detail_activity(request):
     postParams = request.POST.dict()

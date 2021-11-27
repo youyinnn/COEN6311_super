@@ -216,7 +216,7 @@ export default {
                     record.label = "Searching";
                     record.icon = "mdi-text-search";
                     record.iconColor = "blue";
-                    record.content = `In <strong>'${record.input_text}'</strong>`;
+                    record.content = `for <strong>'${record.input_text}'</strong>`;
                     break;
                   case "paper_detail_click":
                     record.label = "Visiting details";
