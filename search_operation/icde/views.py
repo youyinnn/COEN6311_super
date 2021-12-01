@@ -25,12 +25,17 @@ def go_paper_origin(request):
 def go_paper_detail_page(request):
     return response(0)
 
+def get_paper_share_count(request):
+    getParams = request.GET.dict()
+    paper_id = getParams.get('paper_id')
+
+    return response(0, body=icde_access.access_paper_share_count(paper_id))
+
 @auth_require
 def get_paper_team_share_records(request):
     getParams = request.GET.dict()
     user_id = get_id_from_request(request)
     paper_id = getParams.get('paper_id')
-    icde_access.access_paper_team_share_records
 
     return response(0, body=icde_access.access_paper_team_share_records(user_id, paper_id))
 

@@ -545,9 +545,27 @@ export default {
             const body = response.data.body;
             if (code === 0) {
               this.teamList = [...body.joined_team_list];
-              console.log(this.teamList);
-              this.paperOperatedData.shared = body.total_shared;
               if (cb !== undefined) cb();
+            }
+          },
+          final: () => {
+            this.fetchPaperSharedCount();
+          },
+        }
+      );
+    },
+    fetchPaperSharedCount() {
+      this.ax.get(
+        this.config.testEnvBackEndUrl + "icde/access/shared-count",
+        {
+          paper_id: this.paperId,
+        },
+        {
+          success: (response) => {
+            const code = response.data.code;
+            const body = response.data.body;
+            if (code === 0) {
+              this.paperOperatedData.shared = body.total_shared;
             }
           },
         }

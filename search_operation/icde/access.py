@@ -5,6 +5,16 @@ from icde.models import IcdeRecord
 from researcher.models import ResearchTeamAuth
 from django.db import connection
 
+def access_paper_share_count(paper_id): 
+    icde_record_list = ICDE.query_to_list(IcdeRecord.objects.filter(
+        operation_type =  const.PAPER_SHARE,
+        paper_id = paper_id
+    ))
+
+    return {
+        'total_shared': len(icde_record_list),
+    }
+
 def access_paper_team_share_records(user_id, paper_id):
     joined_team_list = get_team_list_by_state(user_id, const.JOINED)
 
@@ -21,7 +31,6 @@ def access_paper_team_share_records(user_id, paper_id):
         team['shared'] = shared
 
     return {
-        'total_shared': len(icde_record_list),
         'joined_team_list' : joined_team_list,
         'icde_record_list' : icde_record_list
     }

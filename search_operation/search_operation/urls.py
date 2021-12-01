@@ -30,6 +30,8 @@ from icde.views import get_all_trending_list
 
 from django.conf import settings
 
+from icde.views import get_paper_share_count
+
 def pathWithContext(path, pattern):
     return urlPath(settings.CONTEXT + '/' + path, pattern)
 
@@ -60,6 +62,7 @@ urlpatterns = [
     pathWithContext('icde/capture/search-paper', search_paper),
     pathWithContext('icde/capture/go-paper-origin', go_paper_origin),
     pathWithContext('icde/capture/go-paper-detail-page', go_paper_detail_page),
+    pathWithContext('icde/access/shared-count', get_paper_share_count),
     pathWithContext('icde/access/shared-team-list', get_paper_team_share_records),
     pathWithContext('icde/access/user-activities', get_user_activities),
     pathWithContext('icde/access/team-activities', get_team_member_activities),
