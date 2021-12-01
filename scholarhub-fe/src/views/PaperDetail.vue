@@ -636,6 +636,13 @@ export default {
       return true;
     },
   },
+  watch: {
+    isLogin: function (newState, oldState) {
+      if (newState && !oldState) {
+        this.fetchTeamListAndSharedData();
+      }
+    },
+  },
   mounted: function () {
     const routeParams = this.$route.params;
     this.paperId = routeParams.id;
