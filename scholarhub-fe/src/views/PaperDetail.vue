@@ -319,7 +319,18 @@
         </div>
         <div style="padding-bottom: 2rem" v-else>
           <v-divider></v-divider>
-          <div v-for="comment in paperComments" :key="comment.id" class="">
+          <div
+            style="padding: 1rem 1rem 0; text-align: center"
+            v-if="paperComments.length === 0"
+          >
+            No comments
+          </div>
+          <div
+            v-else
+            v-for="comment in paperComments"
+            :key="comment.id"
+            class=""
+          >
             <div class="commenter">
               <strong class="mr-2">{{ comment.name }}</strong>
               <span class="mr-2" style="font-size: 14px; color: grey">{{
